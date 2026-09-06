@@ -120,7 +120,7 @@ def login():
         username = request.form.get('username')
         password = request.form.get('password')
 
-        if username == 'admin' and password == '123456':
+        if username == 'serkan dede' and password == '2025Tc00':
             session['admin_logged_in'] = True
             return redirect(url_for('admin_panel'))
         else:
