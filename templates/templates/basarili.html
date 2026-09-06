@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Randevu Talebi Alındı</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 flex items-center justify-center min-h-screen p-4">
+    <div class="bg-white max-w-md w-full p-8 rounded-2xl shadow-xl border text-center">
+        <div class="w-16 h-16 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-4">
+            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+        </div>
+
+        <h1 class="text-2xl font-bold text-gray-900 mb-2">Randevu Talebiniz Alındı!</h1>
+        <p class="text-gray-600 text-sm mb-6">Talebiniz başarıyla veritabanımıza işlendi. Detaylar aşağıdadır:</p>
+
+        <div class="bg-gray-50 p-4 rounded-lg text-left space-y-3 border mb-6 text-sm">
+            <div><span class="text-gray-500 block">Takip No:</span> <strong class="text-gray-800">#{{ appointment['id'] }}</strong></div>
+            <div><span class="text-gray-500 block">Müşteri:</span> <strong class="text-gray-800">{{ appointment['customer_name'] }}</strong></div>
+            <div><span class="text-gray-500 block">Hizmet:</span> <strong class="text-gray-800">{{ appointment['service'] }}</strong></div>
+            <div><span class="text-gray-500 block">Tarih & Saat:</span> <strong class="text-rose-600">{{ appointment['appointment_date'].replace('T', ' ') }}</strong></div>
+            <div><span class="text-gray-500 block">Durum:</span> <span class="bg-yellow-100 text-yellow-800 text-xs px-2 py-1 rounded font-semibold">{{ appointment['status'] }}</span></div>
+        </div>
+
+        <a href="/" class="inline-block bg-rose-600 text-white px-6 py-2.5 rounded-lg font-bold hover:bg-rose-700 transition w-full">Ana Sayfaya Dön</a>
+    </div>
+</body>
+</html>
