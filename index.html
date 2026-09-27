@@ -54,7 +54,7 @@
 </head>
 <body class="bg-[#0A0A0A] text-gray-200 antialiased selection:bg-[#C5A059] selection:text-black">
 
-    <!-- Üst Duyuru / Hatırlatma Bandı -->
+    <!-- Üst Hatırlatma Bandı -->
     <div id="reminderBanner" class="hidden bg-gradient-to-r from-[#C5A059] via-[#F3E5AB] to-[#C5A059] text-black text-xs sm:text-sm font-semibold py-2.5 px-4 text-center shadow-lg transition-all">
         <div class="max-w-7xl mx-auto flex items-center justify-center gap-2">
             <i class="fa-solid fa-bell animate-bounce text-black"></i>
@@ -66,49 +66,77 @@
     <nav class="sticky top-0 z-40 bg-[#0A0A0A]/90 backdrop-blur-md border-b border-gray-800/80">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
             
-            <!-- Logo -->
-            <a href="#" class="flex items-center gap-3 group">
-                <div class="w-10 h-10 rounded-full gold-gradient flex items-center justify-center text-black font-bold shadow-lg shadow-[#C5A059]/20 group-hover:scale-105 transition">
-                    <i class="fa-solid fa-scissors"></i>
-                </div>
-                <div>
-                    <span class="text-xl font-bold font-serif-title gold-gradient-text tracking-wider block">NES</span>
-                    <span class="text-[9px] uppercase tracking-[0.25em] text-gray-400 block -mt-1">Kuaför Salonu</span>
-                </div>
-            </a>
+            <!-- Sol Taraf: Üç Nokta Menü & Logo -->
+            <div class="flex items-center gap-4">
+                <!-- Üç Nokta Üst Üste Menü Butonu -->
+                <div class="relative">
+                    <button onclick="window.toggleDropdownMenu()" class="w-10 h-10 rounded-xl bg-[#121212] border border-gray-800 text-[#C5A059] hover:border-[#C5A059] flex flex-col items-center justify-center gap-1 transition shadow group" title="Menü">
+                        <span class="w-1.5 h-1.5 rounded-full bg-[#C5A059] group-hover:scale-125 transition"></span>
+                        <span class="w-1.5 h-1.5 rounded-full bg-[#C5A059] group-hover:scale-125 transition"></span>
+                        <span class="w-1.5 h-1.5 rounded-full bg-[#C5A059] group-hover:scale-125 transition"></span>
+                    </button>
 
-            <!-- Masaüstü Linkler -->
-            <div class="hidden md:flex items-center gap-8 text-xs font-semibold uppercase tracking-wider text-gray-300">
-                <a href="#anasayfa" class="hover:text-[#C5A059] transition">Ana Sayfa</a>
-                <a href="#hizmetler" class="hover:text-[#C5A059] transition">Hizmetler & Fiyatlar</a>
-                <a href="#galeri" class="hover:text-[#C5A059] transition">Portfolyo</a>
-                <a href="#randevu" class="hover:text-[#C5A059] transition">Randevu Al</a>
-                <a href="#konum" class="hover:text-[#C5A059] transition">Konum & İletişim</a>
-                <a href="#randevularim" id="navMyApps" class="hidden text-[#C5A059] hover:underline flex items-center gap-1.5">
-                    <i class="fa-solid fa-calendar-check"></i> Randevularım
+                    <!-- Açılır Menü (Dropdown) -->
+                    <div id="dropdownMenu" class="hidden absolute left-0 mt-2 w-56 bg-[#121212] border border-[#C5A059]/40 rounded-2xl shadow-2xl py-3 z-50 divide-y divide-gray-800/80">
+                        <div class="px-4 py-2 text-[10px] uppercase tracking-widest text-gray-500 font-semibold">Menü & Navigasyon</div>
+                        <div class="py-1">
+                            <a href="#anasayfa" onclick="window.toggleDropdownMenu()" class="flex items-center gap-3 px-4 py-2.5 text-xs font-semibold text-gray-300 hover:text-[#C5A059] hover:bg-gray-900/60 transition">
+                                <i class="fa-solid fa-house w-4 text-[#C5A059]"></i> Ana Sayfa
+                            </a>
+                            <a href="#hizmetler" onclick="window.toggleDropdownMenu()" class="flex items-center gap-3 px-4 py-2.5 text-xs font-semibold text-gray-300 hover:text-[#C5A059] hover:bg-gray-900/60 transition">
+                                <i class="fa-solid fa-scissors w-4 text-[#C5A059]"></i> Hizmetler & Fiyatlar
+                            </a>
+                            <a href="#galeri" onclick="window.toggleDropdownMenu()" class="flex items-center gap-3 px-4 py-2.5 text-xs font-semibold text-gray-300 hover:text-[#C5A059] hover:bg-gray-900/60 transition">
+                                <i class="fa-solid fa-images w-4 text-[#C5A059]"></i> Portfolyo
+                            </a>
+                            <a href="#randevu" onclick="window.toggleDropdownMenu()" class="flex items-center gap-3 px-4 py-2.5 text-xs font-semibold text-gray-300 hover:text-[#C5A059] hover:bg-gray-900/60 transition">
+                                <i class="fa-solid fa-calendar-plus w-4 text-[#C5A059]"></i> Randevu Al
+                            </a>
+                            <a href="#randevularim" onclick="window.toggleDropdownMenu()" class="flex items-center gap-3 px-4 py-2.5 text-xs font-semibold text-gray-300 hover:text-[#C5A059] hover:bg-gray-900/60 transition">
+                                <i class="fa-solid fa-calendar-check w-4 text-[#C5A059]"></i> Randevularım
+                            </a>
+                            <a href="#kuponlarim" onclick="window.toggleDropdownMenu()" class="flex items-center gap-3 px-4 py-2.5 text-xs font-semibold text-gray-300 hover:text-[#C5A059] hover:bg-gray-900/60 transition">
+                                <i class="fa-solid fa-ticket w-4 text-[#C5A059]"></i> Kuponlarım
+                            </a>
+                            <a href="#konum" onclick="window.toggleDropdownMenu()" class="flex items-center gap-3 px-4 py-2.5 text-xs font-semibold text-gray-300 hover:text-[#C5A059] hover:bg-gray-900/60 transition">
+                                <i class="fa-solid fa-map-location-dot w-4 text-[#C5A059]"></i> Konum & İletişim
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Logo -->
+                <a href="#" class="flex items-center gap-3 group">
+                    <div class="w-10 h-10 rounded-full gold-gradient flex items-center justify-center text-black font-bold shadow-lg shadow-[#C5A059]/20 group-hover:scale-105 transition">
+                        <i class="fa-solid fa-scissors"></i>
+                    </div>
+                    <div>
+                        <span class="text-xl font-bold font-serif-title gold-gradient-text tracking-wider block">NES</span>
+                        <span class="text-[9px] uppercase tracking-[0.25em] text-gray-400 block -mt-1">Kuaför Salonu</span>
+                    </div>
                 </a>
             </div>
 
             <!-- Sağ Butonlar (Kullanıcı & Admin) -->
             <div class="flex items-center gap-3">
                 <div id="authButtonsContainer" class="flex items-center gap-2">
-                    <button onclick="openLoginModal()" class="text-xs font-semibold text-gray-300 hover:text-white px-3 py-2 rounded-xl transition">
+                    <button onclick="window.openLoginModal()" class="text-xs font-semibold text-gray-300 hover:text-white px-3 py-2 rounded-xl transition">
                         Giriş Yap
                     </button>
-                    <button onclick="openRegisterModal()" class="text-xs font-semibold gold-gradient text-black px-4 py-2 rounded-xl shadow hover:opacity-90 transition">
+                    <button onclick="window.openRegisterModal()" class="text-xs font-semibold gold-gradient text-black px-4 py-2 rounded-xl shadow hover:opacity-90 transition">
                         Üye Ol
                     </button>
                 </div>
 
                 <div id="userProfileContainer" class="hidden items-center gap-3 bg-[#121212] border border-[#C5A059]/40 px-3.5 py-1.5 rounded-full">
                     <span class="text-xs font-semibold text-[#C5A059]" id="navUserName"></span>
-                    <button onclick="handleLogout()" class="text-xs text-gray-400 hover:text-red-400 transition ml-1" title="Çıkış Yap">
+                    <button onclick="window.handleLogout()" class="text-xs text-gray-400 hover:text-red-400 transition ml-1" title="Çıkış Yap">
                         <i class="fa-solid fa-right-from-bracket"></i>
                     </button>
                 </div>
 
                 <!-- Admin Paneli Butonu -->
-                <button onclick="openAdminModal()" class="w-9 h-9 rounded-full bg-[#121212] border border-gray-800 text-[#C5A059] hover:border-[#C5A059] flex items-center justify-center transition shadow" title="Yönetici Paneli">
+                <button onclick="window.openAdminModal()" class="w-9 h-9 rounded-full bg-[#121212] border border-gray-800 text-[#C5A059] hover:border-[#C5A059] flex items-center justify-center transition shadow" title="Yönetici Paneli">
                     <i class="fa-solid fa-user-shield text-sm"></i>
                 </button>
             </div>
@@ -166,7 +194,7 @@
                     <h3 class="text-lg font-bold text-white mb-2">Ombre Tasarımı</h3>
                     <p class="text-gray-400 text-xs leading-relaxed mb-4">Doğal ton geçişleri, koruyucu olaplex bakımı ve özel cila uygulaması dahil.</p>
                 </div>
-                <button onclick="toggleServiceFromGrid('ombre')" class="w-full bg-[#0A0A0A] border border-[#C5A059]/40 text-[#C5A059] hover:bg-[#C5A059] hover:text-black font-semibold py-2.5 rounded-xl text-xs uppercase tracking-wider transition">
+                <button onclick="window.toggleServiceFromGrid('ombre')" class="w-full bg-[#0A0A0A] border border-[#C5A059]/40 text-[#C5A059] hover:bg-[#C5A059] hover:text-black font-semibold py-2.5 rounded-xl text-xs uppercase tracking-wider transition">
                     Randevuya Ekle
                 </button>
             </div>
@@ -183,7 +211,7 @@
                     <h3 class="text-lg font-bold text-white mb-2">Özel Renklendirme & Balyaj</h3>
                     <p class="text-gray-400 text-xs leading-relaxed mb-4">Kişiye özel renk analizi, ışıltılı balyaj ve pigment yenileme kürü.</p>
                 </div>
-                <button onclick="toggleServiceFromGrid('renklendirme')" class="w-full bg-[#0A0A0A] border border-[#C5A059]/40 text-[#C5A059] hover:bg-[#C5A059] hover:text-black font-semibold py-2.5 rounded-xl text-xs uppercase tracking-wider transition">
+                <button onclick="window.toggleServiceFromGrid('renklendirme')" class="w-full bg-[#0A0A0A] border border-[#C5A059]/40 text-[#C5A059] hover:bg-[#C5A059] hover:text-black font-semibold py-2.5 rounded-xl text-xs uppercase tracking-wider transition">
                     Randevuya Ekle
                 </button>
             </div>
@@ -200,7 +228,7 @@
                     <h3 class="text-lg font-bold text-white mb-2">Kesim & Şekillendirme</h3>
                     <p class="text-gray-400 text-xs leading-relaxed mb-4">Yüz tipinize özel visagisme kesimi, yıkama ve profesyonel fön.</p>
                 </div>
-                <button onclick="toggleServiceFromGrid('kesim')" class="w-full bg-[#0A0A0A] border border-[#C5A059]/40 text-[#C5A059] hover:bg-[#C5A059] hover:text-black font-semibold py-2.5 rounded-xl text-xs uppercase tracking-wider transition">
+                <button onclick="window.toggleServiceFromGrid('kesim')" class="w-full bg-[#0A0A0A] border border-[#C5A059]/40 text-[#C5A059] hover:bg-[#C5A059] hover:text-black font-semibold py-2.5 rounded-xl text-xs uppercase tracking-wider transition">
                     Randevuya Ekle
                 </button>
             </div>
@@ -217,7 +245,7 @@
                     <h3 class="text-lg font-bold text-white mb-2">Keratin Bakım & Botoks</h3>
                     <p class="text-gray-400 text-xs leading-relaxed mb-4">Yıpranmış saç tellerini yoğun besleyen, 4 ay kalıcı parlaklık kürü.</p>
                 </div>
-                <button onclick="toggleServiceFromGrid('keratin')" class="w-full bg-[#0A0A0A] border border-[#C5A059]/40 text-[#C5A059] hover:bg-[#C5A059] hover:text-black font-semibold py-2.5 rounded-xl text-xs uppercase tracking-wider transition">
+                <button onclick="window.toggleServiceFromGrid('keratin')" class="w-full bg-[#0A0A0A] border border-[#C5A059]/40 text-[#C5A059] hover:bg-[#C5A059] hover:text-black font-semibold py-2.5 rounded-xl text-xs uppercase tracking-wider transition">
                     Randevuya Ekle
                 </button>
             </div>
@@ -227,14 +255,14 @@
                 <div>
                     <div class="flex justify-between items-start mb-4">
                         <span class="w-10 h-10 rounded-xl bg-[#C5A059]/10 text-[#C5A059] flex items-center justify-center text-lg font-bold">
-                            <i class="fa-solid fa-[#C5A059] fa-crown"></i>
+                            <i class="fa-solid fa-crown gold-text"></i>
                         </span>
                         <span class="text-xl font-bold gold-text font-serif-title">7.500 ₺</span>
                     </div>
                     <h3 class="text-lg font-bold text-white mb-2">Gelin Paketi & Özel Gün</h3>
                     <p class="text-gray-400 text-xs leading-relaxed mb-4">Prova dahil gelin topuzu, profesyonel makyaj ve VIP hazırlık odası.</p>
                 </div>
-                <button onclick="toggleServiceFromGrid('gelin')" class="w-full bg-[#0A0A0A] border border-[#C5A059]/40 text-[#C5A059] hover:bg-[#C5A059] hover:text-black font-semibold py-2.5 rounded-xl text-xs uppercase tracking-wider transition">
+                <button onclick="window.toggleServiceFromGrid('gelin')" class="w-full bg-[#0A0A0A] border border-[#C5A059]/40 text-[#C5A059] hover:bg-[#C5A059] hover:text-black font-semibold py-2.5 rounded-xl text-xs uppercase tracking-wider transition">
                     Randevuya Ekle
                 </button>
             </div>
@@ -251,7 +279,7 @@
                     <h3 class="text-lg font-bold text-white mb-2">Spa Manikür & Pedikür</h3>
                     <p class="text-gray-400 text-xs leading-relaxed mb-4">Steril cihazlarla medikal el/ayak bakımı, peeling ve kalıcı oje.</p>
                 </div>
-                <button onclick="toggleServiceFromGrid('manikur')" class="w-full bg-[#0A0A0A] border border-[#C5A059]/40 text-[#C5A059] hover:bg-[#C5A059] hover:text-black font-semibold py-2.5 rounded-xl text-xs uppercase tracking-wider transition">
+                <button onclick="window.toggleServiceFromGrid('manikur')" class="w-full bg-[#0A0A0A] border border-[#C5A059]/40 text-[#C5A059] hover:bg-[#C5A059] hover:text-black font-semibold py-2.5 rounded-xl text-xs uppercase tracking-wider transition">
                     Randevuya Ekle
                 </button>
             </div>
@@ -267,20 +295,16 @@
                 <div class="w-24 h-0.5 bg-[#C5A059] mx-auto mt-4"></div>
             </div>
             <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                <!-- 1. Sarı Balyaj & Lob Kesim -->
-                <div class="overflow-hidden rounded-2xl h-72 border border-gray-800 relative group">
+                <div class="overflow-hidden rounded-2xl h-44 md:h-52 border border-gray-800 relative group">
                     <img src="https://images.unsplash.com/photo-1560869713-7d0a29430803?auto=format&fit=crop&w=600&q=80" class="w-full h-full object-cover group-hover:scale-110 transition duration-500" alt="Sarı Balyaj & Lob Kesim" onerror="this.onerror=null; this.src='https://placehold.co/600x800/121212/C5A059?text=Sari+Balyaj+Lob';">
                 </div>
-                <!-- 2. Kahve Yarı Toplu Şekillendirme -->
-                <div class="overflow-hidden rounded-2xl h-72 border border-gray-800 relative group">
+                <div class="overflow-hidden rounded-2xl h-44 md:h-52 border border-gray-800 relative group">
                     <img src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=600&q=80" class="w-full h-full object-cover group-hover:scale-110 transition duration-500" alt="Kahve Yarı Toplu Şekillendirme" onerror="this.onerror=null; this.src='https://placehold.co/600x800/121212/C5A059?text=Kahve+Yari+Toplu';">
                 </div>
-                <!-- 3. Zarif Şık Topuz -->
-                <div class="overflow-hidden rounded-2xl h-72 border border-gray-800 relative group">
+                <div class="overflow-hidden rounded-2xl h-44 md:h-52 border border-gray-800 relative group">
                     <img src="https://images.unsplash.com/photo-1527799820374-dcf8d9d4a388?auto=format&fit=crop&w=600&q=80" class="w-full h-full object-cover group-hover:scale-110 transition duration-500" alt="Zarif Şık Topuz" onerror="this.onerror=null; this.src='https://placehold.co/600x800/121212/C5A059?text=Zarif+Sik+Topuz';">
                 </div>
-                <!-- 4. Hacimli At Kuyruğu Tasarımı -->
-                <div class="overflow-hidden rounded-2xl h-72 border border-gray-800 relative group">
+                <div class="overflow-hidden rounded-2xl h-44 md:h-52 border border-gray-800 relative group">
                     <img src="https://images.unsplash.com/photo-1519699047748-de8e457a634e?auto=format&fit=crop&w=600&q=80" class="w-full h-full object-cover group-hover:scale-110 transition duration-500" alt="Hacimli At Kuyruğu" onerror="this.onerror=null; this.src='https://placehold.co/600x800/121212/C5A059?text=Hacimli+At+Kuyrugu';">
                 </div>
             </div>
@@ -296,16 +320,10 @@
                 <p class="text-gray-400 text-sm mt-1">Size en uygun zamanı seçin, talebinizi hemen oluşturalım.</p>
             </div>
 
-            <form onsubmit="handleBooking(event)" class="space-y-6">
-                <div class="grid md:grid-cols-2 gap-6">
-                    <div>
-                        <label class="block text-xs font-semibold text-gray-300 uppercase tracking-wider mb-2">Adınız Soyadınız</label>
-                        <input type="text" id="bName" required placeholder="Örn: Elif Demir" class="w-full bg-[#0A0A0A] border border-gray-800 focus:border-[#C5A059] text-white px-4 py-3 rounded-xl focus:outline-none">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-gray-300 uppercase tracking-wider mb-2">Telefon Numaranız</label>
-                        <input type="tel" id="bPhone" required placeholder="05XX XXX XX XX" class="w-full bg-[#0A0A0A] border border-gray-800 focus:border-[#C5A059] text-white px-4 py-3 rounded-xl focus:outline-none">
-                    </div>
+            <form onsubmit="window.handleBooking(event)" class="space-y-6">
+                <div>
+                    <label class="block text-xs font-semibold text-gray-300 uppercase tracking-wider mb-2">Adınız Soyadınız</label>
+                    <input type="text" id="bName" required placeholder="Örn: Elif Demir" class="w-full bg-[#0A0A0A] border border-gray-800 focus:border-[#C5A059] text-white px-4 py-3 rounded-xl focus:outline-none">
                 </div>
 
                 <div>
@@ -314,12 +332,8 @@
                         <span class="text-xs gold-text font-medium"><i class="fa-solid fa-layer-group mr-1"></i>Çoklu Seçim Aktif</span>
                     </div>
 
-                    <!-- Hizmet Seçim Kartları Grid -->
-                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 mb-4" id="serviceSelectionGrid">
-                        <!-- JS Dinamik Render Edilecek -->
-                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 mb-4" id="serviceSelectionGrid"></div>
 
-                    <!-- Dinamik Sepet & Hesaplama Özeti -->
                     <div id="serviceBasketSummary" class="bg-[#0A0A0A] border border-[#C5A059]/30 p-4 rounded-2xl space-y-3">
                         <div class="flex justify-between items-center border-b border-gray-800 pb-2">
                             <span class="text-xs uppercase tracking-wider text-gray-400 font-semibold flex items-center gap-1.5">
@@ -330,6 +344,18 @@
                         <div id="basketItemsList" class="text-xs text-gray-300 space-y-1 max-h-32 overflow-y-auto">
                             <p class="text-gray-500 italic">Lütfen yukarıdan en az bir hizmet seçiniz.</p>
                         </div>
+
+                        <!-- İndirim Kuponu Alanı -->
+                        <div class="pt-2 border-t border-gray-800/80 flex flex-col sm:flex-row items-center gap-2">
+                            <div class="relative w-full">
+                                <input type="text" id="couponInput" placeholder="Kupon Kodunuz (Örn: NES10)" class="w-full bg-[#121212] border border-gray-800 focus:border-[#C5A059] text-white text-xs px-3 py-2 rounded-xl focus:outline-none uppercase">
+                            </div>
+                            <button type="button" onclick="window.applyCoupon()" class="w-full sm:w-auto bg-[#C5A059]/20 hover:bg-[#C5A059] text-[#C5A059] hover:text-black border border-[#C5A059] text-xs font-semibold px-4 py-2 rounded-xl transition shrink-0">
+                                Kuponu Uygula
+                            </button>
+                        </div>
+                        <p id="couponMsg" class="text-[11px] font-medium hidden"></p>
+
                         <div class="flex flex-wrap justify-between items-center pt-2 border-t border-gray-800/80 text-sm font-semibold">
                             <div class="flex items-center gap-2 text-gray-300 text-xs">
                                 <i class="fa-solid fa-stopwatch gold-text"></i>
@@ -346,7 +372,7 @@
                 <div class="grid md:grid-cols-2 gap-6">
                     <div>
                         <label class="block text-xs font-semibold text-gray-300 uppercase tracking-wider mb-2">Tarih</label>
-                        <input type="date" id="bDate" required onclick="this.showPicker && this.showPicker()" onchange="updateTimeSlotAvailability()" class="w-full bg-[#0A0A0A] border border-gray-800 focus:border-[#C5A059] text-white px-4 py-3 rounded-xl focus:outline-none cursor-pointer">
+                        <input type="date" id="bDate" required onclick="this.showPicker && this.showPicker()" onchange="window.updateTimeSlotAvailability()" class="w-full bg-[#0A0A0A] border border-gray-800 focus:border-[#C5A059] text-white px-4 py-3 rounded-xl focus:outline-none cursor-pointer">
                     </div>
                     <div>
                         <label class="block text-xs font-semibold text-gray-300 uppercase tracking-wider mb-2">Saat</label>
@@ -382,17 +408,59 @@
     </section>
 
     <!-- Müşteri Paneli (Randevularım) -->
-    <section id="randevularim" class="py-24 px-4 max-w-4xl mx-auto hidden">
-        <div class="bg-[#121212] p-8 md:p-12 rounded-3xl shadow-2xl border border-[#C5A059]/30">
-            <div class="text-center mb-10">
-                <span class="gold-text text-sm tracking-widest uppercase">Müşteri Paneli</span>
-                <h2 class="text-3xl font-bold font-serif-title gold-text mt-2">Randevularım & Durumları</h2>
-                <p id="userWelcomeSub" class="text-gray-400 text-sm mt-1"></p>
-                <div class="w-24 h-0.5 bg-[#C5A059] mx-auto mt-4"></div>
+    <section id="randevularim" class="py-24 px-4 max-w-4xl mx-auto">
+        <div class="bg-[#121212] p-8 md:p-12 rounded-3xl shadow-2xl border border-[#C5A059]/30 space-y-6">
+            <div class="flex flex-col sm:flex-row justify-between items-center gap-4 border-b border-gray-800 pb-6">
+                <div>
+                    <span class="gold-text text-sm tracking-widest uppercase">Müşteri Paneli</span>
+                    <h2 class="text-3xl font-bold font-serif-title gold-text mt-2">Randevularım & Mesajlar</h2>
+                    <p id="userWelcomeSub" class="text-gray-400 text-sm mt-1"></p>
+                </div>
+                <button onclick="window.renderUserAppointments()" class="text-xs bg-[#C5A059]/20 border border-[#C5A059] text-[#C5A059] px-4 py-2.5 rounded-xl hover:bg-[#C5A059] hover:text-black transition font-semibold flex items-center gap-2 shrink-0">
+                    <i class="fa-solid fa-rotate"></i> Listeyi Yenile
+                </button>
             </div>
 
-            <div id="myAppointmentsContainer" class="space-y-4">
-                <!-- JS ile doldurulacak -->
+            <div id="myAppointmentsContainer" class="space-y-4"></div>
+        </div>
+    </section>
+
+    <!-- Kuponlarım Bölümü -->
+    <section id="kuponlarim" class="py-24 px-4 max-w-4xl mx-auto">
+        <div class="bg-[#121212] p-8 md:p-12 rounded-3xl shadow-2xl border border-[#C5A059]/30 space-y-6">
+            <div class="flex flex-col sm:flex-row justify-between items-center gap-4 border-b border-gray-800 pb-6">
+                <div>
+                    <span class="gold-text text-sm tracking-widest uppercase">Sadakat Programı</span>
+                    <h2 class="text-3xl font-bold font-serif-title gold-text mt-2">Kuponlarım</h2>
+                    <p class="text-gray-400 text-sm mt-1">Size özel tanımlanan indirim kuponları ve geçerlilik süreleri.</p>
+                </div>
+                <button onclick="window.checkAndShowUserLoyaltyCoupon()" class="text-xs bg-[#C5A059]/20 border border-[#C5A059] text-[#C5A059] px-4 py-2.5 rounded-xl hover:bg-[#C5A059] hover:text-black transition font-semibold flex items-center gap-2 shrink-0">
+                    <i class="fa-solid fa-rotate"></i> Kuponu Yenile
+                </button>
+            </div>
+
+            <div id="loyaltyCouponCard" class="hidden bg-gradient-to-r from-[#C5A059]/20 via-[#1a1814] to-[#C5A059]/10 border border-[#C5A059] p-6 rounded-2xl flex flex-col sm:flex-row items-center justify-between gap-6 shadow-xl">
+                <div class="flex items-center gap-4">
+                    <div class="w-14 h-14 rounded-2xl gold-gradient text-black flex items-center justify-center text-2xl font-bold shrink-0 shadow-lg">
+                        <i class="fa-solid fa-ticket"></i>
+                    </div>
+                    <div>
+                        <span class="text-xs gold-text uppercase font-semibold tracking-wider block">Aktif İndirim Kuponu</span>
+                        <h4 class="text-white font-bold text-lg" id="couponTitleText">Tebrikler! İndirim Kuponu Kazandınız</h4>
+                        <p class="text-gray-300 text-xs mt-1" id="couponDescText">Bu kuponu ödeme aşamasında kullanabilirsiniz.</p>
+                        <div class="mt-3 bg-[#0A0A0A]/80 border border-[#C5A059]/40 px-3 py-1.5 rounded-xl inline-flex items-center gap-2">
+                            <i class="fa-solid fa-hourglass-half text-[#C5A059] animate-spin"></i>
+                            <span class="text-[11px] text-gray-300">Kalan Süre: <strong id="couponCountdownDisplay" class="gold-text font-mono">Hesaplanıyor...</strong></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-[#0A0A0A] border border-[#C5A059]/50 px-6 py-3.5 rounded-xl text-center shrink-0">
+                    <span class="text-[10px] text-gray-400 block uppercase tracking-wider mb-1">Kupon Kodunuz</span>
+                    <strong class="gold-text text-xl font-mono tracking-widest" id="couponCodeDisplay">NES10</strong>
+                </div>
+            </div>
+            <div id="noCouponMsg" class="text-center text-gray-400 py-6 text-sm">
+                Henüz size tanımlanmış aktif bir kuponunuz bulunmuyor veya süresi dolmuş/kullanılmıştır.
             </div>
         </div>
     </section>
@@ -402,7 +470,7 @@
         <div class="max-w-7xl mx-auto">
             <div class="text-center mb-16">
                 <span class="gold-text text-sm tracking-widest uppercase">Ziyaret Edin</span>
-                <h2 class="text-3xl font-bold font-serif-title gold-text mt-2">Atölye Konumu</h2>
+                <h2 class="text-3xl md:text-4xl font-bold font-serif-title gold-text mt-2">Atölye Konumu</h2>
                 <div class="w-24 h-0.5 bg-[#C5A059] mx-auto mt-4"></div>
             </div>
             <div class="grid md:grid-cols-2 gap-12 items-center">
@@ -411,12 +479,15 @@
                         <i class="fa-solid fa-location-dot gold-text text-2xl shrink-0"></i>
                         <span>Fıstıkağacı, İspir Sokağı No: 4/A, 34664 Üsküdar / İstanbul</span>
                     </p>
-                    <div class="flex flex-col sm:flex-row gap-4 text-gray-300 text-sm">
+                    <div class="flex flex-col gap-3 text-gray-300 text-sm">
                         <p class="flex items-center gap-2">
                             <i class="fa-solid fa-phone gold-text"></i> +90 (216) 000 00 00
                         </p>
                         <p class="flex items-center gap-2">
-                            <i class="fa-solid fa-clock gold-text"></i> Pazartesi - Cumartesi: 09:00 - 20:00
+                            <i class="fa-solid fa-calendar-days gold-text"></i> <strong>Açık Günler:</strong> Pazartesi, Çarşamba, Perşembe, Cuma, Cumartesi, Pazar <span class="text-xs text-amber-400/90">(Salı günleri kapalıyız)</span>
+                        </p>
+                        <p class="flex items-center gap-2">
+                            <i class="fa-solid fa-clock gold-text"></i> <strong>Çalışma Saatleri:</strong> 10:00 - 19:00
                         </p>
                     </div>
                     <div class="pt-2">
@@ -444,7 +515,7 @@
                 <h3 class="text-2xl font-bold font-serif-title gold-text flex items-center gap-2">
                     <i class="fa-solid fa-user-shield"></i> NES Yönetim Paneli
                 </h3>
-                <button onclick="closeAdminModal()" class="text-gray-400 hover:text-white text-3xl">&times;</button>
+                <button onclick="window.closeAdminModal()" class="text-gray-400 hover:text-white text-3xl">&times;</button>
             </div>
 
             <!-- Şifre Ekranı -->
@@ -453,27 +524,28 @@
                 <h4 class="text-xl font-semibold mb-2 text-white">Yönetici Girişi</h4>
                 <p class="text-xs text-gray-400 mb-6">Lütfen yönetici şifrenizi giriniz</p>
                 <input type="password" id="adminPassInput" placeholder="Şifre" class="w-full bg-[#0A0A0A] border border-gray-800 text-center text-white px-4 py-3 rounded-xl mb-4 focus:border-[#C5A059] focus:outline-none">
-                <button onclick="verifyAdmin()" class="w-full gold-gradient text-black font-semibold py-3 rounded-xl">Giriş Yap</button>
+                <button onclick="window.verifyAdmin()" class="w-full gold-gradient text-black font-semibold py-3 rounded-xl">Giriş Yap</button>
                 <p id="adminErr" class="text-red-400 text-xs mt-3 hidden">Hatalı şifre!</p>
             </div>
 
             <!-- Admin İçerik -->
             <div id="adminPanelContent" class="hidden">
-                <!-- Sekmeler -->
-                <div class="flex gap-4 mb-6 border-b border-gray-800 pb-3">
-                    <button onclick="switchAdminTab('appointments')" id="adminTabAppBtn" class="px-4 py-2 rounded-xl text-xs font-semibold bg-[#C5A059] text-black transition">Randevular</button>
-                    <button onclick="switchAdminTab('users')" id="adminTabUserBtn" class="px-4 py-2 rounded-xl text-xs font-semibold bg-gray-800 text-gray-300 hover:text-white transition">Kullanıcı Hesapları</button>
+                <div class="flex flex-wrap gap-2 mb-6 border-b border-gray-800 pb-3">
+                    <button onclick="window.switchAdminTab('appointments')" id="adminTabAppBtn" class="px-4 py-2 rounded-xl text-xs font-semibold bg-[#C5A059] text-black transition">Randevular</button>
+                    <button onclick="window.switchAdminTab('messages')" id="adminTabMsgBtn" class="px-4 py-2 rounded-xl text-xs font-semibold bg-gray-800 text-gray-300 hover:text-white transition">Müşteri Mesajları</button>
+                    <button onclick="window.switchAdminTab('users')" id="adminTabUserBtn" class="px-4 py-2 rounded-xl text-xs font-semibold bg-gray-800 text-gray-300 hover:text-white transition">Kullanıcı Hesapları</button>
+                    <button onclick="window.switchAdminTab('spending')" id="adminTabSpendBtn" class="px-4 py-2 rounded-xl text-xs font-semibold bg-gray-800 text-gray-300 hover:text-white transition">Harcama Takibi</button>
                 </div>
 
                 <!-- Randevular Sekmesi -->
                 <div id="adminAppointmentsView" class="space-y-4">
                     <div class="flex flex-wrap justify-between items-center gap-4">
-                        <h4 class="font-semibold text-lg text-gray-200">Tüm Müşterilere Ait Randevu Talepleri & Mesajlar</h4>
+                        <h4 class="font-semibold text-lg text-gray-200">Tüm Müşteri Randevu Talepleri</h4>
                         <div class="flex items-center gap-2">
-                            <button onclick="renderAdminTable()" class="text-xs bg-[#C5A059]/20 border border-[#C5A059] text-[#C5A059] px-3.5 py-2 rounded-xl flex items-center gap-1.5 hover:bg-[#C5A059] hover:text-black transition font-semibold">
-                                <i class="fa-solid fa-rotate"></i> Listeyi Yenile
+                            <button onclick="window.renderAdminTable()" class="text-xs bg-[#C5A059]/20 border border-[#C5A059] text-[#C5A059] px-3.5 py-2 rounded-xl flex items-center gap-1.5 hover:bg-[#C5A059] hover:text-black transition font-semibold">
+                                <i class="fa-solid fa-rotate"></i> Yenile
                             </button>
-                            <button onclick="clearAllApp()" class="text-xs bg-red-900/40 text-red-400 border border-red-800 px-3 py-2 rounded-xl">Tümünü Temizle</button>
+                            <button onclick="window.clearAllApp()" class="text-xs bg-red-900/40 text-red-400 border border-red-800 px-3 py-2 rounded-xl">Tümünü Temizle</button>
                         </div>
                     </div>
                     <div class="overflow-x-auto">
@@ -481,7 +553,7 @@
                             <thead>
                                 <tr class="border-b border-gray-800 text-[#C5A059]">
                                     <th class="p-3">Müşteri</th>
-                                    <th class="p-3">Hizmet & Detay</th>
+                                    <th class="p-3">Hizmet Detayı</th>
                                     <th class="p-3">Tarih / Saat</th>
                                     <th class="p-3">Durum</th>
                                     <th class="p-3">İşlemler</th>
@@ -492,11 +564,35 @@
                     </div>
                 </div>
 
-                <!-- Kullanıcılar Sekmesi -->
+                <!-- Müşteri Mesajları Sekmesi -->
+                <div id="adminMessagesView" class="space-y-4 hidden">
+                    <div class="flex justify-between items-center">
+                        <h4 class="font-semibold text-lg text-gray-200">Müşteri Notları & İletişim Kutusu</h4>
+                        <button onclick="window.renderAdminMessagesTable()" class="text-xs bg-[#C5A059]/20 border border-[#C5A059] text-[#C5A059] px-3.5 py-2 rounded-xl hover:bg-[#C5A059] hover:text-black transition font-semibold">
+                            <i class="fa-solid fa-rotate"></i> Yenile
+                        </button>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse text-sm">
+                            <thead>
+                                <tr class="border-b border-gray-800 text-[#C5A059]">
+                                    <th class="p-3">Müşteri</th>
+                                    <th class="p-3">Hizmet & Randevu</th>
+                                    <th class="p-3">Müşteri Notu / Mesajı</th>
+                                    <th class="p-3">Görsel</th>
+                                    <th class="p-3">Yanıt Durumu & İşlem</th>
+                                </tr>
+                            </thead>
+                            <tbody id="adminMessagesTableBody" class="divide-y divide-gray-800"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Kullanıcı Hesapları Sekmesi -->
                 <div id="adminUsersView" class="space-y-4 hidden">
                     <div class="flex justify-between items-center">
-                        <h4 class="font-semibold text-lg text-gray-200">Kayıtlı Müşteri Hesapları</h4>
-                        <button onclick="renderAdminUsersTable()" class="text-xs bg-[#C5A059]/20 border border-[#C5A059] text-[#C5A059] px-3.5 py-2 rounded-xl hover:bg-[#C5A059] hover:text-black transition font-semibold">
+                        <h4 class="font-semibold text-lg text-gray-200">Kayıtlı Müşteri Hesapları & Kupon Yönetimi</h4>
+                        <button onclick="window.renderAdminUsersTable()" class="text-xs bg-[#C5A059]/20 border border-[#C5A059] text-[#C5A059] px-3.5 py-2 rounded-xl hover:bg-[#C5A059] hover:text-black transition font-semibold">
                             <i class="fa-solid fa-rotate"></i> Yenile
                         </button>
                     </div>
@@ -506,12 +602,36 @@
                                 <tr class="border-b border-gray-800 text-[#C5A059]">
                                     <th class="p-3">Ad Soyad</th>
                                     <th class="p-3">Kayıtlı Şifre</th>
-                                    <th class="p-3">Randevu Sayısı</th>
-                                    <th class="p-3">Toplam Harcama</th>
+                                    <th class="p-3">Aktif Kupon Durumu</th>
+                                    <th class="p-3">Kupon Tanımla</th>
                                     <th class="p-3">İşlemler</th>
                                 </tr>
                             </thead>
                             <tbody id="adminUsersTableBody" class="divide-y divide-gray-800"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Harcama Takibi Sekmesi -->
+                <div id="adminSpendingView" class="space-y-4 hidden">
+                    <div class="flex justify-between items-center">
+                        <h4 class="font-semibold text-lg text-gray-200">Müşteri Gün, Ay ve Yıl Bazlı Harcama Analizi</h4>
+                        <button onclick="window.renderAdminSpendingTable()" class="text-xs bg-[#C5A059]/20 border border-[#C5A059] text-[#C5A059] px-3.5 py-2 rounded-xl hover:bg-[#C5A059] hover:text-black transition font-semibold">
+                            <i class="fa-solid fa-rotate"></i> Yenile
+                        </button>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse text-sm">
+                            <thead>
+                                <tr class="border-b border-gray-800 text-[#C5A059]">
+                                    <th class="p-3">Müşteri Adı</th>
+                                    <th class="p-3">Toplam Harcama</th>
+                                    <th class="p-3">Yıl Bazlı Harcamalar</th>
+                                    <th class="p-3">Ay Bazlı Harcamalar</th>
+                                    <th class="p-3">Gün Bazlı Harcamalar</th>
+                                </tr>
+                            </thead>
+                            <tbody id="adminSpendingTableBody" class="divide-y divide-gray-800"></tbody>
                         </table>
                     </div>
                 </div>
@@ -522,26 +642,28 @@
     <!-- Lightbox Modal -->
     <div id="lightboxModal" class="fixed inset-0 bg-black/90 z-[70] hidden flex items-center justify-center p-4">
         <div class="bg-[#121212] border border-[#C5A059]/50 rounded-2xl max-w-2xl w-full p-6 relative flex flex-col md:flex-row gap-6 items-center">
-            <button onclick="closeLightbox()" class="absolute top-4 right-4 text-gray-400 hover:text-white text-2xl">&times;</button>
+            <button onclick="window.closeLightbox()" class="absolute top-4 right-4 text-gray-400 hover:text-white text-2xl">&times;</button>
             <div id="lightboxMediaContainer" class="w-full md:w-1/2"></div>
             <div class="w-full md:w-1/2 space-y-4">
-                <h4 class="gold-text font-serif-title font-bold text-xl">Müşteri Mesajı</h4>
+                <h4 class="gold-text font-serif-title font-bold text-xl">Müşteri Notu / İstekleri</h4>
                 <p id="lightboxNoteText" class="text-gray-300 text-sm bg-[#0A0A0A] p-4 rounded-xl border border-gray-800"></p>
                 <div>
                     <label class="block text-xs font-semibold text-gray-400 uppercase mb-2">Müşteriye Yanıt Gönder</label>
                     <textarea id="adminReplyText" rows="2" placeholder="Yanıtınızı buraya yazın..." class="w-full bg-[#0A0A0A] border border-gray-800 text-white text-sm p-3 rounded-xl focus:border-[#C5A059] focus:outline-none mb-2"></textarea>
-                    <button onclick="sendAdminReply()" class="w-full gold-gradient text-black text-sm font-semibold py-2.5 rounded-xl">Yanıtı Gönder</button>
+                    <button onclick="window.sendAdminReply()" class="w-full gold-gradient text-black text-sm font-semibold py-2.5 rounded-xl">Yanıtı Gönder</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Giriş Modal -->
+    <!-- Giriş Yap Modal -->
     <div id="loginModal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
         <div class="bg-[#121212] border border-[#C5A059]/40 rounded-3xl max-w-md w-full p-6 md:p-8 shadow-2xl relative">
-            <button onclick="closeLoginModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white text-2xl">&times;</button>
+            <button onclick="window.closeLoginModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white text-2xl">&times;</button>
             <h3 class="text-2xl font-bold font-serif-title gold-text mb-4 text-center">Giriş Yap</h3>
-            <div class="space-y-4">
+            
+            <!-- Normal Giriş Formu -->
+            <div id="loginFormView" class="space-y-4">
                 <div>
                     <label class="block text-xs text-gray-400 uppercase mb-1">Ad Soyad</label>
                     <input type="text" id="loginName" placeholder="Adınız Soyadınız" class="w-full bg-[#0A0A0A] border border-gray-800 text-white px-4 py-2.5 rounded-xl focus:border-[#C5A059] focus:outline-none">
@@ -550,16 +672,36 @@
                     <label class="block text-xs text-gray-400 uppercase mb-1">Şifre</label>
                     <input type="password" id="loginPass" placeholder="Şifreniz" class="w-full bg-[#0A0A0A] border border-gray-800 text-white px-4 py-2.5 rounded-xl focus:border-[#C5A059] focus:outline-none">
                 </div>
-                <button onclick="handleLoginSubmit()" class="w-full gold-gradient text-black font-semibold py-3 rounded-xl">Giriş Yap</button>
+                <div class="flex justify-end">
+                    <button type="button" onclick="window.switchToForgotPass()" class="text-xs gold-text hover:underline">Şifremi Unuttum?</button>
+                </div>
+                <button onclick="window.handleLoginSubmit()" class="w-full gold-gradient text-black font-semibold py-3 rounded-xl">Giriş Yap</button>
                 <p id="loginErrorMsg" class="text-red-400 text-xs text-center hidden"></p>
+            </div>
+
+            <!-- Şifremi Unuttum Formu -->
+            <div id="forgotStepView" class="space-y-4 hidden">
+                <div>
+                    <label class="block text-xs text-gray-400 uppercase mb-1">Kayıtlı Ad Soyad</label>
+                    <input type="text" id="forgotName" placeholder="Adınız Soyadınız" class="w-full bg-[#0A0A0A] border border-gray-800 text-white px-4 py-2.5 rounded-xl focus:border-[#C5A059] focus:outline-none">
+                </div>
+                <div>
+                    <label class="block text-xs text-gray-400 uppercase mb-1">Yeni Şifre (En az 6 karakter & 1 Büyük Harf)</label>
+                    <input type="password" id="forgotNewPass" placeholder="Yeni Şifreniz" class="w-full bg-[#0A0A0A] border border-gray-800 text-white px-4 py-2.5 rounded-xl focus:border-[#C5A059] focus:outline-none">
+                </div>
+                <div class="flex justify-between items-center text-xs">
+                    <button type="button" onclick="window.switchToLoginForm()" class="text-gray-400 hover:text-white"><i class="fa-solid fa-arrow-left mr-1"></i> Giriş Ekranına Dön</button>
+                </div>
+                <button onclick="window.handleDirectPasswordReset()" class="w-full gold-gradient text-black font-semibold py-3 rounded-xl">Şifreyi Yenile</button>
+                <p id="forgotErrorMsg" class="text-xs text-center hidden"></p>
             </div>
         </div>
     </div>
 
-    <!-- Üyelik Modal -->
+    <!-- Üye Ol Modal -->
     <div id="registerModal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
         <div class="bg-[#121212] border border-[#C5A059]/40 rounded-3xl max-w-md w-full p-6 md:p-8 shadow-2xl relative">
-            <button onclick="closeRegisterModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white text-2xl">&times;</button>
+            <button onclick="window.closeRegisterModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white text-2xl">&times;</button>
             <h3 class="text-2xl font-bold font-serif-title gold-text mb-4 text-center">Yeni Üyelik Oluştur</h3>
             <div class="space-y-4">
                 <div>
@@ -570,19 +712,35 @@
                     <label class="block text-xs text-gray-400 uppercase mb-1">Şifre (En az 6 karakter & 1 Büyük Harf)</label>
                     <input type="password" id="regPass" placeholder="Şifreniz" class="w-full bg-[#0A0A0A] border border-gray-800 text-white px-4 py-2.5 rounded-xl focus:border-[#C5A059] focus:outline-none">
                 </div>
-                <button onclick="handleRegisterSubmit()" class="w-full gold-gradient text-black font-semibold py-3 rounded-xl">Kayıt Ol</button>
+                <button onclick="window.handleRegisterSubmit()" class="w-full gold-gradient text-black font-semibold py-3 rounded-xl">Kayıt Ol</button>
                 <p id="regErrorMsg" class="text-red-400 text-xs text-center hidden"></p>
             </div>
         </div>
     </div>
 
     <script>
-        document.getElementById('bDate').min = new Date().toISOString().split('T')[0];
+        document.addEventListener('DOMContentLoaded', () => {
+            const bDateEl = document.getElementById('bDate');
+            if (bDateEl) {
+                bDateEl.min = new Date().toISOString().split('T')[0];
+            }
+            window.renderServiceSelectionGrid();
+            window.updateNavAuthUI();
+            setInterval(updateCountdownTimer, 1000);
+
+            document.addEventListener('click', (e) => {
+                const dropdown = document.getElementById('dropdownMenu');
+                const menuBtn = e.target.closest('button');
+                if (dropdown && !dropdown.contains(e.target) && !menuBtn) {
+                    dropdown.classList.add('hidden');
+                }
+            });
+        });
+
         let currentUser = localStorage.getItem('nes_logged_user') || null;
 
         const ALL_TIME_SLOTS = ['10:00', '12:00', '14:00', '16:00', '18:00'];
 
-        // Ayrılmış Ombre ve Renklendirme Hizmet Verileri
         const SERVICES_DATA = [
             { id: 'ombre', name: 'Ombre Tasarımı', price: 3500, durationMin: 180 },
             { id: 'renklendirme', name: 'Özel Renklendirme & Balyaj', price: 3000, durationMin: 150 },
@@ -594,8 +752,17 @@
         ];
 
         let selectedServiceIds = [];
+        let appliedDiscountRate = 0;
+        let appliedCouponCode = '';
 
-        function updateTimeSlotAvailability() {
+        window.toggleDropdownMenu = function() {
+            const dropdown = document.getElementById('dropdownMenu');
+            if (dropdown) {
+                dropdown.classList.toggle('hidden');
+            }
+        };
+
+        window.updateTimeSlotAvailability = function() {
             const dateVal = document.getElementById('bDate').value;
             const timeSelect = document.getElementById('bTime');
             const infoEl = document.getElementById('timeSlotInfo');
@@ -653,7 +820,7 @@
                     infoEl.className = 'text-xs text-emerald-400 mt-1.5 block font-medium';
                 }
             }
-        }
+        };
 
         function formatDuration(mins) {
             if (mins <= 0) return '0 Dk';
@@ -667,7 +834,7 @@
             return `${remainingMins} Dk`;
         }
 
-        function renderServiceSelectionGrid() {
+        window.renderServiceSelectionGrid = function() {
             const container = document.getElementById('serviceSelectionGrid');
             if (!container) return;
             container.innerHTML = '';
@@ -675,7 +842,7 @@
             SERVICES_DATA.forEach(srv => {
                 const isSelected = selectedServiceIds.includes(srv.id);
                 const card = document.createElement('div');
-                card.onclick = () => toggleServiceSelection(srv.id);
+                card.onclick = () => window.toggleServiceSelection(srv.id);
                 card.className = `p-3 rounded-xl border cursor-pointer transition flex justify-between items-center ${
                     isSelected 
                     ? 'bg-[#C5A059]/15 border-[#C5A059] text-white shadow-md' 
@@ -698,27 +865,27 @@
             });
 
             updateBasketSummary();
-        }
+        };
 
-        function toggleServiceSelection(id) {
+        window.toggleServiceSelection = function(id) {
             if (selectedServiceIds.includes(id)) {
                 selectedServiceIds = selectedServiceIds.filter(item => item !== id);
             } else {
                 selectedServiceIds.push(id);
             }
-            renderServiceSelectionGrid();
-        }
+            window.renderServiceSelectionGrid();
+        };
 
-        function toggleServiceFromGrid(id) {
+        window.toggleServiceFromGrid = function(id) {
             if (!selectedServiceIds.includes(id)) {
                 selectedServiceIds.push(id);
             }
-            renderServiceSelectionGrid();
+            window.renderServiceSelectionGrid();
             const randevuSec = document.getElementById('randevu');
             if (randevuSec) {
                 randevuSec.scrollIntoView({ behavior: 'smooth' });
             }
-        }
+        };
 
         function updateBasketSummary() {
             const listEl = document.getElementById('basketItemsList');
@@ -737,14 +904,14 @@
             }
 
             let totalMin = 0;
-            let totalPrice = 0;
+            let rawTotalPrice = 0;
             let htmlList = '<ul class="space-y-1">';
 
             selectedServiceIds.forEach(id => {
                 const srv = SERVICES_DATA.find(s => s.id === id);
                 if (srv) {
                     totalMin += srv.durationMin;
-                    totalPrice += srv.price;
+                    rawTotalPrice += srv.price;
                     htmlList += `
                         <li class="flex justify-between items-center text-xs">
                             <span class="text-gray-200"><i class="fa-solid fa-circle-check gold-text mr-1 text-[10px]"></i>${srv.name} (${formatDuration(srv.durationMin)})</span>
@@ -758,18 +925,234 @@
             listEl.innerHTML = htmlList;
             badgeEl.innerText = `${selectedServiceIds.length} Hizmet Seçildi`;
             totalDurEl.innerText = formatDuration(totalMin);
-            totalPriceEl.innerText = `${totalPrice.toLocaleString('tr-TR')} ₺`;
+
+            let finalPrice = rawTotalPrice;
+            if (appliedDiscountRate > 0) {
+                const discountAmount = rawTotalPrice * appliedDiscountRate;
+                finalPrice = rawTotalPrice - discountAmount;
+                totalPriceEl.innerHTML = `<span class="line-through text-gray-500 text-xs mr-2">${rawTotalPrice.toLocaleString('tr-TR')} ₺</span>${finalPrice.toLocaleString('tr-TR')} ₺ <span class="text-emerald-400 text-xs font-normal">(-%${appliedDiscountRate * 100})</span>`;
+            } else {
+                totalPriceEl.innerText = `${finalPrice.toLocaleString('tr-TR')} ₺`;
+            }
         }
 
-        // Ilk yüklemede başlat
-        renderServiceSelectionGrid();
+        window.applyCoupon = function() {
+            const codeInput = document.getElementById('couponInput');
+            const msgEl = document.getElementById('couponMsg');
+            if (!codeInput || !msgEl) return;
+            const code = codeInput.value.trim().toUpperCase();
 
-        function updateNavAuthUI() {
+            if (!currentUser) {
+                msgEl.innerText = "Kupon kullanmak için önce giriş yapmalısınız.";
+                msgEl.className = "text-[11px] text-red-400 font-medium block";
+                msgEl.classList.remove('hidden');
+                return;
+            }
+
+            const couponData = getValidCouponForUser(currentUser, code);
+
+            if (couponData.valid) {
+                appliedDiscountRate = couponData.rate;
+                appliedCouponCode = code;
+                msgEl.innerText = `Tebrikler! %${couponData.rate * 100} indirim kuponu başarıyla uygulandı.`;
+                msgEl.className = "text-[11px] text-emerald-400 font-medium block";
+                msgEl.classList.remove('hidden');
+                updateBasketSummary();
+            } else {
+                appliedDiscountRate = 0;
+                appliedCouponCode = '';
+                msgEl.innerText = couponData.errorMsg || "Geçersiz veya süresi dolmuş kupon kodu!";
+                msgEl.className = "text-[11px] text-red-400 font-medium block";
+                msgEl.classList.remove('hidden');
+                updateBasketSummary();
+            }
+        };
+
+        function getValidCouponForUser(userName, inputCode) {
+            let couponsMap = {};
+            try {
+                couponsMap = JSON.parse(localStorage.getItem('nes_user_coupons')) || {};
+            } catch(e) {}
+
+            const userKey = userName.toLowerCase();
+            const couponInfo = couponsMap[userKey];
+
+            if (!couponInfo || couponInfo.used) {
+                return { valid: false, errorMsg: "Bu hesap için tanımlı aktif kupon bulunmuyor veya daha önce kullanılmış." };
+            }
+
+            if (inputCode !== couponInfo.code.toUpperCase()) {
+                return { valid: false, errorMsg: "Hatalı kupon kodu!" };
+            }
+
+            const now = new Date();
+            const issuedDate = new Date(couponInfo.issuedAt);
+            const diffTime = now - issuedDate;
+            const diffDays = diffTime / (1000 * 60 * 60 * 24);
+
+            if (diffDays > 15) {
+                return { valid: false, errorMsg: "Üzgünüz, bu kuponun 15 günlük kullanım süresi dolmuştur." };
+            }
+
+            return { valid: true, rate: couponInfo.discountRate };
+        }
+
+        function consumeUserCoupon(userName) {
+            let couponsMap = {};
+            try {
+                couponsMap = JSON.parse(localStorage.getItem('nes_user_coupons')) || {};
+            } catch(e) {}
+
+            const userKey = userName.toLowerCase();
+            if (couponsMap[userKey]) {
+                couponsMap[userKey].used = true;
+                localStorage.setItem('nes_user_coupons', JSON.stringify(couponsMap));
+            }
+        }
+
+        window.checkAndShowUserLoyaltyCoupon = function() {
+            const cardEl = document.getElementById('loyaltyCouponCard');
+            const noMsgEl = document.getElementById('noCouponMsg');
+            const codeDisplay = document.getElementById('couponCodeDisplay');
+            const titleText = document.getElementById('couponTitleText');
+            const descText = document.getElementById('couponDescText');
+
+            if (!cardEl || !noMsgEl) return;
+
+            if (!currentUser) {
+                cardEl.classList.add('hidden');
+                noMsgEl.classList.remove('hidden');
+                noMsgEl.innerText = "Kuponlarınızı görüntülemek için lütfen giriş yapın.";
+                return;
+            }
+
+            let couponsMap = {};
+            try {
+                couponsMap = JSON.parse(localStorage.getItem('nes_user_coupons')) || {};
+            } catch(e) {}
+
+            const userKey = currentUser.toLowerCase();
+            const couponInfo = couponsMap[userKey];
+
+            if (!couponInfo || couponInfo.used) {
+                cardEl.classList.add('hidden');
+                noMsgEl.classList.remove('hidden');
+                noMsgEl.innerText = "Henüz size tanımlanmış aktif bir kuponunuz bulunmuyor veya süresi dolmuş/kullanılmıştır.";
+                return;
+            }
+
+            const now = new Date();
+            const issuedDate = new Date(couponInfo.issuedAt);
+            const diffTime = now - issuedDate;
+            const diffDays = diffTime / (1000 * 60 * 60 * 24);
+
+            if (diffDays > 15) {
+                couponInfo.used = true;
+                localStorage.setItem('nes_user_coupons', JSON.stringify(couponsMap));
+                cardEl.classList.add('hidden');
+                noMsgEl.classList.remove('hidden');
+                noMsgEl.innerText = "Üzgünüz, kuponunuzun 15 günlük süresi sona ermiştir.";
+                return;
+            }
+
+            cardEl.classList.remove('hidden');
+            noMsgEl.classList.add('hidden');
+            if (codeDisplay) codeDisplay.innerText = couponInfo.code;
+            if (titleText) titleText.innerText = `%${couponInfo.discountRate * 100} İndirim Kuponu`;
+            if (descText) descText.innerText = `Bu kuponu ${couponInfo.code} koduyla randevu ödemesinde kullanabilirsiniz.`;
+        };
+
+        function updateCountdownTimer() {
+            if (!currentUser) return;
+            let couponsMap = {};
+            try {
+                couponsMap = JSON.parse(localStorage.getItem('nes_user_coupons')) || {};
+            } catch(e) {}
+
+            const userKey = currentUser.toLowerCase();
+            const couponInfo = couponsMap[userKey];
+            const displayEl = document.getElementById('couponCountdownDisplay');
+
+            if (!displayEl) return;
+
+            if (!couponInfo || couponInfo.used) {
+                displayEl.innerText = "Aktif kupon yok";
+                return;
+            }
+
+            const issuedDate = new Date(couponInfo.issuedAt);
+            const expiryDate = new Date(issuedDate.getTime() + (15 * 24 * 60 * 60 * 1000));
+            const now = new Date();
+            const timeLeft = expiryDate - now;
+
+            if (timeLeft <= 0) {
+                displayEl.innerText = "Süre Doldu";
+                return;
+            }
+
+            const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const mins = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+            const secs = Math.floor((timeLeft % (1000 * 60)) / 1000);
+
+            displayEl.innerText = `${days} Gün ${hours} Saat ${mins} Dk ${secs} Sn`;
+        }
+
+        function addUserSpendingByDate(userName, amount, dateStr) {
+            let spendingRecords = {};
+            try {
+                spendingRecords = JSON.parse(localStorage.getItem('nes_spending_records')) || {};
+            } catch(e) {}
+
+            const userKey = userName.toLowerCase();
+            if (!spendingRecords[userKey]) {
+                spendingRecords[userKey] = [];
+            }
+
+            let day = dateStr;
+            let parts = dateStr.split('-');
+            let year = parts[0] || '2026';
+            let month = parts[1] || '01';
+
+            spendingRecords[userKey].push({
+                date: day,
+                month: `${year}-${month}`,
+                year: year,
+                amount: amount,
+                timestamp: Date.now()
+            });
+
+            localStorage.setItem('nes_spending_records', JSON.stringify(spendingRecords));
+        }
+
+        function getUserSpendingSummary(userName) {
+            let spendingRecords = {};
+            try {
+                spendingRecords = JSON.parse(localStorage.getItem('nes_spending_records')) || {};
+            } catch(e) {}
+
+            const userKey = userName.toLowerCase();
+            const records = spendingRecords[userKey] || [];
+
+            let totalAll = 0;
+            let byYear = {};
+            let byMonth = {};
+            let byDay = {};
+
+            records.forEach(r => {
+                totalAll += r.amount;
+                byYear[r.year] = (byYear[r.year] || 0) + r.amount;
+                byMonth[r.month] = (byMonth[r.month] || 0) + r.amount;
+                byDay[r.date] = (byDay[r.date] || 0) + r.amount;
+            });
+
+            return { totalAll, byYear, byMonth, byDay, records };
+        }
+
+        window.updateNavAuthUI = function() {
             const authButtons = document.getElementById('authButtonsContainer');
             const userProfile = document.getElementById('userProfileContainer');
             const navUserName = document.getElementById('navUserName');
-            const navMyApps = document.getElementById('navMyApps');
-            const randevularimSection = document.getElementById('randevularim');
             const userWelcomeSub = document.getElementById('userWelcomeSub');
             const reminderBanner = document.getElementById('reminderBanner');
 
@@ -780,10 +1163,9 @@
                     userProfile.classList.add('flex');
                 }
                 if (navUserName) navUserName.innerText = currentUser;
-                if (navMyApps) navMyApps.classList.remove('hidden');
-                if (randevularimSection) randevularimSection.classList.remove('hidden');
                 if (userWelcomeSub) userWelcomeSub.innerText = `${currentUser} adlı hesabınıza ait randevu durumları aşağıdadır.`;
-                renderUserAppointments();
+                window.renderUserAppointments();
+                window.checkAndShowUserLoyaltyCoupon();
                 checkReminders();
             } else {
                 if (authButtons) authButtons.classList.remove('hidden');
@@ -791,16 +1173,9 @@
                     userProfile.classList.remove('flex');
                     userProfile.classList.add('hidden');
                 }
-                if (navMyApps) navMyApps.classList.add('hidden');
-                if (randevularimSection) randevularimSection.classList.add('hidden');
                 if (reminderBanner) reminderBanner.classList.add('hidden');
             }
-        }
-        updateNavAuthUI();
-
-        function checkUserLogin() {
-            return currentUser !== null;
-        }
+        };
 
         function getApps() {
             try {
@@ -854,16 +1229,16 @@
             }
         }
 
-        function handleBooking(e) {
+        window.handleBooking = function(e) {
             e.preventDefault();
             const warningEl = document.getElementById('bookingWarning');
             const successEl = document.getElementById('bookingSuccess');
             if (warningEl) warningEl.classList.add('hidden');
             if (successEl) successEl.classList.add('hidden');
 
-            if (!checkUserLogin()) {
+            if (!currentUser) {
                 if (warningEl) warningEl.classList.remove('hidden');
-                openLoginModal();
+                window.openLoginModal();
                 return;
             }
 
@@ -880,12 +1255,11 @@
                 return;
             }
 
-            // Seçilen saat dolu mu kontrol et
             const currentApps = getApps();
             const isSlotTaken = currentApps.some(a => a.date === selectedDate && a.time === selectedTime && a.status !== 'İptal');
             if (isSlotTaken) {
                 alert('Seçtiğiniz tarih ve saat dilimi doludur. Lütfen farklı bir saat seçiniz.');
-                updateTimeSlotAvailability();
+                window.updateTimeSlotAvailability();
                 return;
             }
 
@@ -902,8 +1276,14 @@
                 }
             });
 
+            let finalPrice = totalPrice;
+            if (appliedDiscountRate > 0) {
+                finalPrice = totalPrice - (totalPrice * appliedDiscountRate);
+                consumeUserCoupon(currentUser);
+            }
+
             const serviceNames = selectedObjects.map(s => s.name).join(' + ');
-            const fullServiceSummary = `${serviceNames} (${formatDuration(totalMin)} - ${totalPrice.toLocaleString('tr-TR')} ₺)`;
+            const fullServiceSummary = `${serviceNames} (${formatDuration(totalMin)} - ${finalPrice.toLocaleString('tr-TR')} ₺)`;
 
             const fileInput = document.getElementById('bFile');
 
@@ -911,11 +1291,10 @@
                 const apps = getApps();
                 const newRecord = {
                     id: Date.now(),
-                    name: currentUser,
-                    phone: document.getElementById('bPhone').value,
+                    name: document.getElementById('bName').value,
                     service: fullServiceSummary,
                     serviceList: selectedObjects,
-                    totalPrice: totalPrice,
+                    totalPrice: finalPrice,
                     totalDurationMin: totalMin,
                     date: selectedDate,
                     time: selectedTime,
@@ -928,14 +1307,17 @@
                 saveApps(apps);
                 e.target.reset();
                 selectedServiceIds = [];
-                renderServiceSelectionGrid();
-                updateTimeSlotAvailability();
+                appliedDiscountRate = 0;
+                appliedCouponCode = '';
+                window.renderServiceSelectionGrid();
+                window.updateTimeSlotAvailability();
                 
                 if (successEl) {
                     successEl.classList.remove('hidden');
                     setTimeout(() => successEl.classList.add('hidden'), 4000);
                 }
-                renderUserAppointments();
+                window.renderUserAppointments();
+                window.checkAndShowUserLoyaltyCoupon();
             };
 
             if (fileInput.files && fileInput.files[0]) {
@@ -947,9 +1329,9 @@
             } else {
                 saveRecord('');
             }
-        }
+        };
 
-        function renderUserAppointments() {
+        window.renderUserAppointments = function() {
             const container = document.getElementById('myAppointmentsContainer');
             if (!container) return;
             const apps = getApps();
@@ -968,13 +1350,14 @@
                     <div class="space-y-2">
                         <span class="gold-text font-serif font-bold text-lg">${app.service}</span>
                         <p class="text-xs text-gray-300"><i class="fa-solid fa-calendar-days text-[#C5A059] mr-1"></i> ${app.date} - <b>${app.time}</b></p>
-                        <p class="text-xs text-gray-400">Not: ${app.note || 'Not belirtilmemiş'}</p>
+                        <p class="text-xs text-gray-400">Notunuz: ${app.note || 'Not belirtilmemiş'}</p>
                         ${app.image ? `<div class="mt-2"><span class="text-[10px] text-gray-400 block mb-1">Yüklediğiniz Model:</span><img src="${app.image}" class="w-20 h-20 object-cover rounded-xl border border-[#C5A059]/40"></div>` : ''}
                         ${app.reply ? `<p class="text-xs text-emerald-400 mt-2 bg-emerald-950/40 border border-emerald-900 p-3 rounded-xl"><i class="fa-solid fa-reply mr-1"></i> <b>Kuaför Yanıtı:</b> ${app.reply}</p>` : ''}
                     </div>
-                    <div class="flex items-center gap-3">
+                    <div class="flex flex-col items-end gap-2">
                         <span class="px-3.5 py-1.5 rounded-full text-xs font-semibold ${
                             app.status === 'Onaylandı' ? 'bg-emerald-900/50 text-emerald-300 border border-emerald-800' :
+                            app.status === 'Tamamlandı' ? 'bg-blue-900/50 text-blue-300 border border-blue-800' :
                             app.status === 'İptal' ? 'bg-red-900/50 text-red-300 border border-red-800' :
                             'bg-amber-900/50 text-amber-300 border border-amber-800'
                         }">${app.status}</span>
@@ -982,44 +1365,69 @@
                 `;
                 container.appendChild(div);
             });
-        }
+        };
 
-        function openAdminModal() { document.getElementById('adminModal').classList.remove('hidden'); }
-        function closeAdminModal() { document.getElementById('adminModal').classList.add('hidden'); }
+        window.openAdminModal = function() {
+            const modal = document.getElementById('adminModal');
+            if (modal) modal.classList.remove('hidden');
+        };
 
-        function verifyAdmin() {
+        window.closeAdminModal = function() {
+            const modal = document.getElementById('adminModal');
+            if (modal) modal.classList.add('hidden');
+        };
+
+        window.verifyAdmin = function() {
             const val = document.getElementById('adminPassInput').value;
             if(val === '1234') {
                 document.getElementById('adminAuthScreen').classList.add('hidden');
                 document.getElementById('adminPanelContent').classList.remove('hidden');
-                renderAdminTable();
+                window.renderAdminTable();
             } else {
                 document.getElementById('adminErr').classList.remove('hidden');
             }
-        }
+        };
 
-        function switchAdminTab(tab) {
+        window.switchAdminTab = function(tab) {
             const appBtn = document.getElementById('adminTabAppBtn');
+            const msgBtn = document.getElementById('adminTabMsgBtn');
             const userBtn = document.getElementById('adminTabUserBtn');
+            const spendBtn = document.getElementById('adminTabSpendBtn');
+
             const appView = document.getElementById('adminAppointmentsView');
+            const msgView = document.getElementById('adminMessagesView');
             const userView = document.getElementById('adminUsersView');
+            const spendView = document.getElementById('adminSpendingView');
+
+            [appBtn, msgBtn, userBtn, spendBtn].forEach(b => {
+                if(b) {
+                    b.className = "px-4 py-2 rounded-xl text-xs font-semibold bg-gray-800 text-gray-300 hover:text-white transition";
+                }
+            });
+            [appView, msgView, userView, spendView].forEach(v => {
+                if(v) v.classList.add('hidden');
+            });
 
             if (tab === 'appointments') {
-                appBtn.className = "px-4 py-2 rounded-xl text-xs font-semibold bg-[#C5A059] text-black transition";
-                userBtn.className = "px-4 py-2 rounded-xl text-xs font-semibold bg-gray-800 text-gray-300 hover:text-white transition";
-                appView.classList.remove('hidden');
-                userView.classList.add('hidden');
-                renderAdminTable();
-            } else {
-                userBtn.className = "px-4 py-2 rounded-xl text-xs font-semibold bg-[#C5A059] text-black transition";
-                appBtn.className = "px-4 py-2 rounded-xl text-xs font-semibold bg-gray-800 text-gray-300 hover:text-white transition";
-                userView.classList.remove('hidden');
-                appView.classList.add('hidden');
-                renderAdminUsersTable();
+                if(appBtn) appBtn.className = "px-4 py-2 rounded-xl text-xs font-semibold bg-[#C5A059] text-black transition";
+                if(appView) appView.classList.remove('hidden');
+                window.renderAdminTable();
+            } else if (tab === 'messages') {
+                if(msgBtn) msgBtn.className = "px-4 py-2 rounded-xl text-xs font-semibold bg-[#C5A059] text-black transition";
+                if(msgView) msgView.classList.remove('hidden');
+                window.renderAdminMessagesTable();
+            } else if (tab === 'users') {
+                if(userBtn) userBtn.className = "px-4 py-2 rounded-xl text-xs font-semibold bg-[#C5A059] text-black transition";
+                if(userView) userView.classList.remove('hidden');
+                window.renderAdminUsersTable();
+            } else if (tab === 'spending') {
+                if(spendBtn) spendBtn.className = "px-4 py-2 rounded-xl text-xs font-semibold bg-[#C5A059] text-black transition";
+                if(spendView) spendView.classList.remove('hidden');
+                window.renderAdminSpendingTable();
             }
-        }
+        };
 
-        function renderAdminTable() {
+        window.renderAdminTable = function() {
             const apps = getApps();
             const tbody = document.getElementById('adminTableBody');
             if (!tbody) return;
@@ -1032,28 +1440,54 @@
                 const tr = document.createElement('tr');
                 tr.className = "hover:bg-gray-900/50";
                 tr.innerHTML = `
-                    <td class="p-3 font-semibold text-white">${app.name}<br><span class="text-xs text-gray-400">${app.phone}</span></td>
+                    <td class="p-3 font-semibold text-white">${app.name}</td>
                     <td class="p-3">
-                        <span class="gold-text">${app.service}</span><br>
-                        <span class="text-xs text-gray-400">${app.note || 'Not yok'}</span>
-                        ${app.image ? `<br><button onclick="openLightboxImage('${app.image}', '${app.note || ''}', ${app.id})" class="text-xs text-[#C5A059] underline mt-1 inline-block"><i class="fa-solid fa-image"></i> Görseli Gör</button>` : ''}
+                        <span class="gold-text">${app.service}</span>
                     </td>
                     <td class="p-3 text-gray-300">${app.date} <br><b>${app.time}</b></td>
-                    <td class="p-3"><span class="px-2.5 py-1 rounded-full text-xs font-medium ${app.status==='Onaylandı'?'bg-emerald-900/50 text-emerald-400 border border-emerald-800':'bg-amber-900/50 text-amber-400 border border-amber-800'}">${app.status}</span></td>
+                    <td class="p-3"><span class="px-2.5 py-1 rounded-full text-xs font-medium ${app.status==='Onaylandı'?'bg-emerald-900/50 text-emerald-400 border border-emerald-800':app.status==='Tamamlandı'?'bg-blue-900/50 text-blue-400 border border-blue-800':'bg-amber-900/50 text-amber-400 border border-amber-800'}">${app.status}</span></td>
                     <td class="p-3 space-x-2">
-                        <button onclick="updateStatus(${app.id}, 'Onaylandı')" class="text-emerald-400 hover:text-emerald-300" title="Onayla"><i class="fa-solid fa-check"></i></button>
-                        <button onclick="updateStatus(${app.id}, 'İptal')" class="text-red-400 hover:text-red-300" title="İptal Et"><i class="fa-solid fa-ban"></i></button>
-                        <button onclick="openLightboxImage('${app.image || ''}', '${app.note || 'Not yok'}', ${app.id})" class="text-blue-400 hover:text-blue-300" title="Mesaj & Yanıt"><i class="fa-solid fa-message"></i></button>
-                        <button onclick="deleteApp(${app.id})" class="text-gray-500 hover:text-red-400" title="Sil"><i class="fa-solid fa-trash"></i></button>
+                        <button onclick="window.updateStatus(${app.id}, 'Onaylandı')" class="text-emerald-400 hover:text-emerald-300" title="Onayla"><i class="fa-solid fa-check"></i></button>
+                        <button onclick="window.updateStatus(${app.id}, 'Tamamlandı')" class="text-blue-400 hover:text-blue-300" title="Tamamlandı Olarak İşaretle (Harcamalara Ekle)"><i class="fa-solid fa-circle-check"></i></button>
+                        <button onclick="window.updateStatus(${app.id}, 'İptal')" class="text-red-400 hover:text-red-300" title="İptal Et"><i class="fa-solid fa-ban"></i></button>
+                        <button onclick="window.deleteApp(${app.id})" class="text-gray-500 hover:text-red-400" title="Sil (Harcamalar etkilenmez)"><i class="fa-solid fa-trash"></i></button>
                     </td>
                 `;
                 tbody.appendChild(tr);
             });
-        }
+        };
 
-        function renderAdminUsersTable() {
-            const users = getUsersList();
+        window.renderAdminMessagesTable = function() {
             const apps = getApps();
+            const tbody = document.getElementById('adminMessagesTableBody');
+            if (!tbody) return;
+            tbody.innerHTML = '';
+            if(apps.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" class="text-center p-6 text-gray-500">Henüz müşteri mesajı yok.</td></tr>';
+                return;
+            }
+            apps.forEach(app => {
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-gray-900/50";
+                tr.innerHTML = `
+                    <td class="p-3 font-semibold text-white">${app.name}</td>
+                    <td class="p-3 text-xs text-gray-300"><span class="gold-text font-semibold">${app.service}</span><br>${app.date} / ${app.time}</td>
+                    <td class="p-3 text-xs text-gray-200">${app.note || 'Not belirtilmemiş'}</td>
+                    <td class="p-3">
+                        ${app.image ? `<button onclick="window.openLightboxImage('${app.image}', '${app.note || ''}', ${app.id})" class="text-xs text-[#C5A059] underline"><i class="fa-solid fa-image"></i> Görseli Gör</button>` : '<span class="text-gray-600 text-xs">Görsel yok</span>'}
+                    </td>
+                    <td class="p-3">
+                        <button onclick="window.openLightboxImage('${app.image || ''}', '${app.note || 'Not yok'}', ${app.id})" class="text-xs bg-[#C5A059]/20 text-[#C5A059] border border-[#C5A059] px-3 py-1.5 rounded-lg hover:bg-[#C5A059] hover:text-black transition font-semibold">
+                            <i class="fa-solid fa-reply"></i> Yanıt Ver ${app.reply ? '(Yanıtlandı)' : ''}
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        };
+
+        window.renderAdminUsersTable = function() {
+            const users = getUsersList();
             const tbody = document.getElementById('adminUsersTableBody');
             if (!tbody) return;
             tbody.innerHTML = '';
@@ -1063,45 +1497,124 @@
                 return;
             }
 
-            users.forEach((u) => {
-                const userApps = apps.filter(a => a.name && a.name.toLowerCase() === u.name.toLowerCase());
-                const userAppCount = userApps.length;
-                
-                let totalSpent = 0;
-                userApps.forEach(app => {
-                    if (app.status === 'Onaylandı') {
-                        if (app.totalPrice) {
-                            totalSpent += app.totalPrice;
-                        } else if (app.service) {
-                            const match = app.service.match(/([\d\.]+)\s*₺/);
-                            if (match) {
-                                const val = parseInt(match[1].replace(/\./g, ''), 10);
-                                if (!isNaN(val)) totalSpent += val;
-                            }
-                        }
-                    }
-                });
+            let couponsMap = {};
+            try {
+                couponsMap = JSON.parse(localStorage.getItem('nes_user_coupons')) || {};
+            } catch(e) {}
 
-                const formattedSpent = new Intl.NumberFormat('tr-TR').format(totalSpent);
+            users.forEach((u) => {
+                const userKey = u.name.toLowerCase();
+                const couponInfo = couponsMap[userKey];
+                const hasActiveCoupon = couponInfo && !couponInfo.used && (new Date() - new Date(couponInfo.issuedAt) <= 15*24*60*60*1000);
 
                 const tr = document.createElement('tr');
-                tr.className = "hover:bg-gray-900/50";
+                tr.className = "hover:bg-gray-900/50 align-top";
                 tr.innerHTML = `
                     <td class="p-3 font-semibold text-white">${u.name}</td>
                     <td class="p-3 text-gray-400">${u.pass}</td>
-                    <td class="p-3"><span class="px-2.5 py-1 rounded-full text-xs bg-[#C5A059]/10 text-[#C5A059]">${userAppCount} Adet</span></td>
-                    <td class="p-3"><span class="px-2.5 py-1 rounded-full text-xs bg-emerald-900/40 text-emerald-300 border border-emerald-800 font-semibold">${formattedSpent} ₺</span></td>
                     <td class="p-3">
-                        <button onclick="deleteUserAccount('${u.name}')" class="text-red-400 hover:text-red-300 text-xs bg-red-950/40 border border-red-900 px-3 py-1.5 rounded-lg flex items-center gap-1">
-                            <i class="fa-solid fa-trash"></i> Hesabı Sil
+                        ${hasActiveCoupon ? `<span class="text-xs text-amber-400 font-bold bg-amber-950/40 border border-amber-800 px-2.5 py-1 rounded-full">${couponInfo.code} (%${couponInfo.discountRate*100})</span>` : '<span class="text-xs text-gray-500">Aktif Kupon Yok</span>'}
+                    </td>
+                    <td class="p-3 flex items-center gap-1.5">
+                        <select id="couponSelect_${u.name.replace(/\s+/g, '_')}" class="bg-[#0A0A0A] border border-gray-800 text-white text-xs p-1.5 rounded-lg">
+                            <option value="0.10|NES10">%10 (NES10)</option>
+                            <option value="0.20|NES20">%20 (NES20)</option>
+                            <option value="0.30|NES30">%30 (NES30)</option>
+                        </select>
+                        <button onclick="window.assignCouponToUser('${u.name}')" class="text-xs bg-[#C5A059] text-black font-semibold px-2.5 py-1.5 rounded-lg hover:opacity-90">Gönder</button>
+                    </td>
+                    <td class="p-3">
+                        <button onclick="window.deleteUserAccount('${u.name}')" class="text-red-400 hover:text-red-300 text-xs bg-red-950/40 border border-red-900 px-3 py-1.5 rounded-lg flex items-center gap-1">
+                            <i class="fa-solid fa-trash"></i> Sil
                         </button>
                     </td>
                 `;
                 tbody.appendChild(tr);
             });
-        }
+        };
 
-        function deleteUserAccount(userName) {
+        window.renderAdminSpendingTable = function() {
+            const users = getUsersList();
+            const tbody = document.getElementById('adminSpendingTableBody');
+            if (!tbody) return;
+            tbody.innerHTML = '';
+
+            if (users.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" class="text-center p-6 text-gray-500">Henüz kayıtlı kullanıcı bulunmuyor.</td></tr>';
+                return;
+            }
+
+            users.forEach((u) => {
+                const summary = getUserSpendingSummary(u.name);
+
+                let yearsHtml = `<ul class="space-y-0.5 text-xs text-gray-300">`;
+                if (Object.keys(summary.byYear).length === 0) {
+                    yearsHtml += `<li class="text-gray-500 italic">Yıl kaydı yok</li>`;
+                } else {
+                    for (let [yr, amt] of Object.entries(summary.byYear)) {
+                        yearsHtml += `<li>• ${yr}: <b class="gold-text">${amt.toLocaleString('tr-TR')} ₺</b></li>`;
+                    }
+                }
+                yearsHtml += `</ul>`;
+
+                let monthsHtml = `<ul class="space-y-0.5 text-xs text-gray-300 max-h-24 overflow-y-auto">`;
+                if (Object.keys(summary.byMonth).length === 0) {
+                    monthsHtml += `<li class="text-gray-500 italic">Ay kaydı yok</li>`;
+                } else {
+                    for (let [mKey, amt] of Object.entries(summary.byMonth)) {
+                        monthsHtml += `<li>• ${mKey}: <b class="text-emerald-400">${amt.toLocaleString('tr-TR')} ₺</b></li>`;
+                    }
+                }
+                monthsHtml += `</ul>`;
+
+                let daysHtml = `<ul class="space-y-0.5 text-[11px] text-gray-400 max-h-24 overflow-y-auto">`;
+                if (Object.keys(summary.byDay).length === 0) {
+                    daysHtml += `<li class="text-gray-500 italic">Gün kaydı yok</li>`;
+                } else {
+                    for (let [dKey, amt] of Object.entries(summary.byDay)) {
+                        daysHtml += `<li>• ${dKey}: <b class="text-blue-400">${amt.toLocaleString('tr-TR')} ₺</b></li>`;
+                    }
+                }
+                daysHtml += `</ul>`;
+
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-gray-900/50 align-top";
+                tr.innerHTML = `
+                    <td class="p-3 font-semibold text-white">${u.name}</td>
+                    <td class="p-3"><span class="gold-text font-bold">${summary.totalAll.toLocaleString('tr-TR')} ₺</span></td>
+                    <td class="p-3">${yearsHtml}</td>
+                    <td class="p-3">${monthsHtml}</td>
+                    <td class="p-3">${daysHtml}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        };
+
+        window.assignCouponToUser = function(userName) {
+            const selectEl = document.getElementById(`couponSelect_${userName.replace(/\s+/g, '_')}`);
+            if (!selectEl) return;
+            const parts = selectEl.value.split('|');
+            const rate = parseFloat(parts[0]);
+            const code = parts[1];
+
+            let couponsMap = {};
+            try {
+                couponsMap = JSON.parse(localStorage.getItem('nes_user_coupons')) || {};
+            } catch(e) {}
+
+            couponsMap[userName.toLowerCase()] = {
+                code: code,
+                discountRate: rate,
+                issuedAt: new Date().toISOString(),
+                used: false
+            };
+
+            localStorage.setItem('nes_user_coupons', JSON.stringify(couponsMap));
+            alert(`"${userName}" adlı müşteriye ${code} (${rate*100}%) kuponu başarıyla tanımlandı!`);
+            window.renderAdminUsersTable();
+        };
+
+        window.deleteUserAccount = function(userName) {
             if (confirm(`"${userName}" adlı kullanıcı hesabını ve ilişkili tüm randevuları silmek istediğinize emin misiniz?`)) {
                 let users = getUsersList();
                 users = users.filter(u => u.name.toLowerCase() !== userName.toLowerCase());
@@ -1112,19 +1625,20 @@
                 saveApps(apps);
 
                 if (currentUser && currentUser.toLowerCase() === userName.toLowerCase()) {
-                    handleLogout();
+                    window.handleLogout();
                 }
 
-                renderAdminUsersTable();
-                renderAdminTable();
+                window.renderAdminUsersTable();
+                window.renderAdminTable();
+                window.renderAdminSpendingTable();
             }
-        }
+        };
 
         let activeLightboxId = null;
-        function openLightboxImage(imgSrc, noteText, appId) {
+        window.openLightboxImage = function(imgSrc, noteText, appId) {
             activeLightboxId = appId;
             const container = document.getElementById('lightboxMediaContainer');
-            if(imgSrc) {
+            if(imgSrc && imgSrc !== '') {
                 container.innerHTML = `<img src="${imgSrc}" class="w-full h-auto rounded-xl border border-gray-800">`;
             } else {
                 container.innerHTML = `<div class="text-gray-500 text-sm italic p-8 text-center bg-[#0A0A0A] rounded-xl">Fotoğraf yüklenmemiş</div>`;
@@ -1132,11 +1646,14 @@
             document.getElementById('lightboxNoteText').innerText = noteText;
             document.getElementById('adminReplyText').value = '';
             document.getElementById('lightboxModal').classList.remove('hidden');
-        }
+        };
 
-        function closeLightbox() { document.getElementById('lightboxModal').classList.add('hidden'); }
+        window.closeLightbox = function() {
+            const modal = document.getElementById('lightboxModal');
+            if (modal) modal.classList.add('hidden');
+        };
 
-        function sendAdminReply() {
+        window.sendAdminReply = function() {
             const replyVal = document.getElementById('adminReplyText').value;
             if(!replyVal) return alert('Lütfen yanıt yazın.');
             const apps = getApps();
@@ -1144,61 +1661,152 @@
             if(target) {
                 target.reply = replyVal;
                 saveApps(apps);
-                closeLightbox();
-                renderAdminTable();
-                renderUserAppointments();
+                window.closeLightbox();
+                window.renderAdminMessagesTable();
+                window.renderUserAppointments();
             }
-        }
+        };
 
-        function updateStatus(id, st) {
+        window.updateStatus = function(id, st) {
             const apps = getApps();
             const target = apps.find(a => a.id === id);
             if(target) { 
+                if (st === 'Tamamlandı' && target.status !== 'Tamamlandı') {
+                    let amountToAdd = 0;
+                    if (target.totalPrice) {
+                        amountToAdd = target.totalPrice;
+                    } else if (target.service) {
+                        const match = target.service.match(/([\d\.]+)\s*₺/);
+                        if (match) {
+                            const val = parseInt(match[1].replace(/\./g, ''), 10);
+                            if (!isNaN(val)) amountToAdd = val;
+                        }
+                    }
+                    if (amountToAdd > 0 && target.name) {
+                        addUserSpendingByDate(target.name, amountToAdd, target.date || new Date().toISOString().split('T')[0]);
+                    }
+                }
+
                 target.status = st; 
                 saveApps(apps); 
-                renderAdminTable(); 
-                renderUserAppointments(); 
-                updateTimeSlotAvailability();
+                window.renderAdminTable(); 
+                window.renderAdminMessagesTable();
+                window.renderUserAppointments(); 
+                window.updateTimeSlotAvailability();
+                if(st === 'Tamamlandı') {
+                    window.renderAdminSpendingTable();
+                }
             }
-        }
+        };
 
-        function deleteApp(id) {
+        window.deleteApp = function(id) {
             let apps = getApps();
             apps = apps.filter(a => a.id !== id);
             saveApps(apps);
-            renderAdminTable();
-            renderUserAppointments();
-            updateTimeSlotAvailability();
-        }
+            window.renderAdminTable();
+            window.renderAdminMessagesTable();
+            window.renderUserAppointments();
+            window.updateTimeSlotAvailability();
+        };
 
-        function clearAllApp() {
+        window.clearAllApp = function() {
             if(confirm('Tüm randevu kayıtları silinsin mi?')) {
                 localStorage.removeItem('nes_apps');
-                renderAdminTable();
-                renderUserAppointments();
-                updateTimeSlotAvailability();
+                window.renderAdminTable();
+                window.renderAdminMessagesTable();
+                window.renderUserAppointments();
+                window.updateTimeSlotAvailability();
             }
-        }
+        };
 
-        function openLoginModal() { document.getElementById('loginModal').classList.remove('hidden'); }
-        function closeLoginModal() { document.getElementById('loginModal').classList.add('hidden'); }
-        function openRegisterModal() { document.getElementById('registerModal').classList.remove('hidden'); }
-        function closeRegisterModal() { document.getElementById('registerModal').classList.add('hidden'); }
+        window.openLoginModal = function() {
+            const modal = document.getElementById('loginModal');
+            if (modal) {
+                window.switchToLoginForm();
+                modal.classList.remove('hidden');
+            }
+        };
 
-        function handleRegisterSubmit() {
+        window.closeLoginModal = function() {
+            const modal = document.getElementById('loginModal');
+            if (modal) modal.classList.add('hidden');
+        };
+
+        window.switchToLoginForm = function() {
+            const formView = document.getElementById('loginFormView');
+            const forgotView = document.getElementById('forgotStepView');
+            if (forgotView) forgotView.classList.add('hidden');
+            if (formView) formView.classList.remove('hidden');
+        };
+
+        window.switchToForgotPass = function() {
+            const formView = document.getElementById('loginFormView');
+            const forgotView = document.getElementById('forgotStepView');
+            if (formView) formView.classList.add('hidden');
+            if (forgotView) forgotView.classList.remove('hidden');
+        };
+
+        window.handleDirectPasswordReset = function() {
+            const identifier = document.getElementById('forgotName').value.trim().toLowerCase();
+            const newPass = document.getElementById('forgotNewPass').value;
+            const err = document.getElementById('forgotErrorMsg');
+
+            if (!identifier || !newPass) {
+                err.innerText = "Lütfen ad soyad ve yeni şifrenizi girin!";
+                err.className = "text-red-400 text-xs text-center block";
+                return;
+            }
+
+            if (newPass.length < 6 || !/[A-Z]/.test(newPass)) {
+                err.innerText = "Şifre en az 6 karakter olmalı ve 1 büyük harf içermelidir!";
+                err.className = "text-red-400 text-xs text-center block";
+                return;
+            }
+
+            let users = getUsersList();
+            const idx = users.findIndex(u => u.name.toLowerCase() === identifier);
+
+            if (idx === -1) {
+                err.innerText = "Bu isimde kayıtlı kullanıcı bulunamadı!";
+                err.className = "text-red-400 text-xs text-center block";
+                return;
+            }
+
+            users[idx].pass = newPass;
+            saveUsersList(users);
+
+            err.innerText = "Şifreniz başarıyla yenilendi! Giriş yapabilirsiniz.";
+            err.className = "text-emerald-400 text-xs text-center block";
+
+            setTimeout(() => {
+                window.switchToLoginForm();
+            }, 1500);
+        };
+
+        window.openRegisterModal = function() {
+            const modal = document.getElementById('registerModal');
+            if (modal) modal.classList.remove('hidden');
+        };
+
+        window.closeRegisterModal = function() {
+            const modal = document.getElementById('registerModal');
+            if (modal) modal.classList.add('hidden');
+        };
+
+        window.handleRegisterSubmit = function() {
             const name = document.getElementById('regName').value.trim();
             const pass = document.getElementById('regPass').value;
             const err = document.getElementById('regErrorMsg');
 
             if(!name || pass.length < 6 || !/[A-Z]/.test(pass)) {
-                err.innerText = "Şifre en az 6 karakter olmalı ve 1 büyük harf içermelidir!";
+                err.innerText = "Ad soyad doldurun; şifre en az 6 karakter ve 1 büyük harf içermelidir!";
                 err.classList.remove('hidden');
                 return;
             }
 
             let users = getUsersList();
             if (users.some(u => u.name.toLowerCase() === name.toLowerCase())) {
-                err.innerText = "Bu isimde bir kullanıcı zaten mevcut!";
+                err.innerText = "Bu ad soyad ile kayıtlı kullanıcı zaten mevcut!";
                 err.classList.remove('hidden');
                 return;
             }
@@ -1206,48 +1814,34 @@
             users.push({ name, pass });
             saveUsersList(users);
 
-            localStorage.setItem('nes_reg_name', name);
-            localStorage.setItem('nes_reg_pass', pass);
+            window.closeRegisterModal();
+            window.openLoginModal();
+        };
 
-            closeRegisterModal();
-            openLoginModal();
-        }
-
-        function handleLoginSubmit() {
-            const name = document.getElementById('loginName').value.trim();
+        window.handleLoginSubmit = function() {
+            const identifier = document.getElementById('loginName').value.trim().toLowerCase();
             const pass = document.getElementById('loginPass').value;
             const err = document.getElementById('loginErrorMsg');
             
             let users = getUsersList();
-            const foundUser = users.find(u => u.name.toLowerCase() === name.toLowerCase() && u.pass === pass);
+            const foundUser = users.find(u => u.name.toLowerCase() === identifier && u.pass === pass);
 
-            // Geriye dönük uyumluluk için eski tekli kayıt kontrolü
-            const savedName = localStorage.getItem('nes_reg_name');
-            const savedPass = localStorage.getItem('nes_reg_pass');
-            const isOldMatch = (savedName && name === savedName && pass === savedPass);
-
-            if(foundUser || isOldMatch) {
-                currentUser = name;
-                localStorage.setItem('nes_logged_user', name);
-                
-                if (!users.some(u => u.name.toLowerCase() === name.toLowerCase())) {
-                    users.push({ name, pass });
-                    saveUsersList(users);
-                }
-
-                closeLoginModal();
-                updateNavAuthUI();
+            if(foundUser) {
+                currentUser = foundUser.name;
+                localStorage.setItem('nes_logged_user', foundUser.name);
+                window.closeLoginModal();
+                window.updateNavAuthUI();
             } else {
                 err.innerText = "Hatalı Ad Soyad veya Şifre!";
                 err.classList.remove('hidden');
             }
-        }
+        };
 
-        function handleLogout() {
+        window.handleLogout = function() {
             currentUser = null;
             localStorage.removeItem('nes_logged_user');
-            updateNavAuthUI();
-        }
+            window.updateNavAuthUI();
+        };
     </script>
 </body>
 </html>
