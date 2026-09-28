@@ -38,13 +38,6 @@
 </head>
 <body class="bg-[#0A0A0A] text-gray-200 antialiased selection:bg-[#C5A059] selection:text-black min-h-screen flex flex-col">
 
-    <div id="reminderBanner" class="hidden bg-gradient-to-r from-[#C5A059] via-[#F3E5AB] to-[#C5A059] text-black text-xs sm:text-sm font-semibold py-2.5 px-4 text-center shadow-lg transition-all">
-        <div class="max-w-7xl mx-auto flex items-center justify-center gap-2">
-            <i class="fa-solid fa-bell animate-bounce text-black"></i>
-            <span id="reminderText"></span>
-        </div>
-    </div>
-
     <nav class="sticky top-0 z-40 bg-[#0A0A0A]/90 backdrop-blur-md border-b border-gray-800/80">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
             <div class="flex items-center gap-4">
@@ -72,9 +65,6 @@
                             </a>
                             <a href="#randevularim" onclick="window.toggleDropdownMenu()" class="flex items-center gap-3 px-4 py-2.5 text-xs font-semibold text-gray-300 hover:text-[#C5A059] hover:bg-gray-900/60 transition">
                                 <i class="fa-solid fa-calendar-check w-4 text-[#C5A059]"></i> Randevularım
-                            </a>
-                            <a href="#kuponlarim" onclick="window.toggleDropdownMenu()" class="flex items-center gap-3 px-4 py-2.5 text-xs font-semibold text-gray-300 hover:text-[#C5A059] hover:bg-gray-900/60 transition">
-                                <i class="fa-solid fa-ticket w-4 text-[#C5A059]"></i> Kuponlarım
                             </a>
                             <a href="#konum" onclick="window.toggleDropdownMenu()" class="flex items-center gap-3 px-4 py-2.5 text-xs font-semibold text-gray-300 hover:text-[#C5A059] hover:bg-gray-900/60 transition">
                                 <i class="fa-solid fa-map-location-dot w-4 text-[#C5A059]"></i> Konum & İletişim
@@ -177,7 +167,7 @@
         </div>
     </section>
 
-    <section id="randevu" class="py-24 px-4 max-w-4xl mx-auto">
+    <section id="randevu" class="py-24 px-4 max-w-4xl mx-auto border-b border-gray-800">
         <div class="bg-[#121212] p-8 md:p-12 rounded-3xl shadow-2xl border border-[#C5A059]/30">
             <div class="text-center mb-10">
                 <span class="gold-text text-sm tracking-widest uppercase">VIP Rezervasyon</span>
@@ -214,16 +204,6 @@
                         <div id="basketItemsList" class="text-xs text-gray-300 space-y-1 max-h-32 overflow-y-auto">
                             <p class="text-gray-500 italic">Lütfen hizmet seçiniz.</p>
                         </div>
-
-                        <div class="pt-2 border-t border-gray-800/80 flex flex-col sm:flex-row items-center gap-2">
-                            <div class="relative w-full">
-                                <input type="text" id="couponInput" placeholder="Kupon Kodunuz" class="w-full bg-[#121212] border border-gray-800 focus:border-[#C5A059] text-white text-xs px-3 py-2 rounded-xl focus:outline-none uppercase">
-                            </div>
-                            <button type="button" onclick="window.applyCoupon()" class="w-full sm:w-auto bg-[#C5A059]/20 hover:bg-[#C5A059] text-[#C5A059] hover:text-black border border-[#C5A059] text-xs font-semibold px-4 py-2 rounded-xl transition shrink-0">
-                                Uygula
-                            </button>
-                        </div>
-                        <p id="couponMsg" class="text-[11px] font-medium hidden"></p>
 
                         <div class="flex flex-wrap justify-between items-center pt-2 border-t border-gray-800/80 text-sm font-semibold">
                             <div class="flex items-center gap-2 text-gray-300 text-xs">
@@ -290,26 +270,6 @@
             </div>
 
             <div id="myAppointmentsContainer" class="space-y-4"></div>
-        </div>
-    </section>
-
-    <section id="kuponlarim" class="py-24 px-4 max-w-4xl mx-auto">
-        <div class="bg-[#121212] p-8 md:p-12 rounded-3xl shadow-2xl border border-[#C5A059]/30 space-y-6">
-            <div class="flex flex-col sm:flex-row justify-between items-center gap-4 border-b border-gray-800 pb-6">
-                <div>
-                    <span class="gold-text text-sm tracking-widest uppercase">Sadakat Programı</span>
-                    <h2 class="text-3xl font-bold font-serif-title gold-text mt-2">Kuponlarım</h2>
-                    <p class="text-gray-400 text-sm mt-1">Admin panelinden size tanımlanan aktif indirim kuponları.</p>
-                </div>
-                <button onclick="window.checkAndShowUserLoyaltyCoupon()" class="text-xs bg-[#C5A059]/20 border border-[#C5A059] text-[#C5A059] px-4 py-2.5 rounded-xl hover:bg-[#C5A059] hover:text-black transition font-semibold flex items-center gap-2 shrink-0">
-                    <i class="fa-solid fa-rotate"></i> Yenile
-                </button>
-            </div>
-
-            <div id="loyaltyCouponCard" class="hidden space-y-4"></div>
-            <div id="noCouponMsg" class="text-center text-gray-400 py-6 text-sm">
-                Henüz size tanımlanmış aktif kupon bulunmuyor.
-            </div>
         </div>
     </section>
 
@@ -407,8 +367,6 @@
         let currentUser = localStorage.getItem('nes_logged_user') || null;
         const ALL_TIME_SLOTS = ['10:00', '12:00', '14:00', '16:00', '18:00'];
         let selectedServiceIds = [];
-        let appliedDiscountRate = 0;
-        let appliedCouponCode = '';
 
         const DEFAULT_SERVICES_DATA = [
             { id: 'ombre', name: 'Ombre Tasarımı', price: 3500, durationMin: 180 },
@@ -464,7 +422,6 @@
             window.renderMainServicesCatalog();
             window.renderServiceSelectionGrid();
             window.updateNavAuthUI();
-            setInterval(updateCountdownTimer, 1000);
 
             document.addEventListener('click', (e) => {
                 const dropdown = document.getElementById('dropdownMenu');
@@ -597,15 +554,7 @@
             listEl.innerHTML = htmlList;
             badgeEl.innerText = `${selectedServiceIds.length} Hizmet`;
             totalDurEl.innerText = formatDuration(totalMin);
-
-            let finalPrice = rawTotalPrice;
-            if (appliedDiscountRate > 0) {
-                const discountAmount = rawTotalPrice * appliedDiscountRate;
-                finalPrice = rawTotalPrice - discountAmount;
-                totalPriceEl.innerHTML = `<span class="line-through text-gray-500 text-xs mr-2">${rawTotalPrice.toLocaleString('tr-TR')} ₺</span>${finalPrice.toLocaleString('tr-TR')} ₺ <span class="text-emerald-400 text-xs">(-%${appliedDiscountRate * 100})</span>`;
-            } else {
-                totalPriceEl.innerText = `${finalPrice.toLocaleString('tr-TR')} ₺`;
-            }
+            totalPriceEl.innerText = `${rawTotalPrice.toLocaleString('tr-TR')} ₺`;
         }
 
         window.updateTimeSlotAvailability = function() {
@@ -663,151 +612,7 @@
             }
         };
 
-        window.applyCoupon = function() {
-            const codeInput = document.getElementById('couponInput');
-            const msgEl = document.getElementById('couponMsg');
-            if (!codeInput || !msgEl) return;
-            const code = codeInput.value.trim().toUpperCase();
-
-            if (!currentUser) {
-                msgEl.innerText = "Kupon kullanmak için giriş yapmalısınız.";
-                msgEl.className = "text-[11px] text-red-400 font-medium block";
-                msgEl.classList.remove('hidden');
-                return;
-            }
-
-            const couponData = getValidCouponForUser(currentUser, code);
-
-            if (couponData.valid) {
-                appliedDiscountRate = couponData.rate;
-                appliedCouponCode = code;
-                msgEl.innerText = `Tebrikler! %${couponData.rate * 100} indirim uygulandı.`;
-                msgEl.className = "text-[11px] text-emerald-400 font-medium block";
-                msgEl.classList.remove('hidden');
-                updateBasketSummary();
-            } else {
-                appliedDiscountRate = 0;
-                appliedCouponCode = '';
-                msgEl.innerText = couponData.errorMsg || "Geçersiz kupon!";
-                msgEl.className = "text-[11px] text-red-400 font-medium block";
-                msgEl.classList.remove('hidden');
-                updateBasketSummary();
-            }
-        };
-
-        function getValidCouponForUser(userName, inputCode) {
-            let couponsMap = {};
-            try { couponsMap = JSON.parse(localStorage.getItem('nes_user_coupons')) || {}; } catch(e) {}
-
-            const userKey = userName.toLowerCase();
-            let foundKey = Object.keys(couponsMap).find(k => k.toLowerCase() === userKey) || userKey;
-            let userCoupons = couponsMap[foundKey] || [];
-            if (!Array.isArray(userCoupons)) userCoupons = userCoupons ? [userCoupons] : [];
-
-            const cleanCode = inputCode.trim().toUpperCase();
-            const targetCoupon = userCoupons.find(c => c && !c.used && c.code.toUpperCase() === cleanCode);
-
-            if (!targetCoupon) {
-                return { valid: false, errorMsg: "Geçersiz veya kullanılmış kupon!" };
-            }
-
-            const now = new Date();
-            const issuedDate = new Date(targetCoupon.issuedAt);
-            const diffDays = (now - issuedDate) / (1000 * 60 * 60 * 24);
-
-            if (diffDays > 15) {
-                return { valid: false, errorMsg: "Kuponun 15 günlük süresi dolmuş." };
-            }
-
-            return { valid: true, rate: targetCoupon.discountRate };
-        }
-
-        function consumeUserCoupon(userName, couponCode) {
-            let couponsMap = {};
-            try { couponsMap = JSON.parse(localStorage.getItem('nes_user_coupons')) || {}; } catch(e) {}
-
-            const userKey = userName.toLowerCase();
-            let foundKey = Object.keys(couponsMap).find(k => k.toLowerCase() === userKey) || userKey;
-            let userCoupons = couponsMap[foundKey] || [];
-            if (!Array.isArray(userCoupons)) userCoupons = [];
-
-            const target = userCoupons.find(c => c && !c.used && c.code.toUpperCase() === couponCode.toUpperCase());
-            if (target) {
-                target.used = true;
-                couponsMap[foundKey] = userCoupons;
-                localStorage.setItem('nes_user_coupons', JSON.stringify(couponsMap));
-            }
-        }
-
-        window.checkAndShowUserLoyaltyCoupon = function() {
-            const cardEl = document.getElementById('loyaltyCouponCard');
-            const noMsgEl = document.getElementById('noCouponMsg');
-
-            if (!cardEl || !noMsgEl) return;
-
-            if (!currentUser) {
-                cardEl.classList.add('hidden');
-                noMsgEl.classList.remove('hidden');
-                noMsgEl.innerText = "Kuponlar için giriş yapın.";
-                return;
-            }
-
-            let couponsMap = {};
-            try { couponsMap = JSON.parse(localStorage.getItem('nes_user_coupons')) || {}; } catch(e) {}
-
-            const userKey = currentUser.toLowerCase();
-            let foundKey = Object.keys(couponsMap).find(k => k.toLowerCase() === userKey) || userKey;
-            let userCoupons = couponsMap[foundKey] || [];
-            if (!Array.isArray(userCoupons)) userCoupons = [];
-
-            const now = new Date();
-            const activeCoupons = userCoupons.filter(c => {
-                if (!c || c.used) return false;
-                const issuedDate = new Date(c.issuedAt);
-                const diffDays = (now - issuedDate) / (1000 * 60 * 60 * 24);
-                return diffDays <= 15;
-            });
-
-            if (activeCoupons.length === 0) {
-                cardEl.classList.add('hidden');
-                noMsgEl.classList.remove('hidden');
-                noMsgEl.innerText = "Aktif kuponunuz bulunmuyor.";
-                return;
-            }
-
-            cardEl.classList.remove('hidden');
-            noMsgEl.classList.add('hidden');
-
-            let htmlList = `<div class="grid grid-cols-1 sm:grid-cols-2 gap-3 w-full">`;
-            activeCoupons.forEach(c => {
-                htmlList += `
-                    <div class="bg-[#0A0A0A]/90 border border-[#C5A059]/40 p-4 rounded-xl flex items-center justify-between">
-                        <div>
-                            <span class="text-[10px] gold-text uppercase font-bold block">%${Math.round(c.discountRate * 100)} İNDİRİM</span>
-                            <strong class="text-white text-base font-mono tracking-wider">${c.code}</strong>
-                        </div>
-                        <button type="button" onclick="window.useCouponInForm('${c.code}')" class="gold-gradient text-black text-[11px] font-bold px-3 py-1.5 rounded-lg hover:opacity-90">Kullan</button>
-                    </div>
-                `;
-            });
-            htmlList += `</div>`;
-            cardEl.innerHTML = htmlList;
-        };
-
-        window.useCouponInForm = function(code) {
-            const input = document.getElementById('couponInput');
-            if (input) {
-                input.value = code;
-                window.applyCoupon();
-                const randevuSec = document.getElementById('randevu');
-                if (randevuSec) randevuSec.scrollIntoView({ behavior: 'smooth' });
-            }
-        };
-
-        function updateCountdownTimer() {}
-
         window.updateNavAuthUI = function() {
-            // Check if user was deleted by admin
             if (currentUser) {
                 let users = getUsersList();
                 const exists = users.some(u => u.name.toLowerCase() === currentUser.toLowerCase());
@@ -822,7 +627,6 @@
             const userProfile = document.getElementById('userProfileContainer');
             const navUserName = document.getElementById('navUserName');
             const userWelcomeSub = document.getElementById('userWelcomeSub');
-            const reminderBanner = document.getElementById('reminderBanner');
 
             if (currentUser) {
                 if (authButtons) authButtons.classList.add('hidden');
@@ -833,14 +637,12 @@
                 if (navUserName) navUserName.innerText = currentUser;
                 if (userWelcomeSub) userWelcomeSub.innerText = `${currentUser} hesap randevuları.`;
                 window.renderUserAppointments();
-                window.checkAndShowUserLoyaltyCoupon();
             } else {
                 if (authButtons) authButtons.classList.remove('hidden');
                 if (userProfile) {
                     userProfile.classList.remove('flex');
                     userProfile.classList.add('hidden');
                 }
-                if (reminderBanner) reminderBanner.classList.add('hidden');
             }
         };
 
@@ -884,14 +686,8 @@
                 }
             });
 
-            let finalPrice = totalPrice;
-            if (appliedDiscountRate > 0 && appliedCouponCode) {
-                finalPrice = totalPrice - (totalPrice * appliedDiscountRate);
-                consumeUserCoupon(currentUser, appliedCouponCode);
-            }
-
             const serviceNames = selectedObjects.map(s => s.name).join(' + ');
-            const fullServiceSummary = `${serviceNames} (${formatDuration(totalMin)} - ${finalPrice.toLocaleString('tr-TR')} ₺)`;
+            const fullServiceSummary = `${serviceNames} (${formatDuration(totalMin)} - ${totalPrice.toLocaleString('tr-TR')} ₺)`;
             const fileInput = document.getElementById('bFile');
 
             const saveRecord = (img64) => {
@@ -902,7 +698,7 @@
                     phone: document.getElementById('bPhone').value,
                     service: fullServiceSummary,
                     serviceList: selectedObjects,
-                    totalPrice: finalPrice,
+                    totalPrice: totalPrice,
                     totalDurationMin: totalMin,
                     date: selectedDate,
                     time: selectedTime,
@@ -915,8 +711,6 @@
                 saveApps(apps);
                 e.target.reset();
                 selectedServiceIds = [];
-                appliedDiscountRate = 0;
-                appliedCouponCode = '';
                 window.renderServiceSelectionGrid();
                 window.updateTimeSlotAvailability();
                 
@@ -925,7 +719,6 @@
                     setTimeout(() => successEl.classList.add('hidden'), 4000);
                 }
                 window.renderUserAppointments();
-                window.checkAndShowUserLoyaltyCoupon();
             };
 
             if (fileInput.files && fileInput.files[0]) {
