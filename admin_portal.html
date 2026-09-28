@@ -876,11 +876,22 @@
 
             users.forEach(u => {
                 const userKey = u.name.toLowerCase();
-                const couponInfo = couponsMap[userKey];
+                let userCoupons = couponsMap[userKey] || [];
+                if (!Array.isArray(userCoupons)) {
+                    userCoupons = userCoupons ? [userCoupons] : [];
+                }
+
                 const records = spendingMap[userKey] || [];
                 const totalSpend = records.reduce((sum, r) => sum + r.amount, 0);
 
-                const hasActive = couponInfo && !couponInfo.used;
+                const activeCoupons = userCoupons.filter(c => c && !c.used);
+
+                let couponsBadgeHtml = '<span class="text-gray-600 text-[10px]">Aktif Kupon Yok</span>';
+                if (activeCoupons.length > 0) {
+                    couponsBadgeHtml = activeCoupons.map(c => 
+                        `<span class="inline-block m-0.5 px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-950/60 border border-amber-800 text-amber-300" title="Tarih: ${new Date(c.issuedAt).toLocaleDateString('tr-TR')}">${c.code} (%${Math.round(c.discountRate * 100)})</span>`
+                    ).join(' ');
+                }
 
                 const tr = document.createElement('tr');
                 tr.className = "hover:bg-gray-900/40 transition";
@@ -888,17 +899,16 @@
                     <td class="p-4 font-bold text-white">${u.name}</td>
                     <td class="p-4 text-gray-400 font-mono">${u.pass}</td>
                     <td class="p-4 font-bold gold-gradient-text">${totalSpend.toLocaleString('tr-TR')} ₺</td>
-                    <td class="p-4">
-                        ${hasActive ? `<span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-amber-950/60 border border-amber-800 text-amber-300">${couponInfo.code} (%${couponInfo.discountRate * 100})</span>` : '<span class="text-gray-600 text-[10px]">Aktif Kupon Yok</span>'}
-                    </td>
+                    <td class="p-4 font-medium">${couponsBadgeHtml}</td>
                     <td class="p-4">
                         <div class="flex items-center gap-1.5">
                             <select id="couponRate_${u.name.replace(/\s+/g, '_')}" class="bg-[#0A0A0A] border border-gray-800 text-white text-xs p-1.5 rounded-lg focus:outline-none">
-                                <option value="0.10|NES10">%10 Indirim (NES10)</option>
-                                <option value="0.20|NES20">%20 Indirim (NES20)</option>
-                                <option value="0.30|NES30">%30 VIP Indirim (NES30)</option>
+                                <option value="0.10|NES10">%10 İndirim (NES10)</option>
+                                <option value="0.20|NES20">%20 İndirim (NES20)</option>
+                                <option value="0.30|NES30">%30 VIP İndirim (NES30)</option>
+                                <option value="0.50|NES50">%50 Özel Fırsat (NES50)</option>
                             </select>
-                            <button onclick="window.assignUserCoupon('${u.name}')" class="gold-gradient text-black font-bold text-xs px-3 py-1.5 rounded-lg hover:opacity-90">Ata</button>
+                            <button onclick="window.assignUserCoupon('${u.name}')" class="gold-gradient text-black font-bold text-xs px-3 py-1.5 rounded-lg hover:opacity-90 shadow">+ Kupon Gönder</button>
                         </div>
                     </td>
                     <td class="p-4 text-center">
@@ -913,23 +923,37 @@
             const selectEl = document.getElementById(`couponRate_${userName.replace(/\s+/g, '_')}`);
             if (!selectEl) return;
 
-            const [rateStr, code] = selectEl.value.split('|');
+            const [rateStr, codePrefix] = selectEl.value.split('|');
             const rate = parseFloat(rateStr);
 
             let couponsMap = {};
             try { couponsMap = JSON.parse(localStorage.getItem('nes_user_coupons')) || {}; } catch(e){}
 
-            couponsMap[userName.toLowerCase()] = {
-                code: code,
+            const userKey = userName.toLowerCase();
+            let userCoupons = couponsMap[userKey] || [];
+            if (!Array.isArray(userCoupons)) {
+                userCoupons = userCoupons ? [userCoupons] : [];
+            }
+
+            // Müşteriye özel benzersiz kupon kodu üretimi (Örn: NES10-381)
+            const randomSuffix = Math.floor(100 + Math.random() * 900);
+            const finalCode = `${codePrefix}-${randomSuffix}`;
+
+            const newCoupon = {
+                id: 'cp_' + Date.now() + '_' + Math.random().toString(36).substring(2, 5),
+                code: finalCode,
                 discountRate: rate,
                 issuedAt: new Date().toISOString(),
                 used: false
             };
 
+            userCoupons.push(newCoupon);
+            couponsMap[userKey] = userCoupons;
+
             localStorage.setItem('nes_user_coupons', JSON.stringify(couponsMap));
-            addAuditLog('Kupon Tanımlandı', `"${userName}" müşterisine ${code} (%${rate * 100}) kuponu eklendi.`);
+            addAuditLog('Kupon Tanımlandı', `"${userName}" müşterisine yeni kupon eklendi: ${finalCode} (%${rate * 100}).`);
             window.syncAllData();
-            showToast(`"${userName}" için kupon tanımlandı.`, 'success');
+            showToast(`"${userName}" için ${finalCode} kuponu eklendi.`, 'success');
         };
 
         window.deleteUser = function(userName) {
