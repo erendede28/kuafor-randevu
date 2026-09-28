@@ -153,7 +153,7 @@
                     <span class="text-xs text-gray-300 font-medium">Canlı Veritabanı Senkronizasyonu Aktif</span>
                 </div>
                 <div class="flex items-center gap-4 text-xs">
-                    <button onclick="window.syncAllData()" class="bg-[#0A0A0A] border border-gray-800 hover:border-[#C5A059] text-[#C5A059] px-3 py-1.5 rounded-xl transition flex items-center gap-1.5 font-medium">
+                    <button onclick="window.syncAllData()" class="bg-[#0A0A0A] border border-gray-800 hover:border-[#C5A059] text-[#C5A059] px-3.5 py-2 rounded-xl transition flex items-center gap-1.5 font-medium shadow">
                         <i class="fa-solid fa-rotate"></i> Verileri Yenile
                     </button>
                     <span class="text-gray-500">|</span>
@@ -237,10 +237,12 @@
                             <h1 class="text-2xl font-bold font-serif-title text-white">Müşteri Randevu Yönetimi</h1>
                             <p class="text-xs text-gray-400 mt-1">Gelen randevu taleplerini onaylayın, iptal edin veya tamamlandı olarak işaretleyin.</p>
                         </div>
-                        <div class="flex gap-2">
+                        <div class="flex flex-wrap gap-2">
                             <button onclick="window.filterApps('Hepsi')" class="text-xs bg-gray-800 px-3 py-1.5 rounded-xl text-gray-300 font-semibold hover:text-white">Tümü</button>
                             <button onclick="window.filterApps('Beklemede')" class="text-xs bg-amber-950/50 border border-amber-800 text-amber-300 px-3 py-1.5 rounded-xl font-semibold">Bekleyenler</button>
                             <button onclick="window.filterApps('Onaylandı')" class="text-xs bg-emerald-950/50 border border-emerald-800 text-emerald-300 px-3 py-1.5 rounded-xl font-semibold">Onaylananlar</button>
+                            <button onclick="window.filterApps('Tamamlandı')" class="text-xs bg-blue-950/50 border border-blue-800 text-blue-300 px-3 py-1.5 rounded-xl font-semibold">Tamamlananlar</button>
+                            <button onclick="window.filterApps('İptal')" class="text-xs bg-red-950/50 border border-red-800 text-red-300 px-3 py-1.5 rounded-xl font-semibold">İptal Edilenler</button>
                         </div>
                     </div>
 
@@ -511,6 +513,8 @@
             renderCustomersTable(users);
             renderSpendingTable(users);
             renderAuditLogs();
+
+            showToast('Veriler güncellendi.', 'success');
         };
 
         function getStoredApps() {
@@ -677,13 +681,57 @@
             const apps = getStoredApps();
             const target = apps.find(a => a.id === id);
             if (target) {
+                const oldStatus = target.status;
                 target.status = newStatus;
+
+                // Tamamlandı olarak işaretlendiğinde finansal harcama kayıtlarına ekle
+                if (newStatus === 'Tamamlandı' && oldStatus !== 'Tamamlandı') {
+                    let amountToAdd = target.totalPrice || 0;
+                    if (!amountToAdd && target.service) {
+                        const match = target.service.match(/([\d\.]+)\s*₺/);
+                        if (match) {
+                            const val = parseInt(match[1].replace(/\./g, ''), 10);
+                            if (!isNaN(val)) amountToAdd = val;
+                        }
+                    }
+                    if (amountToAdd > 0 && target.name) {
+                        addUserSpendingByDate(target.name, amountToAdd, target.date || new Date().toISOString().split('T')[0]);
+                    }
+                }
+
                 saveStoredApps(apps);
                 addAuditLog('Randevu Güncelleme', `#${id} ID'li randevu durumu "${newStatus}" yapıldı.`);
                 window.syncAllData();
-                showToast(`Randevu durumu "${newStatus}" olarak güncellendi.`, 'info');
+                showToast(`Randevu durumu "${newStatus}" olarak güncellendi.`, 'success');
             }
         };
+
+        function addUserSpendingByDate(userName, amount, dateStr) {
+            let spendingRecords = {};
+            try {
+                spendingRecords = JSON.parse(localStorage.getItem('nes_spending_records')) || {};
+            } catch(e) {}
+
+            const userKey = userName.toLowerCase();
+            if (!spendingRecords[userKey]) {
+                spendingRecords[userKey] = [];
+            }
+
+            let day = dateStr;
+            let parts = dateStr.split('-');
+            let year = parts[0] || '2026';
+            let month = parts[1] || '01';
+
+            spendingRecords[userKey].push({
+                date: day,
+                month: `${year}-${month}`,
+                year: year,
+                amount: amount,
+                timestamp: Date.now()
+            });
+
+            localStorage.setItem('nes_spending_records', JSON.stringify(spendingRecords));
+        }
 
         window.openReplyModalForApp = function(id) {
             activeReplyAppId = id;
