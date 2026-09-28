@@ -269,7 +269,7 @@
                 <div id="view_customers" class="space-y-6 hidden">
                     <div class="border-b border-gray-800 pb-4">
                         <h1 class="text-2xl font-bold font-serif-title text-white">Müşteri CRM Yönetimi</h1>
-                        <p class="text-xs text-gray-400 mt-1">Müşteri hesaplarını görüntüleyin ve yönetin.</p>
+                        <p class="text-xs text-gray-400 mt-1">Kayıtlı müşteri hesaplarını görüntüleyin ve yönetin.</p>
                     </div>
 
                     <div class="bg-[#121212] border border-gray-800 rounded-2xl overflow-hidden shadow-xl">
@@ -484,7 +484,7 @@
             renderSpendingTable(users);
             renderAuditLogs();
 
-            showToast('Veriler güncellendi.', 'success');
+            showToast('Veriler senkronize edildi.', 'success');
         };
 
         function getStoredApps() {
@@ -704,7 +704,7 @@
             let spendingRecords = {};
             try { spendingRecords = JSON.parse(localStorage.getItem('nes_spending_records')) || {}; } catch(e) {}
 
-            const userKey = userName.toLowerCase();
+            const userKey = (userName || '').trim().toLowerCase();
             if (!spendingRecords[userKey]) {
                 spendingRecords[userKey] = [];
             }
@@ -879,7 +879,7 @@
             if (!tbody) return;
             tbody.innerHTML = '';
 
-            if (users.length === 0) {
+            if (!users || users.length === 0) {
                 tbody.innerHTML = '<tr><td colspan="4" class="text-center py-6 text-gray-500">Kayıtlı kullanıcı hesabı bulunmuyor.</td></tr>';
                 return;
             }
@@ -888,7 +888,7 @@
             try { spendingMap = JSON.parse(localStorage.getItem('nes_spending_records')) || {}; } catch(e){}
 
             users.forEach((u, index) => {
-                const userKey = u.name.toLowerCase();
+                const userKey = (u.name || '').trim().toLowerCase();
                 const records = spendingMap[userKey] || [];
                 const totalSpend = records.reduce((sum, r) => sum + r.amount, 0);
 
@@ -928,13 +928,13 @@
             let spendingMap = {};
             try { spendingMap = JSON.parse(localStorage.getItem('nes_spending_records')) || {}; } catch(e){}
 
-            if (users.length === 0) {
+            if (!users || users.length === 0) {
                 tbody.innerHTML = '<tr><td colspan="5" class="text-center py-6 text-gray-500">Veri yok.</td></tr>';
                 return;
             }
 
             users.forEach(u => {
-                const userKey = u.name.toLowerCase();
+                const userKey = (u.name || '').trim().toLowerCase();
                 const records = spendingMap[userKey] || [];
 
                 let total = 0;
@@ -964,7 +964,7 @@
 
         function addAuditLog(action, details) {
             let logs = [];
-            try { logs = JSON.parse(localStorage.getItem('nes_audit_logs')) || {}; } catch(e){}
+            try { logs = JSON.parse(localStorage.getItem('nes_audit_logs')) || []; } catch(e){}
 
             logs.unshift({
                 timestamp: new Date().toLocaleString('tr-TR'),
@@ -983,7 +983,7 @@
             container.innerHTML = '';
 
             let logs = [];
-            try { logs = JSON.parse(localStorage.getItem('nes_audit_logs')) || {}; } catch(e){}
+            try { logs = JSON.parse(localStorage.getItem('nes_audit_logs')) || []; } catch(e){}
 
             if (logs.length === 0) {
                 container.innerHTML = '<p class="text-gray-500 italic py-4">Kayıt yok.</p>';
