@@ -38,7 +38,6 @@
 </head>
 <body class="bg-[#0A0A0A] text-gray-200 antialiased selection:bg-[#C5A059] selection:text-black min-h-screen flex flex-col">
 
-    <!-- Üst Hatırlatma Bandı -->
     <div id="reminderBanner" class="hidden bg-gradient-to-r from-[#C5A059] via-[#F3E5AB] to-[#C5A059] text-black text-xs sm:text-sm font-semibold py-2.5 px-4 text-center shadow-lg transition-all">
         <div class="max-w-7xl mx-auto flex items-center justify-center gap-2">
             <i class="fa-solid fa-bell animate-bounce text-black"></i>
@@ -46,7 +45,6 @@
         </div>
     </div>
 
-    <!-- Navigasyon Barı -->
     <nav class="sticky top-0 z-40 bg-[#0A0A0A]/90 backdrop-blur-md border-b border-gray-800/80">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
             <div class="flex items-center gap-4">
@@ -116,7 +114,6 @@
         </div>
     </nav>
 
-    <!-- Hero Bölümü -->
     <section id="anasayfa" class="relative min-h-[85vh] flex items-center justify-center px-4 overflow-hidden border-b border-gray-800">
         <div class="absolute inset-0 bg-cover bg-center opacity-25 scale-105" style="background-image: url('https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=1920&q=80');"></div>
         <div class="absolute inset-0 bg-gradient-to-t from-[#0A0A0A] via-[#0A0A0A]/70 to-transparent"></div>
@@ -145,21 +142,17 @@
         </div>
     </section>
 
-    <!-- Hizmetler & Fiyat Listesi -->
     <section id="hizmetler" class="py-24 px-4 max-w-7xl mx-auto border-b border-gray-800">
         <div class="text-center mb-16">
             <span class="gold-text text-sm tracking-widest uppercase font-semibold">Şeffaf Fiyatlandırma</span>
             <h2 class="text-3xl md:text-4xl font-bold font-serif-title gold-text mt-2">Hizmetlerimiz & Fiyat Listesi</h2>
             <div class="w-24 h-0.5 bg-[#C5A059] mx-auto mt-4"></div>
-            <p class="text-gray-400 text-sm mt-3">Tüm hizmetlerimizde dünya markası orijinal ürünler kullanılmaktadır.</p>
+            <p class="text-gray-400 text-sm mt-3">Admin panelinden güncellenen tüm hizmetler anında burada listelenir.</p>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="mainServicesCatalogGrid">
-            <!-- Dinamik Olarak Doldurulacak -->
-        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="mainServicesCatalogGrid"></div>
     </section>
 
-    <!-- Portfolyo Bölümü -->
     <section id="galeri" class="py-24 px-4 bg-[#0A0A0A] border-b border-gray-800">
         <div class="max-w-7xl mx-auto">
             <div class="text-center mb-16">
@@ -169,28 +162,27 @@
             </div>
             <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <div class="overflow-hidden rounded-2xl h-44 md:h-52 border border-gray-800 relative group">
-                    <img src="https://images.unsplash.com/photo-1560869713-7d0a29430803?auto=format&fit=crop&w=600&q=80" class="w-full h-full object-cover group-hover:scale-110 transition duration-500" alt="Sarı Balyaj & Lob Kesim" onerror="this.onerror=null; this.src='https://placehold.co/600x800/121212/C5A059?text=Sari+Balyaj';">
+                    <img src="https://images.unsplash.com/photo-1560869713-7d0a29430803?auto=format&fit=crop&w=600&q=80" class="w-full h-full object-cover group-hover:scale-110 transition duration-500" alt="Sarı Balyaj">
                 </div>
                 <div class="overflow-hidden rounded-2xl h-44 md:h-52 border border-gray-800 relative group">
-                    <img src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=600&q=80" class="w-full h-full object-cover group-hover:scale-110 transition duration-500" alt="Kahve Yarı Toplu" onerror="this.onerror=null; this.src='https://placehold.co/600x800/121212/C5A059?text=Kahve+Toplu';">
+                    <img src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=600&q=80" class="w-full h-full object-cover group-hover:scale-110 transition duration-500" alt="Kahve Toplu">
                 </div>
                 <div class="overflow-hidden rounded-2xl h-44 md:h-52 border border-gray-800 relative group">
-                    <img src="https://images.unsplash.com/photo-1527799820374-dcf8d9d4a388?auto=format&fit=crop&w=600&q=80" class="w-full h-full object-cover group-hover:scale-110 transition duration-500" alt="Zarif Şık Topuz" onerror="this.onerror=null; this.src='https://placehold.co/600x800/121212/C5A059?text=Zarif+Topuz';">
+                    <img src="https://images.unsplash.com/photo-1527799820374-dcf8d9d4a388?auto=format&fit=crop&w=600&q=80" class="w-full h-full object-cover group-hover:scale-110 transition duration-500" alt="Zarif Topuz">
                 </div>
                 <div class="overflow-hidden rounded-2xl h-44 md:h-52 border border-gray-800 relative group">
-                    <img src="https://images.unsplash.com/photo-1519699047748-de8e457a634e?auto=format&fit=crop&w=600&q=80" class="w-full h-full object-cover group-hover:scale-110 transition duration-500" alt="Hacimli At Kuyruğu" onerror="this.onerror=null; this.src='https://placehold.co/600x800/121212/C5A059?text=At+Kuyrugu';">
+                    <img src="https://images.unsplash.com/photo-1519699047748-de8e457a634e?auto=format&fit=crop&w=600&q=80" class="w-full h-full object-cover group-hover:scale-110 transition duration-500" alt="At Kuyruğu">
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Randevu Oluşturma Bölümü -->
     <section id="randevu" class="py-24 px-4 max-w-4xl mx-auto">
         <div class="bg-[#121212] p-8 md:p-12 rounded-3xl shadow-2xl border border-[#C5A059]/30">
             <div class="text-center mb-10">
                 <span class="gold-text text-sm tracking-widest uppercase">VIP Rezervasyon</span>
                 <h2 class="text-3xl font-bold font-serif-title gold-text mt-2">Randevu Oluşturun</h2>
-                <p class="text-gray-400 text-sm mt-1">Size en uygun zamanı seçin, talebinizi hemen oluşturalım.</p>
+                <p class="text-gray-400 text-sm mt-1">Size en uygun zamanı seçin.</p>
             </div>
 
             <form onsubmit="window.handleBooking(event)" class="space-y-6">
@@ -207,8 +199,7 @@
 
                 <div>
                     <div class="flex justify-between items-center mb-2">
-                        <label class="block text-xs font-semibold text-gray-300 uppercase tracking-wider">Hizmet Seçimi (Birden Fazla Seçebilirsiniz)</label>
-                        <span class="text-xs gold-text font-medium"><i class="fa-solid fa-layer-group mr-1"></i>Çoklu Seçim Aktif</span>
+                        <label class="block text-xs font-semibold text-gray-300 uppercase tracking-wider">Hizmet Seçimi (Çoklu Seçim Aktif)</label>
                     </div>
 
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 mb-4" id="serviceSelectionGrid"></div>
@@ -216,20 +207,20 @@
                     <div id="serviceBasketSummary" class="bg-[#0A0A0A] border border-[#C5A059]/30 p-4 rounded-2xl space-y-3">
                         <div class="flex justify-between items-center border-b border-gray-800 pb-2">
                             <span class="text-xs uppercase tracking-wider text-gray-400 font-semibold flex items-center gap-1.5">
-                                <i class="fa-solid fa-basket-shopping gold-text"></i> Seçilen Hizmetler Sepeti
+                                <i class="fa-solid fa-basket-shopping gold-text"></i> Sepet
                             </span>
-                            <span id="basketCountBadge" class="text-[10px] bg-[#C5A059]/20 text-[#C5A059] px-2.5 py-0.5 rounded-full font-bold">0 Hizmet Seçildi</span>
+                            <span id="basketCountBadge" class="text-[10px] bg-[#C5A059]/20 text-[#C5A059] px-2.5 py-0.5 rounded-full font-bold">0 Hizmet</span>
                         </div>
                         <div id="basketItemsList" class="text-xs text-gray-300 space-y-1 max-h-32 overflow-y-auto">
-                            <p class="text-gray-500 italic">Lütfen yukarıdan en az bir hizmet seçiniz.</p>
+                            <p class="text-gray-500 italic">Lütfen hizmet seçiniz.</p>
                         </div>
 
                         <div class="pt-2 border-t border-gray-800/80 flex flex-col sm:flex-row items-center gap-2">
                             <div class="relative w-full">
-                                <input type="text" id="couponInput" placeholder="Kupon Kodunuz (Örn: NES10)" class="w-full bg-[#121212] border border-gray-800 focus:border-[#C5A059] text-white text-xs px-3 py-2 rounded-xl focus:outline-none uppercase">
+                                <input type="text" id="couponInput" placeholder="Kupon Kodunuz" class="w-full bg-[#121212] border border-gray-800 focus:border-[#C5A059] text-white text-xs px-3 py-2 rounded-xl focus:outline-none uppercase">
                             </div>
                             <button type="button" onclick="window.applyCoupon()" class="w-full sm:w-auto bg-[#C5A059]/20 hover:bg-[#C5A059] text-[#C5A059] hover:text-black border border-[#C5A059] text-xs font-semibold px-4 py-2 rounded-xl transition shrink-0">
-                                Kuponu Uygula
+                                Uygula
                             </button>
                         </div>
                         <p id="couponMsg" class="text-[11px] font-medium hidden"></p>
@@ -237,10 +228,10 @@
                         <div class="flex flex-wrap justify-between items-center pt-2 border-t border-gray-800/80 text-sm font-semibold">
                             <div class="flex items-center gap-2 text-gray-300 text-xs">
                                 <i class="fa-solid fa-stopwatch gold-text"></i>
-                                <span>Tahmini Süre: <strong id="basketTotalDuration" class="gold-text">0 Dk</strong></span>
+                                <span>Süre: <strong id="basketTotalDuration" class="gold-text">0 Dk</strong></span>
                             </div>
                             <div class="text-right">
-                                <span class="text-xs text-gray-400 mr-2">Toplam Tutar:</span>
+                                <span class="text-xs text-gray-400 mr-2">Toplam:</span>
                                 <span id="basketTotalPrice" class="text-lg gold-text font-bold">0 ₺</span>
                             </div>
                         </div>
@@ -267,9 +258,9 @@
                 </div>
 
                 <div>
-                    <label class="block text-xs font-semibold text-gray-300 uppercase tracking-wider mb-2">Notunuz / İstediğiniz Model Görseli</label>
-                    <textarea id="bNote" rows="3" placeholder="Örn: Bu saç modelinden istiyorum..." class="w-full bg-[#0A0A0A] border border-gray-800 focus:border-[#C5A059] text-white px-4 py-3 rounded-xl focus:outline-none mb-3"></textarea>
-                    <input type="file" id="bFile" accept="image/*" class="w-full text-sm text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-[#C5A059] file:text-black hover:file:bg-[#b8934a] cursor-pointer">
+                    <label class="block text-xs font-semibold text-gray-300 uppercase tracking-wider mb-2">Notunuz / Görsel</label>
+                    <textarea id="bNote" rows="3" placeholder="Örn: Bu modelden istiyorum..." class="w-full bg-[#0A0A0A] border border-gray-800 focus:border-[#C5A059] text-white px-4 py-3 rounded-xl focus:outline-none mb-3"></textarea>
+                    <input type="file" id="bFile" accept="image/*" class="w-full text-sm text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-[#C5A059] file:text-black cursor-pointer">
                 </div>
 
                 <button type="submit" class="w-full gold-gradient text-black font-semibold py-4 rounded-xl shadow-lg text-lg hover:opacity-90 transition">
@@ -277,15 +268,14 @@
                 </button>
             </form>
             <div id="bookingSuccess" class="hidden mt-6 bg-[#C5A059]/10 border border-[#C5A059] text-[#C5A059] p-4 rounded-xl text-center font-medium">
-                <i class="fa-solid fa-circle-check mr-2"></i> Randevu talebiniz başarıyla alındı!
+                Randevu talebiniz alındı!
             </div>
             <div id="bookingWarning" class="hidden mt-6 bg-red-900/40 border border-red-800 text-red-300 p-4 rounded-xl text-center font-medium">
-                <i class="fa-solid fa-triangle-exclamation mr-2"></i> Randevu oluşturabilmek için önce Giriş Yapmanız veya Üye Olmanız gerekmektedir!
+                Önce Giriş Yapmalısınız!
             </div>
         </div>
     </section>
 
-    <!-- Müşteri Paneli (Randevularım) -->
     <section id="randevularim" class="py-24 px-4 max-w-4xl mx-auto">
         <div class="bg-[#121212] p-8 md:p-12 rounded-3xl shadow-2xl border border-[#C5A059]/30 space-y-6">
             <div class="flex flex-col sm:flex-row justify-between items-center gap-4 border-b border-gray-800 pb-6">
@@ -295,7 +285,7 @@
                     <p id="userWelcomeSub" class="text-gray-400 text-sm mt-1"></p>
                 </div>
                 <button onclick="window.renderUserAppointments()" class="text-xs bg-[#C5A059]/20 border border-[#C5A059] text-[#C5A059] px-4 py-2.5 rounded-xl hover:bg-[#C5A059] hover:text-black transition font-semibold flex items-center gap-2 shrink-0">
-                    <i class="fa-solid fa-rotate"></i> Listeyi Yenile
+                    <i class="fa-solid fa-rotate"></i> Yenile
                 </button>
             </div>
 
@@ -303,45 +293,26 @@
         </div>
     </section>
 
-    <!-- Kuponlarım Bölümü -->
     <section id="kuponlarim" class="py-24 px-4 max-w-4xl mx-auto">
         <div class="bg-[#121212] p-8 md:p-12 rounded-3xl shadow-2xl border border-[#C5A059]/30 space-y-6">
             <div class="flex flex-col sm:flex-row justify-between items-center gap-4 border-b border-gray-800 pb-6">
                 <div>
                     <span class="gold-text text-sm tracking-widest uppercase">Sadakat Programı</span>
                     <h2 class="text-3xl font-bold font-serif-title gold-text mt-2">Kuponlarım</h2>
-                    <p class="text-gray-400 text-sm mt-1">Size özel tanımlanan indirim kuponları ve geçerlilik süreleri.</p>
+                    <p class="text-gray-400 text-sm mt-1">Admin panelinden size tanımlanan aktif indirim kuponları.</p>
                 </div>
                 <button onclick="window.checkAndShowUserLoyaltyCoupon()" class="text-xs bg-[#C5A059]/20 border border-[#C5A059] text-[#C5A059] px-4 py-2.5 rounded-xl hover:bg-[#C5A059] hover:text-black transition font-semibold flex items-center gap-2 shrink-0">
-                    <i class="fa-solid fa-rotate"></i> Kuponu Yenile
+                    <i class="fa-solid fa-rotate"></i> Yenile
                 </button>
             </div>
 
-            <div id="loyaltyCouponCard" class="hidden space-y-4">
-                <div class="bg-gradient-to-r from-[#C5A059]/20 via-[#1a1814] to-[#C5A059]/10 border border-[#C5A059] p-6 rounded-2xl flex flex-col sm:flex-row items-center justify-between gap-6 shadow-xl">
-                    <div class="flex items-center gap-4">
-                        <div class="w-14 h-14 rounded-2xl gold-gradient text-black flex items-center justify-center text-2xl font-bold shrink-0 shadow-lg">
-                            <i class="fa-solid fa-ticket"></i>
-                        </div>
-                        <div>
-                            <span class="text-xs gold-text uppercase font-semibold tracking-wider block">Aktif İndirim Kuponu</span>
-                            <h4 class="text-white font-bold text-lg" id="couponTitleText">Tebrikler! İndirim Kuponu Kazandınız</h4>
-                            <p class="text-gray-300 text-xs mt-1" id="couponDescText">Bu kuponu ödeme aşamasında kullanabilirsiniz.</p>
-                            <div class="mt-3 bg-[#0A0A0A]/80 border border-[#C5A059]/40 px-3 py-1.5 rounded-xl inline-flex items-center gap-2">
-                                <i class="fa-solid fa-hourglass-half text-[#C5A059] animate-spin"></i>
-                                <span class="text-[11px] text-gray-300">Kalan Süre: <strong id="couponCountdownDisplay" class="gold-text font-mono">Hesaplanıyor...</strong></span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <div id="loyaltyCouponCard" class="hidden space-y-4"></div>
             <div id="noCouponMsg" class="text-center text-gray-400 py-6 text-sm">
-                Henüz size tanımlanmış aktif bir kuponunuz bulunmuyor veya süresi dolmuş/kullanılmıştır.
+                Henüz size tanımlanmış aktif kupon bulunmuyor.
             </div>
         </div>
     </section>
 
-    <!-- Konum & İletişim Bölümü -->
     <section id="konum" class="py-24 px-4 bg-[#0F0F0F] border-t border-gray-800">
         <div class="max-w-7xl mx-auto">
             <div class="text-center mb-16">
@@ -357,28 +328,21 @@
                     </p>
                     <div class="flex flex-col gap-3 text-gray-300 text-sm">
                         <p class="flex items-center gap-2"><i class="fa-solid fa-phone gold-text"></i> +90 (216) 000 00 00</p>
-                        <p class="flex items-center gap-2"><i class="fa-solid fa-calendar-days gold-text"></i> <strong>Açık Günler:</strong> Pazartesi - Pazar <span class="text-xs text-amber-400/90">(Salı günleri kapalıyız)</span></p>
+                        <p class="flex items-center gap-2"><i class="fa-solid fa-calendar-days gold-text"></i> <strong>Açık Günler:</strong> Pazartesi - Pazar</p>
                         <p class="flex items-center gap-2"><i class="fa-solid fa-clock gold-text"></i> <strong>Çalışma Saatleri:</strong> 10:00 - 19:00</p>
-                    </div>
-                    <div class="pt-2">
-                        <a href="https://maps.app.goo.gl/fVrwzGqusjmgitqS8?g_st=aw" target="_blank" class="inline-flex items-center gap-3 gold-gradient text-black px-8 py-3.5 rounded-full font-semibold text-sm shadow-lg hover:opacity-90 transition">
-                            <i class="fa-solid fa-map-location-dot"></i> Haritada Aç & Yol Tarifi Al
-                        </a>
                     </div>
                 </div>
                 <div class="h-96 rounded-3xl overflow-hidden border border-[#C5A059]/30 shadow-2xl bg-white relative">
-                    <iframe width="100%" height="100%" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.com/maps?q=NES+KUAF%C3%96R,+F%C4%B1st%C4%B1ka%C4%9Fac%C4%B1,+%C4%B0spir+Soka%C4%9F%C4%B1+4/A,+34664+%C3%9Csk%C3%BCdar/%C4%B0stanbul&t=&z=17&ie=UTF8&iwloc=&output=embed" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+                    <iframe width="100%" height="100%" frameborder="0" scrolling="no" src="https://maps.google.com/maps?q=NES+KUAF%C3%96R,+F%C4%B1st%C4%B1ka%C4%9Fac%C4%B1,+%C4%B0spir+Soka%C4%9F%C4%B1+4/A,+34664+%C3%9Csk%C3%BCdar/%C4%B0stanbul&t=&z=17&ie=UTF8&iwloc=&output=embed" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Footer -->
     <footer class="py-12 px-4 text-center border-t border-gray-900 text-gray-500 text-sm mt-auto">
         <p>&copy; 2026 NES KUAFÖR SALONU. Tüm hakları saklıdır.</p>
     </footer>
 
-    <!-- Giriş Yap Modal -->
     <div id="loginModal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
         <div class="bg-[#121212] border border-[#C5A059]/40 rounded-3xl max-w-md w-full p-6 md:p-8 shadow-2xl relative">
             <button onclick="window.closeLoginModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white text-2xl">&times;</button>
@@ -406,11 +370,11 @@
                     <input type="text" id="forgotName" placeholder="Adınız Soyadınız" class="w-full bg-[#0A0A0A] border border-gray-800 text-white px-4 py-2.5 rounded-xl focus:border-[#C5A059] focus:outline-none">
                 </div>
                 <div>
-                    <label class="block text-xs text-gray-400 uppercase mb-1">Yeni Şifre (En az 6 karakter & 1 Büyük Harf)</label>
-                    <input type="password" id="forgotNewPass" placeholder="Yeni Şifreniz" class="w-full bg-[#0A0A0A] border border-gray-800 text-white px-4 py-2.5 rounded-xl focus:border-[#C5A059] focus:outline-none">
+                    <label class="block text-xs text-gray-400 uppercase mb-1">Yeni Şifre</label>
+                    <input type="password" id="forgotNewPass" placeholder="Yeni Şifre" class="w-full bg-[#0A0A0A] border border-gray-800 text-white px-4 py-2.5 rounded-xl focus:border-[#C5A059] focus:outline-none">
                 </div>
                 <div class="flex justify-between items-center text-xs">
-                    <button type="button" onclick="window.switchToLoginForm()" class="text-gray-400 hover:text-white"><i class="fa-solid fa-arrow-left mr-1"></i> Giriş Ekranına Dön</button>
+                    <button type="button" onclick="window.switchToLoginForm()" class="text-gray-400 hover:text-white"><i class="fa-solid fa-arrow-left mr-1"></i> Geri Dön</button>
                 </div>
                 <button onclick="window.handleDirectPasswordReset()" class="w-full gold-gradient text-black font-semibold py-3 rounded-xl">Şifreyi Yenile</button>
                 <p id="forgotErrorMsg" class="text-xs text-center hidden"></p>
@@ -418,7 +382,6 @@
         </div>
     </div>
 
-    <!-- Üye Ol Modal -->
     <div id="registerModal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
         <div class="bg-[#121212] border border-[#C5A059]/40 rounded-3xl max-w-md w-full p-6 md:p-8 shadow-2xl relative">
             <button onclick="window.closeRegisterModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white text-2xl">&times;</button>
@@ -605,8 +568,8 @@
             const services = getServicesData();
 
             if (selectedServiceIds.length === 0) {
-                listEl.innerHTML = '<p class="text-gray-500 italic">Lütfen yukarıdan en az bir hizmet seçiniz.</p>';
-                badgeEl.innerText = '0 Hizmet Seçildi';
+                listEl.innerHTML = '<p class="text-gray-500 italic">Lütfen hizmet seçiniz.</p>';
+                badgeEl.innerText = '0 Hizmet';
                 totalDurEl.innerText = '0 Dk';
                 totalPriceEl.innerText = '0 ₺';
                 return;
@@ -632,14 +595,14 @@
 
             htmlList += '</ul>';
             listEl.innerHTML = htmlList;
-            badgeEl.innerText = `${selectedServiceIds.length} Hizmet Seçildi`;
+            badgeEl.innerText = `${selectedServiceIds.length} Hizmet`;
             totalDurEl.innerText = formatDuration(totalMin);
 
             let finalPrice = rawTotalPrice;
             if (appliedDiscountRate > 0) {
                 const discountAmount = rawTotalPrice * appliedDiscountRate;
                 finalPrice = rawTotalPrice - discountAmount;
-                totalPriceEl.innerHTML = `<span class="line-through text-gray-500 text-xs mr-2">${rawTotalPrice.toLocaleString('tr-TR')} ₺</span>${finalPrice.toLocaleString('tr-TR')} ₺ <span class="text-emerald-400 text-xs font-normal">(-%${appliedDiscountRate * 100})</span>`;
+                totalPriceEl.innerHTML = `<span class="line-through text-gray-500 text-xs mr-2">${rawTotalPrice.toLocaleString('tr-TR')} ₺</span>${finalPrice.toLocaleString('tr-TR')} ₺ <span class="text-emerald-400 text-xs">(-%${appliedDiscountRate * 100})</span>`;
             } else {
                 totalPriceEl.innerText = `${finalPrice.toLocaleString('tr-TR')} ₺`;
             }
@@ -679,9 +642,9 @@
                 option.value = time;
 
                 if (isBooked) {
-                    option.textContent = `${time} - (DOLU / REZERVE)`;
+                    option.textContent = `${time} - (DOLU)`;
                     option.disabled = true;
-                    option.className = 'text-gray-600 bg-gray-900 font-normal';
+                    option.className = 'text-gray-600 bg-gray-900';
                 } else {
                     option.textContent = `${time} (Müsait)`;
                     availableCount++;
@@ -695,13 +658,8 @@
             });
 
             if (infoEl) {
-                if (availableCount === 0) {
-                    infoEl.innerText = '⚠️ Bu tarihteki tüm randevu saatlerimiz doludur.';
-                    infoEl.className = 'text-xs text-red-400 mt-1.5 block font-medium';
-                } else {
-                    infoEl.innerText = `✓ Seçtiğiniz tarihte ${availableCount} boş saat dilimi bulunmaktadır.`;
-                    infoEl.className = 'text-xs text-emerald-400 mt-1.5 block font-medium';
-                }
+                infoEl.innerText = availableCount === 0 ? '⚠️ Bu tarih tamamen doludur.' : `✓ ${availableCount} boş saat var.`;
+                infoEl.className = `text-xs mt-1.5 block font-medium ${availableCount === 0 ? 'text-red-400' : 'text-emerald-400'}`;
             }
         };
 
@@ -712,7 +670,7 @@
             const code = codeInput.value.trim().toUpperCase();
 
             if (!currentUser) {
-                msgEl.innerText = "Kupon kullanmak için önce giriş yapmalısınız.";
+                msgEl.innerText = "Kupon kullanmak için giriş yapmalısınız.";
                 msgEl.className = "text-[11px] text-red-400 font-medium block";
                 msgEl.classList.remove('hidden');
                 return;
@@ -723,14 +681,14 @@
             if (couponData.valid) {
                 appliedDiscountRate = couponData.rate;
                 appliedCouponCode = code;
-                msgEl.innerText = `Tebrikler! %${couponData.rate * 100} indirim kuponu başarıyla uygulandı.`;
+                msgEl.innerText = `Tebrikler! %${couponData.rate * 100} indirim uygulandı.`;
                 msgEl.className = "text-[11px] text-emerald-400 font-medium block";
                 msgEl.classList.remove('hidden');
                 updateBasketSummary();
             } else {
                 appliedDiscountRate = 0;
                 appliedCouponCode = '';
-                msgEl.innerText = couponData.errorMsg || "Geçersiz veya süresi dolmuş kupon kodu!";
+                msgEl.innerText = couponData.errorMsg || "Geçersiz kupon!";
                 msgEl.className = "text-[11px] text-red-400 font-medium block";
                 msgEl.classList.remove('hidden');
                 updateBasketSummary();
@@ -750,7 +708,7 @@
             const targetCoupon = userCoupons.find(c => c && !c.used && c.code.toUpperCase() === cleanCode);
 
             if (!targetCoupon) {
-                return { valid: false, errorMsg: "Hatalı, daha önce kullanılmış veya bu hesaba ait olmayan kupon kodu!" };
+                return { valid: false, errorMsg: "Geçersiz veya kullanılmış kupon!" };
             }
 
             const now = new Date();
@@ -758,7 +716,7 @@
             const diffDays = (now - issuedDate) / (1000 * 60 * 60 * 24);
 
             if (diffDays > 15) {
-                return { valid: false, errorMsg: "Üzgünüz, bu kuponun 15 günlük kullanım süresi dolmuştur." };
+                return { valid: false, errorMsg: "Kuponun 15 günlük süresi dolmuş." };
             }
 
             return { valid: true, rate: targetCoupon.discountRate };
@@ -790,7 +748,7 @@
             if (!currentUser) {
                 cardEl.classList.add('hidden');
                 noMsgEl.classList.remove('hidden');
-                noMsgEl.innerText = "Kuponlarınızı görüntülemek için lütfen giriş yapın.";
+                noMsgEl.innerText = "Kuponlar için giriş yapın.";
                 return;
             }
 
@@ -813,7 +771,7 @@
             if (activeCoupons.length === 0) {
                 cardEl.classList.add('hidden');
                 noMsgEl.classList.remove('hidden');
-                noMsgEl.innerText = "Henüz size tanımlanmış aktif bir kuponunuz bulunmuyor veya süreleri dolmuştur.";
+                noMsgEl.innerText = "Aktif kuponunuz bulunmuyor.";
                 return;
             }
 
@@ -833,12 +791,7 @@
                 `;
             });
             htmlList += `</div>`;
-
-            const titleText = document.getElementById('couponTitleText');
-            if (titleText) titleText.innerText = `Aktif Kuponlarınız (${activeCoupons.length} Adet)`;
-            
-            const descContainer = document.getElementById('couponDescText');
-            if (descContainer) descContainer.innerHTML = htmlList;
+            cardEl.innerHTML = htmlList;
         };
 
         window.useCouponInForm = function(code) {
@@ -851,45 +804,20 @@
             }
         };
 
-        function updateCountdownTimer() {
-            if (!currentUser) return;
-            let couponsMap = {};
-            try { couponsMap = JSON.parse(localStorage.getItem('nes_user_coupons')) || {}; } catch(e) {}
-
-            const userKey = currentUser.toLowerCase();
-            let foundKey = Object.keys(couponsMap).find(k => k.toLowerCase() === userKey) || userKey;
-            let userCoupons = couponsMap[foundKey] || [];
-            if (!Array.isArray(userCoupons)) userCoupons = [];
-
-            const active = userCoupons.find(c => c && !c.used);
-            const displayEl = document.getElementById('couponCountdownDisplay');
-
-            if (!displayEl) return;
-
-            if (!active) {
-                displayEl.innerText = "Aktif kupon yok";
-                return;
-            }
-
-            const issuedDate = new Date(active.issuedAt);
-            const expiryDate = new Date(issuedDate.getTime() + (15 * 24 * 60 * 60 * 1000));
-            const now = new Date();
-            const timeLeft = expiryDate - now;
-
-            if (timeLeft <= 0) {
-                displayEl.innerText = "Süre Doldu";
-                return;
-            }
-
-            const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const mins = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
-            const secs = Math.floor((timeLeft % (1000 * 60)) / 1000);
-
-            displayEl.innerText = `${days} Gün ${hours} Saat ${mins} Dk ${secs} Sn`;
-        }
+        function updateCountdownTimer() {}
 
         window.updateNavAuthUI = function() {
+            // Check if user was deleted by admin
+            if (currentUser) {
+                let users = getUsersList();
+                const exists = users.some(u => u.name.toLowerCase() === currentUser.toLowerCase());
+                if (!exists) {
+                    window.handleLogout();
+                    showToast('Hesabınız yönetici tarafından silindi.', 'warning');
+                    return;
+                }
+            }
+
             const authButtons = document.getElementById('authButtonsContainer');
             const userProfile = document.getElementById('userProfileContainer');
             const navUserName = document.getElementById('navUserName');
@@ -903,10 +831,9 @@
                     userProfile.classList.add('flex');
                 }
                 if (navUserName) navUserName.innerText = currentUser;
-                if (userWelcomeSub) userWelcomeSub.innerText = `${currentUser} adlı hesabınıza ait randevu durumları aşağıdadır.`;
+                if (userWelcomeSub) userWelcomeSub.innerText = `${currentUser} hesap randevuları.`;
                 window.renderUserAppointments();
                 window.checkAndShowUserLoyaltyCoupon();
-                checkReminders();
             } else {
                 if (authButtons) authButtons.classList.remove('hidden');
                 if (userProfile) {
@@ -916,34 +843,6 @@
                 if (reminderBanner) reminderBanner.classList.add('hidden');
             }
         };
-
-        function checkReminders() {
-            const apps = getApps();
-            const todayStr = new Date().toISOString().split('T')[0];
-            const tomorrow = new Date();
-            tomorrow.setDate(tomorrow.getDate() + 1);
-            const tomorrowStr = tomorrow.toISOString().split('T')[0];
-
-            const myApproved = apps.filter(a => a.name && currentUser && a.name.toLowerCase() === currentUser.toLowerCase() && a.status === 'Onaylandı');
-            const banner = document.getElementById('reminderBanner');
-            const reminderText = document.getElementById('reminderText');
-
-            let reminderMsg = '';
-            myApproved.forEach(app => {
-                if (app.date === todayStr) {
-                    reminderMsg = `Hatırlatma: Bugün saat ${app.time}'de "${app.service}" randevunuz bulunmaktadır!`;
-                } else if (app.date === tomorrowStr) {
-                    reminderMsg = `Hatırlatma: Yarın saat ${app.time}'de "${app.service}" randevunuz bulunmaktadır!`;
-                }
-            });
-
-            if (reminderMsg) {
-                if (reminderText) reminderText.innerText = reminderMsg;
-                if (banner) banner.classList.remove('hidden');
-            } else {
-                if (banner) banner.classList.add('hidden');
-            }
-        }
 
         window.handleBooking = function(e) {
             e.preventDefault();
@@ -959,7 +858,7 @@
             }
 
             if (selectedServiceIds.length === 0) {
-                showToast('Lütfen en az bir hizmet seçiniz!', 'warning');
+                showToast('Hizmet seçmelisiniz!', 'warning');
                 return;
             }
 
@@ -967,15 +866,7 @@
             const selectedTime = document.getElementById('bTime').value;
 
             if (!selectedDate || !selectedTime) {
-                showToast('Lütfen geçerli bir tarih ve saat seçiniz.', 'warning');
-                return;
-            }
-
-            const currentApps = getApps();
-            const isSlotTaken = currentApps.some(a => a.date === selectedDate && a.time === selectedTime && a.status !== 'İptal');
-            if (isSlotTaken) {
-                showToast('Seçtiğiniz saat dilimi doludur. Lütfen farklı bir saat seçiniz.', 'warning');
-                window.updateTimeSlotAvailability();
+                showToast('Tarih ve saat seçiniz.', 'warning');
                 return;
             }
 
@@ -1001,7 +892,6 @@
 
             const serviceNames = selectedObjects.map(s => s.name).join(' + ');
             const fullServiceSummary = `${serviceNames} (${formatDuration(totalMin)} - ${finalPrice.toLocaleString('tr-TR')} ₺)`;
-
             const fileInput = document.getElementById('bFile');
 
             const saveRecord = (img64) => {
@@ -1057,7 +947,7 @@
             
             container.innerHTML = '';
             if (myApps.length === 0) {
-                container.innerHTML = '<p class="text-center text-gray-400 py-6 text-sm">Henüz kayıtlı randevunuz bulunmuyor.</p>';
+                container.innerHTML = '<p class="text-center text-gray-400 py-6 text-sm">Randevunuz bulunmuyor.</p>';
                 return;
             }
 
@@ -1068,9 +958,8 @@
                     <div class="space-y-2">
                         <span class="gold-text font-serif font-bold text-lg">${app.service}</span>
                         <p class="text-xs text-gray-300"><i class="fa-solid fa-calendar-days text-[#C5A059] mr-1"></i> ${app.date} - <b>${app.time}</b></p>
-                        <p class="text-xs text-gray-400">Notunuz: ${app.note || 'Not belirtilmemiş'}</p>
-                        ${app.image ? `<div class="mt-2"><span class="text-[10px] text-gray-400 block mb-1">Yüklediğiniz Model:</span><img src="${app.image}" class="w-20 h-20 object-cover rounded-xl border border-[#C5A059]/40"></div>` : ''}
-                        ${app.reply ? `<p class="text-xs text-emerald-400 mt-2 bg-emerald-950/40 border border-emerald-900 p-3 rounded-xl"><i class="fa-solid fa-reply mr-1"></i> <b>Kuaför Yanıtı:</b> ${app.reply}</p>` : ''}
+                        <p class="text-xs text-gray-400">Not: ${app.note || 'Yok'}</p>
+                        ${app.reply ? `<p class="text-xs text-emerald-400 mt-2 bg-emerald-950/40 border border-emerald-900 p-3 rounded-xl"><i class="fa-solid fa-reply mr-1"></i> <b>Yanıt:</b> ${app.reply}</p>` : ''}
                     </div>
                     <div class="flex flex-col items-end gap-2">
                         <span class="px-3.5 py-1.5 rounded-full text-xs font-semibold ${
@@ -1099,17 +988,13 @@
         };
 
         window.switchToLoginForm = function() {
-            const formView = document.getElementById('loginFormView');
-            const forgotView = document.getElementById('forgotStepView');
-            if (forgotView) forgotView.classList.add('hidden');
-            if (formView) formView.classList.remove('hidden');
+            document.getElementById('loginFormView').classList.remove('hidden');
+            document.getElementById('forgotStepView').classList.add('hidden');
         };
 
         window.switchToForgotPass = function() {
-            const formView = document.getElementById('loginFormView');
-            const forgotView = document.getElementById('forgotStepView');
-            if (formView) formView.classList.add('hidden');
-            if (forgotView) forgotView.classList.remove('hidden');
+            document.getElementById('loginFormView').classList.add('hidden');
+            document.getElementById('forgotStepView').classList.remove('hidden');
         };
 
         window.handleDirectPasswordReset = function() {
@@ -1118,14 +1003,8 @@
             const err = document.getElementById('forgotErrorMsg');
 
             if (!identifier || !newPass) {
-                err.innerText = "Lütfen ad soyad ve yeni şifrenizi girin!";
-                err.className = "text-red-400 text-xs text-center block";
-                return;
-            }
-
-            if (newPass.length < 6 || !/[A-Z]/.test(newPass)) {
-                err.innerText = "Şifre en az 6 karakter olmalı ve 1 büyük harf içermelidir!";
-                err.className = "text-red-400 text-xs text-center block";
+                err.innerText = "Alanları doldurun!";
+                err.classList.remove('hidden');
                 return;
             }
 
@@ -1133,28 +1012,25 @@
             const idx = users.findIndex(u => u.name.toLowerCase() === identifier);
 
             if (idx === -1) {
-                err.innerText = "Bu isimde kayıtlı kullanıcı bulunamadı!";
-                err.className = "text-red-400 text-xs text-center block";
+                err.innerText = "Kullanıcı bulunamadı!";
+                err.classList.remove('hidden');
                 return;
             }
 
             users[idx].pass = newPass;
             saveUsersList(users);
 
-            err.innerText = "Şifreniz başarıyla yenilendi! Giriş yapabilirsiniz.";
-            err.className = "text-emerald-400 text-xs text-center block";
-
+            err.innerText = "Şifre yenilendi!";
+            err.classList.remove('hidden');
             setTimeout(() => { window.switchToLoginForm(); }, 1500);
         };
 
         window.openRegisterModal = function() {
-            const modal = document.getElementById('registerModal');
-            if (modal) modal.classList.remove('hidden');
+            document.getElementById('registerModal').classList.remove('hidden');
         };
 
         window.closeRegisterModal = function() {
-            const modal = document.getElementById('registerModal');
-            if (modal) modal.classList.add('hidden');
+            document.getElementById('registerModal').classList.add('hidden');
         };
 
         window.handleRegisterSubmit = function() {
@@ -1162,15 +1038,15 @@
             const pass = document.getElementById('regPass').value;
             const err = document.getElementById('regErrorMsg');
 
-            if(!name || pass.length < 6 || !/[A-Z]/.test(pass)) {
-                err.innerText = "Ad soyad doldurun; şifre en az 6 karakter ve 1 büyük harf içermelidir!";
+            if(!name || pass.length < 6) {
+                err.innerText = "Ad soyad ve en az 6 karakter şifre girin!";
                 err.classList.remove('hidden');
                 return;
             }
 
             let users = getUsersList();
             if (users.some(u => u.name.toLowerCase() === name.toLowerCase())) {
-                err.innerText = "Bu ad soyad ile kayıtlı kullanıcı zaten mevcut!";
+                err.innerText = "Bu isimde kullanıcı zaten var!";
                 err.classList.remove('hidden');
                 return;
             }
@@ -1180,7 +1056,7 @@
 
             window.closeRegisterModal();
             window.openLoginModal();
-            showToast('Hesabınız oluşturuldu. Giriş yapabilirsiniz.', 'success');
+            showToast('Kayıt başarılı. Giriş yapabilirsiniz.', 'success');
         };
 
         window.handleLoginSubmit = function() {
@@ -1208,6 +1084,11 @@
             localStorage.removeItem('nes_logged_user');
             window.updateNavAuthUI();
             showToast('Oturum kapatıldı.', 'info');
+        };
+
+        window.toggleDropdownMenu = function() {
+            const dropdown = document.getElementById('dropdownMenu');
+            if (dropdown) dropdown.classList.toggle('hidden');
         };
 
         function showToast(message, type = 'info') {
