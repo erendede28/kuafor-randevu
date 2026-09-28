@@ -841,14 +841,29 @@
                         <span class="text-xs text-gray-500 block"><i class="fa-regular fa-clock mr-1"></i>Tahmini Süre: ${s.durationMin} Dakika</span>
                     </div>
                     <div class="flex gap-2 pt-2 border-t border-gray-800/80">
-                        <button onclick="window.openEditServiceModal('${s.id}')" class="w-full bg-[#0A0A0A] border border-gray-800 text-gray-300 hover:text-white hover:border-[#C5A059] py-2 rounded-xl text-xs font-semibold transition">
+                        <button onclick="window.openEditServiceModal('${s.id}')" class="w-1/2 bg-[#0A0A0A] border border-gray-800 text-gray-300 hover:text-white hover:border-[#C5A059] py-2 rounded-xl text-xs font-semibold transition">
                             <i class="fa-solid fa-pen-to-square mr-1"></i> Düzenle
+                        </button>
+                        <button onclick="window.deleteService('${s.id}')" class="w-1/2 bg-red-950/40 border border-red-900 text-red-400 hover:bg-red-900 hover:text-white py-2 rounded-xl text-xs font-semibold transition">
+                            <i class="fa-solid fa-trash mr-1"></i> Sil
                         </button>
                     </div>
                 `;
                 container.appendChild(card);
             });
         }
+
+        window.deleteService = function(srvId) {
+            let srvs = getStoredServices();
+            const target = srvs.find(s => s.id === srvId);
+            srvs = srvs.filter(s => s.id !== srvId);
+            saveStoredServices(srvs);
+            if (target) {
+                addAuditLog('Hizmet Silindi', `"${target.name}" kataloğdan kaldırıldı.`);
+            }
+            window.syncAllData();
+            showToast('Hizmet başarıyla silindi.', 'info');
+        };
 
         window.openAddServiceModal = function() {
             document.getElementById('serviceModalTitle').innerText = "Yeni Hizmet Ekle";
