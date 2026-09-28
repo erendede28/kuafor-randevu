@@ -110,6 +110,9 @@
                 <button onclick="window.switchTab('services')" id="nav_services" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-xs font-semibold text-gray-400 hover:text-white hover:bg-gray-900 transition">
                     <i class="fa-solid fa-list-check w-4 text-center text-[#C5A059]"></i> Hizmet & Fiyat Kataloğu
                 </button>
+                <button onclick="window.switchTab('notepad')" id="nav_notepad" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-xs font-semibold text-gray-400 hover:text-white hover:bg-gray-900 transition">
+                    <i class="fa-solid fa-book w-4 text-center text-[#C5A059]"></i> Müşteri Not Defteri
+                </button>
                 <button onclick="window.switchTab('customers')" id="nav_customers" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-xs font-semibold text-gray-400 hover:text-white hover:bg-gray-900 transition">
                     <i class="fa-solid fa-users w-4 text-center text-[#C5A059]"></i> Müşteri CRM Yönetimi
                 </button>
@@ -256,7 +259,7 @@
                     <div class="flex justify-between items-center border-b border-gray-800 pb-4">
                         <div>
                             <h1 class="text-2xl font-bold font-serif-title text-white">Hizmet & Fiyat Kataloğu Yönetimi</h1>
-                            <p class="text-xs text-gray-400 mt-1">Buradan eklediğiniz veya sildiğiniz hizmetler müşterinin rezervasyon ekranına anında yansır.</p>
+                            <p class="text-xs text-gray-400 mt-1">Buradan eklediğiniz, düzenlediğiniz veya sildiğiniz hizmetler müşterinin rezervasyon ekranına anında yansır.</p>
                         </div>
                         <button onclick="window.openAddServiceModal()" class="gold-gradient text-black text-xs font-bold px-4 py-2.5 rounded-xl shadow hover:opacity-90 transition">
                             <i class="fa-solid fa-plus mr-1"></i> Yeni Hizmet Ekle
@@ -264,6 +267,20 @@
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="servicesGridContainer"></div>
+                </div>
+
+                <div id="view_notepad" class="space-y-6 hidden">
+                    <div class="flex justify-between items-center border-b border-gray-800 pb-4">
+                        <div>
+                            <h1 class="text-2xl font-bold font-serif-title text-white">Müşteri Saç & Boya Not Defteri</h1>
+                            <p class="text-xs text-gray-400 mt-1">Müşterilerinizin saç özellikleri ve boya reçetelerini kaydedin.</p>
+                        </div>
+                        <button onclick="window.openAddNotepadModal()" class="gold-gradient text-black text-xs font-bold px-4 py-2.5 rounded-xl shadow hover:opacity-90 transition">
+                            <i class="fa-solid fa-plus mr-1"></i> Yeni Not / Reçete Ekle
+                        </button>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="notepadGridContainer"></div>
                 </div>
 
                 <div id="view_customers" class="space-y-6 hidden">
@@ -279,8 +296,7 @@
                                     <tr class="bg-[#0A0A0A] border-b border-gray-800 text-[#C5A059] uppercase tracking-wider font-semibold">
                                         <th class="p-4">Müşteri Adı</th>
                                         <th class="p-4">Sistem Şifresi</th>
-                                        <th class="p-4">Toplam Harcama</th>
-                                        <th class="p-4 text-center">İşlem</th>
+                                        <th class="p-4 text-center">İşlem / Sil</th>
                                     </tr>
                                 </thead>
                                 <tbody id="userTableBody" class="divide-y divide-gray-800/80"></tbody>
@@ -356,6 +372,31 @@
 
             <button onclick="window.saveServiceForm()" class="w-full gold-gradient text-black font-bold py-3 rounded-xl text-xs uppercase tracking-wider shadow">
                 Kaydet & Yayınla
+            </button>
+        </div>
+    </div>
+
+    <div id="notepadModal" class="fixed inset-0 bg-black/80 backdrop-blur z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-[#121212] border border-[#C5A059]/40 rounded-3xl max-w-md w-full p-6 space-y-4 shadow-2xl relative">
+            <button onclick="window.closeNotepadModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white text-2xl">&times;</button>
+            <h3 class="text-xl font-bold font-serif-title text-white" id="notepadModalTitle">Müşteri Notu Ekle</h3>
+            
+            <input type="hidden" id="modalNotepadId">
+            <div>
+                <label class="block text-xs font-semibold text-gray-400 mb-1">Müşteri Adı Soyadı</label>
+                <input type="text" id="modalNotepadCustomer" placeholder="Örn: Elif Demir" class="w-full bg-[#0A0A0A] border border-gray-800 text-white p-3 rounded-xl text-xs focus:border-[#C5A059] focus:outline-none">
+            </div>
+            <div>
+                <label class="block text-xs font-semibold text-gray-400 mb-1">Saç Tipi & Yapısı</label>
+                <input type="text" id="modalNotepadHairType" placeholder="Örn: Kalın telli, boyalı" class="w-full bg-[#0A0A0A] border border-gray-800 text-white p-3 rounded-xl text-xs focus:border-[#C5A059] focus:outline-none">
+            </div>
+            <div>
+                <label class="block text-xs font-semibold text-gray-400 mb-1">Boya Reçetesi / Formül</label>
+                <textarea id="modalNotepadFormula" rows="3" placeholder="Örn: Kök: 6.0 + 20vol | Uçlar: 8.1 cila" class="w-full bg-[#0A0A0A] border border-gray-800 text-white p-3 rounded-xl text-xs focus:border-[#C5A059] focus:outline-none"></textarea>
+            </div>
+
+            <button onclick="window.saveNotepadForm()" class="w-full gold-gradient text-black font-bold py-3 rounded-xl text-xs uppercase tracking-wider shadow">
+                Notu Kaydet
             </button>
         </div>
     </div>
@@ -449,7 +490,7 @@
 
         window.switchTab = function(tabName) {
             activeTab = tabName;
-            ['dashboard', 'appointments', 'services', 'customers', 'financials', 'audit'].forEach(t => {
+            ['dashboard', 'appointments', 'services', 'notepad', 'customers', 'financials', 'audit'].forEach(t => {
                 const view = document.getElementById(`view_${t}`);
                 const nav = document.getElementById(`nav_${t}`);
                 if (view) view.classList.add('hidden');
@@ -472,6 +513,7 @@
             const apps = getStoredApps();
             const users = getStoredUsers();
             const services = getStoredServices();
+            const notepad = getStoredNotepad();
 
             const pending = apps.filter(a => a.status === 'Beklemede').length;
             const badge = document.getElementById('badgePendingCount');
@@ -480,11 +522,12 @@
             renderDashboard(apps, users);
             renderAppointmentsTable(apps);
             renderServicesGrid(services);
+            renderNotepadGrid(notepad);
             renderCustomersTable(users);
             renderSpendingTable(users);
             renderAuditLogs();
 
-            showToast('Veriler senkronize edildi.', 'success');
+            showToast('Veriler başarıyla yenilendi.', 'success');
         };
 
         function getStoredApps() {
@@ -501,6 +544,11 @@
             try { return JSON.parse(localStorage.getItem('nes_services_catalog')) || DEFAULT_SERVICES; } catch(e) { return DEFAULT_SERVICES; }
         }
         function saveStoredServices(srvs) { localStorage.setItem('nes_services_catalog', JSON.stringify(srvs)); }
+
+        function getStoredNotepad() {
+            try { return JSON.parse(localStorage.getItem('nes_customer_notepad')) || []; } catch(e) { return []; }
+        }
+        function saveStoredNotepad(notes) { localStorage.setItem('nes_customer_notepad', JSON.stringify(notes)); }
 
         function renderDashboard(apps, users) {
             let totalRevenue = 0;
@@ -650,7 +698,7 @@
                         <button onclick="window.updateAppStatus(${a.id}, 'Onaylandı')" class="p-2 bg-emerald-950/50 border border-emerald-800 text-emerald-400 rounded-lg hover:bg-emerald-900 transition" title="Onayla"><i class="fa-solid fa-check"></i></button>
                         <button onclick="window.updateAppStatus(${a.id}, 'Tamamlandı')" class="p-2 bg-blue-950/50 border border-blue-800 text-blue-400 rounded-lg hover:bg-blue-900 transition" title="Tamamlandı İşaretle"><i class="fa-solid fa-flag-checkered"></i></button>
                         <button onclick="window.openReplyModalForApp(${a.id})" class="p-2 bg-amber-950/50 border border-amber-800 text-amber-400 rounded-lg hover:bg-amber-900 transition" title="Not / Görsel"><i class="fa-solid fa-comment"></i></button>
-                        <button onclick="window.updateAppStatus(${a.id}, 'İptal')" class="p-2 bg-red-950/50 border border-red-800 text-red-400 rounded-lg hover:bg-red-900 transition" title="İptal Et"><i class="fa-solid fa-xmark"></i></button>
+                        <button onclick="window.updateAppStatus(${a.id}, 'İptal')" class="p-2 bg-red-950/50 border border-red-800 text-red-300 rounded-lg hover:bg-red-900 transition" title="İptal Et"><i class="fa-solid fa-xmark"></i></button>
                         <button onclick="window.deleteAppointment(${a.id})" class="p-2 bg-red-950/80 border border-red-800 text-red-300 rounded-lg hover:bg-red-900 transition" title="Kalıcı Olarak Sil"><i class="fa-solid fa-trash"></i></button>
                     </td>
                 `;
@@ -874,32 +922,130 @@
             showToast('Katalog kaydedildi.', 'success');
         };
 
+        function renderNotepadGrid(notes) {
+            const container = document.getElementById('notepadGridContainer');
+            if (!container) return;
+            container.innerHTML = '';
+
+            if (!notes || notes.length === 0) {
+                container.innerHTML = '<p class="text-gray-500 italic text-center py-8 col-span-full">Defterde henüz kayıtlı not bulunmuyor.</p>';
+                return;
+            }
+
+            notes.forEach(item => {
+                const card = document.createElement('div');
+                card.className = "bg-[#121212] border border-gray-800 hover:border-[#C5A059]/60 p-5 rounded-2xl flex flex-col justify-between space-y-4 transition";
+                card.innerHTML = `
+                    <div class="space-y-2">
+                        <div class="flex justify-between items-start">
+                            <span class="w-8 h-8 rounded-lg bg-[#C5A059]/10 text-[#C5A059] flex items-center justify-center font-bold text-sm">
+                                <i class="fa-solid fa-book"></i>
+                            </span>
+                            <span class="text-[10px] text-gray-500">${item.updatedAt || ''}</span>
+                        </div>
+                        <h4 class="font-bold text-white text-sm">${item.customerName}</h4>
+                        <p class="text-xs text-gray-300"><strong>Saç Tipi:</strong> ${item.hairType || 'Belirtilmemiş'}</p>
+                        <p class="text-xs font-mono text-[#C5A059] bg-[#0A0A0A] p-2.5 rounded-xl border border-gray-800"><strong>Reçete:</strong> ${item.formula || 'Yok'}</p>
+                    </div>
+                    <div class="flex gap-2 pt-2 border-t border-gray-800/80">
+                        <button onclick="window.openEditNotepadModal('${item.id}')" class="w-1/2 bg-[#0A0A0A] border border-gray-800 text-gray-300 hover:text-white hover:border-[#C5A059] py-2 rounded-xl text-xs font-semibold transition">
+                            <i class="fa-solid fa-pen-to-square mr-1"></i> Düzenle
+                        </button>
+                        <button onclick="window.deleteNotepad('${item.id}')" class="w-1/2 bg-red-950/40 border border-red-900 text-red-400 hover:bg-red-900 hover:text-white py-2 rounded-xl text-xs font-semibold transition">
+                            <i class="fa-solid fa-trash mr-1"></i> Sil
+                        </button>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        window.openAddNotepadModal = function() {
+            document.getElementById('notepadModalTitle').innerText = "Yeni Müşteri Notu Ekle";
+            document.getElementById('modalNotepadId').value = "";
+            document.getElementById('modalNotepadCustomer').value = "";
+            document.getElementById('modalNotepadHairType').value = "";
+            document.getElementById('modalNotepadFormula').value = "";
+            document.getElementById('notepadModal').classList.remove('hidden');
+        };
+
+        window.openEditNotepadModal = function(id) {
+            const notes = getStoredNotepad();
+            const target = notes.find(n => String(n.id) === String(id));
+            if (!target) return;
+
+            document.getElementById('notepadModalTitle').innerText = "Müşteri Notunu Düzenle";
+            document.getElementById('modalNotepadId').value = target.id;
+            document.getElementById('modalNotepadCustomer').value = target.customerName || '';
+            document.getElementById('modalNotepadHairType').value = target.hairType || '';
+            document.getElementById('modalNotepadFormula').value = target.formula || '';
+            document.getElementById('notepadModal').classList.remove('hidden');
+        };
+
+        window.closeNotepadModal = function() {
+            document.getElementById('notepadModal').classList.add('hidden');
+        };
+
+        window.saveNotepadForm = function() {
+            const id = document.getElementById('modalNotepadId').value;
+            const customerName = document.getElementById('modalNotepadCustomer').value.trim();
+            const hairType = document.getElementById('modalNotepadHairType').value.trim();
+            const formula = document.getElementById('modalNotepadFormula').value.trim();
+
+            if (!customerName) {
+                return showToast('Lütfen müşteri adını girin.', 'warning');
+            }
+
+            let notes = getStoredNotepad();
+            const timeStr = new Date().toLocaleString('tr-TR');
+
+            if (id) {
+                const idx = notes.findIndex(n => String(n.id) === String(id));
+                if (idx !== -1) {
+                    notes[idx] = { id, customerName, hairType, formula, updatedAt: timeStr };
+                    addAuditLog('Not Defteri Güncellendi', `"${customerName}" için saç reçetesi güncellendi.`);
+                } else {
+                    notes.push({ id, customerName, hairType, formula, updatedAt: timeStr });
+                }
+            } else {
+                const newId = 'note_' + Date.now();
+                notes.push({ id: newId, customerName, hairType, formula, updatedAt: timeStr });
+                addAuditLog('Yeni Not Defteri Kaydı', `"${customerName}" için yeni saç reçetesi eklendi.`);
+            }
+
+            saveStoredNotepad(notes);
+            window.closeNotepadModal();
+            window.syncAllData();
+            showToast('Müşteri notu başarıyla kaydedildi.', 'success');
+        };
+
+        window.deleteNotepad = function(id) {
+            let notes = getStoredNotepad();
+            notes = notes.filter(n => String(n.id) !== String(id));
+            saveStoredNotepad(notes);
+            addAuditLog('Not Defteri Silindi', `ID #${id} olan not defteri kaydı silindi.`);
+            window.syncAllData();
+            showToast('Müşteri notu silindi.', 'info');
+        };
+
         function renderCustomersTable(users) {
             const tbody = document.getElementById('userTableBody');
             if (!tbody) return;
             tbody.innerHTML = '';
 
             if (!users || users.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="4" class="text-center py-6 text-gray-500">Kayıtlı kullanıcı hesabı bulunmuyor.</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="3" class="text-center py-6 text-gray-500">Kayıtlı kullanıcı hesabı bulunmuyor.</td></tr>';
                 return;
             }
 
-            let spendingMap = {};
-            try { spendingMap = JSON.parse(localStorage.getItem('nes_spending_records')) || {}; } catch(e){}
-
             users.forEach((u, index) => {
-                const userKey = (u.name || '').trim().toLowerCase();
-                const records = spendingMap[userKey] || [];
-                const totalSpend = records.reduce((sum, r) => sum + r.amount, 0);
-
                 const tr = document.createElement('tr');
-                tr.className = "hover:bg-gray-900/40 transition";
+                tr.className = "hover:bg-gray-900/40 transition align-middle";
                 tr.innerHTML = `
                     <td class="p-4 font-bold text-white">${u.name}</td>
                     <td class="p-4 text-gray-400 font-mono">${u.pass}</td>
-                    <td class="p-4 font-bold gold-gradient-text">${totalSpend.toLocaleString('tr-TR')} ₺</td>
                     <td class="p-4 text-center">
-                        <button onclick="window.deleteUser(${index})" class="p-1.5 bg-red-950/40 border border-red-900 text-red-400 rounded-lg hover:bg-red-900 transition" title="Kullanıcıyı Sil"><i class="fa-solid fa-trash"></i></button>
+                        <button onclick="window.deleteUser(${index})" class="p-2 bg-red-950/40 border border-red-900 text-red-400 rounded-xl hover:bg-red-900 transition" title="Kullanıcıyı Sil"><i class="fa-solid fa-trash"></i></button>
                     </td>
                 `;
                 tbody.appendChild(tr);
