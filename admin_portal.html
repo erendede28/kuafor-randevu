@@ -235,7 +235,7 @@
                     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-gray-800 pb-4">
                         <div>
                             <h1 class="text-2xl font-bold font-serif-title text-white">Müşteri Randevu Yönetimi</h1>
-                            <p class="text-xs text-gray-400 mt-1">Gelen randevu taleplerini onaylayın, iptal edin veya tamamlandı olarak işaretleyin.</p>
+                            <p class="text-xs text-gray-400 mt-1">Gelen randevu taleplerini onaylayın, iptal edin, tamamlandı yapın veya silin.</p>
                         </div>
                         <div class="flex flex-wrap gap-2">
                             <button onclick="window.filterApps('Hepsi')" class="text-xs bg-gray-800 px-3 py-1.5 rounded-xl text-gray-300 font-semibold hover:text-white">Tümü</button>
@@ -251,7 +251,7 @@
                             <table class="w-full text-left border-collapse text-xs">
                                 <thead>
                                     <tr class="bg-[#0A0A0A] border-b border-gray-800 text-[#C5A059] uppercase tracking-wider font-semibold">
-                                        <th class="p-4">ID / Müşteri</th>
+                                        <th class="p-4">ID / Müşteri & İletişim</th>
                                         <th class="p-4">Seçilen Hizmetler</th>
                                         <th class="p-4">Tarih & Saat</th>
                                         <th class="p-4">Tutar & Süre</th>
@@ -286,7 +286,7 @@
                 <div id="view_customers" class="space-y-6 hidden">
                     <div class="border-b border-gray-800 pb-4">
                         <h1 class="text-2xl font-bold font-serif-title text-white">Müşteri CRM & Sadakat Programı</h1>
-                        <p class="text-xs text-gray-400 mt-1">Sistemdeki müşterileri görün, özel indirim kuponları tanımlayın ve hesap yönetimi yapın.</p>
+                        <p class="text-xs text-gray-400 mt-1">Sistemdeki müşterileri görün, özel indirim kuponları tanımlayın ve kuponları yönetin.</p>
                     </div>
 
                     <div class="bg-[#121212] border border-gray-800 rounded-2xl overflow-hidden shadow-xl">
@@ -358,7 +358,6 @@
         </main>
     </div>
 
-    <!-- HİZMET DÜZENLEME / EKLEME MODAL -->
     <div id="serviceEditModal" class="fixed inset-0 bg-black/80 backdrop-blur z-50 hidden flex items-center justify-center p-4">
         <div class="bg-[#121212] border border-[#C5A059]/40 rounded-3xl max-w-md w-full p-6 space-y-4 shadow-2xl relative">
             <button onclick="window.closeServiceModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white text-2xl">&times;</button>
@@ -436,7 +435,6 @@
     <div id="toastContainer" class="fixed bottom-6 right-6 z-50 space-y-2 pointer-events-none"></div>
 
     <script>
-        // Veri Modelleri & Varsayılan Hizmet Kataloğu
         const DEFAULT_SERVICES = [
             { id: 'ombre', name: 'Ombre Tasarımı', price: 3500, durationMin: 180 },
             { id: 'renklendirme', name: 'Özel Renklendirme & Balyaj', price: 3000, durationMin: 150 },
@@ -450,12 +448,12 @@
         let activeTab = 'dashboard';
         let revenueChartInstance = null;
         let activeReplyAppId = null;
+        let currentManagingUser = null;
 
         document.addEventListener('DOMContentLoaded', () => {
             updateLiveClock();
             setInterval(updateLiveClock, 1000);
 
-            // Hizmet kataloğu yoksa ilklendir
             if (!localStorage.getItem('nes_services_catalog')) {
                 localStorage.setItem('nes_services_catalog', JSON.stringify(DEFAULT_SERVICES));
             }
@@ -520,12 +518,10 @@
             const users = getStoredUsers();
             const services = getStoredServices();
 
-            // Badge Güncelle
             const pending = apps.filter(a => a.status === 'Beklemede').length;
             const badge = document.getElementById('badgePendingCount');
             if (badge) badge.innerText = pending;
 
-            // Görünümlere Göre Render
             renderDashboard(apps, users);
             renderAppointmentsTable(apps);
             renderServicesGrid(services);
@@ -571,7 +567,6 @@
             document.getElementById('dashPendingApps').innerText = pendingCount;
             document.getElementById('dashTotalUsers').innerText = users.length;
 
-            // Bugünün Ajandası
             const todayStr = new Date().toISOString().split('T')[0];
             const todayApps = apps.filter(a => a.date === todayStr || a.status === 'Beklemede');
             const todayContainer = document.getElementById('dashTodayList');
@@ -596,7 +591,6 @@
                 }
             }
 
-            // Chart Render
             renderRevenueChart(apps);
         }
 
@@ -661,7 +655,6 @@
             filtered.forEach(a => {
                 const tr = document.createElement('tr');
                 tr.className = "hover:bg-gray-900/40 transition";
-                const rawPhone = a.phone || 'Belirtilmedi';
                 const cleanPhone = (a.phone || '').replace(/\s+/g, '');
                 const waPhone = cleanPhone.startsWith('0') ? '9' + cleanPhone : cleanPhone;
 
@@ -711,14 +704,12 @@
         }
 
         window.deleteAppointment = function(id) {
-            if (confirm('Bu randevuyu kalıcı olarak silmek istediğinize emin misiniz?')) {
-                let apps = getStoredApps();
-                apps = apps.filter(a => a.id !== id);
-                saveStoredApps(apps);
-                addAuditLog('Randevu Silindi', `#${id} ID'li randevu kalıcı olarak silindi.`);
-                window.syncAllData();
-                showToast('Randevu silindi.', 'info');
-            }
+            let apps = getStoredApps();
+            apps = apps.filter(a => a.id !== id);
+            saveStoredApps(apps);
+            addAuditLog('Randevu Silindi', `#${id} ID'li randevu kalıcı olarak silindi.`);
+            window.syncAllData();
+            showToast('Randevu başarıyla silindi.', 'info');
         };
 
         window.filterApps = function(status) {
@@ -733,7 +724,6 @@
                 const oldStatus = target.status;
                 target.status = newStatus;
 
-                // Tamamlandı olarak işaretlendiğinde finansal harcama kayıtlarına ekle
                 if (newStatus === 'Tamamlandı' && oldStatus !== 'Tamamlandı') {
                     let amountToAdd = target.totalPrice || 0;
                     if (!amountToAdd && target.service) {
@@ -766,13 +756,12 @@
                 spendingRecords[userKey] = [];
             }
 
-            let day = dateStr;
             let parts = dateStr.split('-');
             let year = parts[0] || '2026';
             let month = parts[1] || '01';
 
             spendingRecords[userKey].push({
-                date: day,
+                date: dateStr,
                 month: `${year}-${month}`,
                 year: year,
                 amount: amount,
@@ -953,7 +942,7 @@
                             ${activeCoupons.map(c => 
                                 `<span class="inline-block px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-950/60 border border-amber-800 text-amber-300">${c.code} (%${Math.round(c.discountRate * 100)})</span>`
                             ).join(' ')}
-                            <button onclick="window.openCouponManageModal(${JSON.stringify(u.name)})" class="text-[10px] bg-[#C5A059]/20 border border-[#C5A059]/60 text-[#C5A059] px-2 py-0.5 rounded-lg hover:bg-[#C5A059] hover:text-black transition ml-1 font-semibold" title="Kuponları Yönet (Sil / Düzenle)">
+                            <button onclick="window.openCouponManageModal(${JSON.stringify(u.name)})" class="text-[10px] bg-[#C5A059]/20 border border-[#C5A059]/60 text-[#C5A059] px-2 py-0.5 rounded-lg hover:bg-[#C5A059] hover:text-black transition ml-1 font-semibold" title="Kuponları Yönet">
                                 <i class="fa-solid fa-gear"></i> Yönet (${userCoupons.length})
                             </button>
                         </div>
@@ -992,8 +981,6 @@
                 tbody.appendChild(tr);
             });
         }
-
-        let currentManagingUser = null;
 
         window.openCouponManageModal = function(userName) {
             currentManagingUser = userName;
@@ -1048,7 +1035,7 @@
                             <option value="0.50" ${c.discountRate === 0.5 ? 'selected' : ''}>%50 İndirim</option>
                             <option value="0.80" ${c.discountRate === 0.8 ? 'selected' : ''}>%80 İndirim</option>
                         </select>
-                        <button onclick="window.saveCouponChanges(${JSON.stringify(currentManagingUser)}, ${index})" class="bg-blue-950/60 border border-blue-800 text-blue-300 px-2.5 py-1.5 rounded-lg hover:bg-blue-900 transition text-[11px]" title="Oranı ve Süreyi Güncelle/Uzat">
+                        <button onclick="window.saveCouponChanges(${JSON.stringify(currentManagingUser)}, ${index})" class="bg-blue-950/60 border border-blue-800 text-blue-300 px-2.5 py-1.5 rounded-lg hover:bg-blue-900 transition text-[11px]" title="Güncelle">
                             <i class="fa-solid fa-pen"></i> Güncelle
                         </button>
                         <button onclick="window.deleteSingleCoupon(${JSON.stringify(currentManagingUser)}, ${index})" class="bg-red-950/60 border border-red-800 text-red-300 px-2.5 py-1.5 rounded-lg hover:bg-red-900 transition text-[11px]" title="Kuponu Sil">
@@ -1120,7 +1107,6 @@
                 userCoupons = userCoupons ? [userCoupons] : [];
             }
 
-            // Müşteriye özel benzersiz kupon kodu üretimi (Örn: NES10-381)
             const randomSuffix = Math.floor(100 + Math.random() * 900);
             const finalCode = `${codePrefix}-${randomSuffix}`;
 
@@ -1142,14 +1128,12 @@
         };
 
         window.deleteUser = function(userName) {
-            if (confirm(`"${userName}" kullanıcısını silmek istiyor musunuz?`)) {
-                let users = getStoredUsers();
-                users = users.filter(u => u.name.toLowerCase() !== userName.toLowerCase());
-                saveStoredUsers(users);
-                addAuditLog('Kullanıcı Silindi', `"${userName}" hesabı sistemden kaldırıldı.`);
-                window.syncAllData();
-                showToast('Kullanıcı silindi.', 'info');
-            }
+            let users = getStoredUsers();
+            users = users.filter(u => u.name.toLowerCase() !== userName.toLowerCase());
+            saveStoredUsers(users);
+            addAuditLog('Kullanıcı Silindi', `"${userName}" hesabı sistemden kaldırıldı.`);
+            window.syncAllData();
+            showToast('Kullanıcı silindi.', 'info');
         };
 
         function renderSpendingTable(users) {
@@ -1196,7 +1180,7 @@
 
         function addAuditLog(action, details) {
             let logs = [];
-            try { logs = JSON.parse(localStorage.getItem('nes_audit_logs')) || []; } catch(e){}
+            try { logs = JSON.parse(localStorage.getItem('nes_audit_logs')) || {}; } catch(e){}
 
             logs.unshift({
                 timestamp: new Date().toLocaleString('tr-TR'),
@@ -1215,7 +1199,7 @@
             container.innerHTML = '';
 
             let logs = [];
-            try { logs = JSON.parse(localStorage.getItem('nes_audit_logs')) || []; } catch(e){}
+            try { logs = JSON.parse(localStorage.getItem('nes_audit_logs')) || {}; } catch(e){}
 
             if (logs.length === 0) {
                 container.innerHTML = '<p class="text-gray-500 italic py-4">Henüz denetim izi kaydı yok.</p>';
@@ -1238,11 +1222,9 @@
         }
 
         window.clearAuditLogs = function() {
-            if (confirm('Tüm denetim kayıtlarını silmek istiyor musunuz?')) {
-                localStorage.removeItem('nes_audit_logs');
-                renderAuditLogs();
-                showToast('Audit logları temizlendi.', 'info');
-            }
+            localStorage.removeItem('nes_audit_logs');
+            renderAuditLogs();
+            showToast('Audit logları temizlendi.', 'info');
         };
 
         function showToast(message, type = 'info') {
