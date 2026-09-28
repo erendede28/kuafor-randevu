@@ -398,6 +398,10 @@
                 </div>
                 <div class="space-y-3">
                     <div>
+                        <span class="text-[10px] text-gray-500 uppercase tracking-wider block font-semibold">İletişim Bilgisi</span>
+                        <p id="replyModalPhone" class="text-xs text-[#C5A059] font-mono font-bold bg-[#0A0A0A] p-2.5 rounded-xl border border-gray-800 mt-1 flex items-center justify-between"></p>
+                    </div>
+                    <div>
                         <span class="text-[10px] text-gray-500 uppercase tracking-wider block font-semibold">Müşteri Notu</span>
                         <p id="replyModalNote" class="text-xs text-gray-200 bg-[#0A0A0A] p-3 rounded-xl border border-gray-800 mt-1"></p>
                     </div>
@@ -642,9 +646,27 @@
             filtered.forEach(a => {
                 const tr = document.createElement('tr');
                 tr.className = "hover:bg-gray-900/40 transition";
+                const rawPhone = a.phone || 'Belirtilmedi';
+                const cleanPhone = (a.phone || '').replace(/\s+/g, '');
+                const waPhone = cleanPhone.startsWith('0') ? '9' + cleanPhone : cleanPhone;
+
+                const phoneHtml = a.phone ? `
+                    <div class="flex items-center gap-2 mt-1 text-[11px] font-mono text-gray-400">
+                        <i class="fa-solid fa-phone text-[#C5A059]"></i>
+                        <span>${a.phone}</span>
+                        <a href="https://wa.me/${waPhone}" target="_blank" class="text-emerald-400 hover:text-emerald-300 ml-1" title="WhatsApp Mesaj Gönder">
+                            <i class="fa-brands fa-whatsapp text-sm"></i>
+                        </a>
+                        <a href="tel:${cleanPhone}" class="text-blue-400 hover:text-blue-300" title="Ara">
+                            <i class="fa-solid fa-phone-flip text-xs"></i>
+                        </a>
+                    </div>
+                ` : '<span class="text-[10px] text-gray-600 block">Tel: Yok</span>';
+
                 tr.innerHTML = `
                     <td class="p-4">
-                        <strong class="text-white block">${a.name}</strong>
+                        <strong class="text-white block text-sm">${a.name}</strong>
+                        ${phoneHtml}
                         <span class="text-[10px] text-gray-500">ID: #${a.id}</span>
                     </td>
                     <td class="p-4 font-semibold text-[#C5A059]">${a.service}</td>
@@ -741,12 +763,22 @@
 
             const mediaContainer = document.getElementById('replyModalMedia');
             const noteEl = document.getElementById('replyModalNote');
+            const phoneEl = document.getElementById('replyModalPhone');
             const inputEl = document.getElementById('replyModalInput');
 
             if (target.image) {
                 mediaContainer.innerHTML = `<img src="${target.image}" class="max-h-48 rounded-xl border border-gray-800">`;
             } else {
                 mediaContainer.innerHTML = `<span class="text-xs text-gray-500 italic">Müşteri görsel yüklemedi</span>`;
+            }
+
+            if (phoneEl) {
+                const cleanPhone = (target.phone || '').replace(/\s+/g, '');
+                const waPhone = cleanPhone.startsWith('0') ? '9' + cleanPhone : cleanPhone;
+                phoneEl.innerHTML = `
+                    <span>${target.phone || 'Telefon Belirtilmedi'}</span>
+                    ${target.phone ? `<a href="https://wa.me/${waPhone}" target="_blank" class="bg-emerald-950/80 text-emerald-400 border border-emerald-800 px-2.5 py-1 rounded-lg hover:bg-emerald-900 transition flex items-center gap-1 text-[11px] font-sans font-normal"><i class="fa-brands fa-whatsapp text-sm"></i> WhatsApp'tan Yaz</a>` : ''}
+                `;
             }
 
             noteEl.innerText = target.note || 'Özel not eklenmemiş.';
