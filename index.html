@@ -1793,13 +1793,17 @@
         };
 
         window.handleRegisterSubmit = function() {
-            const name = document.getElementById('regName').value.trim();
-            const phone = document.getElementById('regPhone').value.trim();
-            const pass = document.getElementById('regPass').value;
+            const nameEl = document.getElementById('regName');
+            const passEl = document.getElementById('regPass');
             const err = document.getElementById('regErrorMsg');
 
-            if(!name || !phone || pass.length < 6 || !/[A-Z]/.test(pass)) {
-                err.innerText = "Ad soyad ve telefon numarası doldurun; şifre en az 6 karakter ve 1 büyük harf içermelidir!";
+            if (!err) return;
+
+            const name = nameEl ? nameEl.value.trim() : '';
+            const pass = passEl ? passEl.value : '';
+
+            if(!name || pass.length < 6 || !/[A-Z]/.test(pass)) {
+                err.innerText = "Ad soyad doldurulmalı; şifre en az 6 karakter ve 1 büyük harf içermelidir!";
                 err.classList.remove('hidden');
                 return;
             }
@@ -1811,11 +1815,17 @@
                 return;
             }
 
-            users.push({ name, phone, pass });
+            users.push({ name, pass });
             saveUsersList(users);
+
+            if (nameEl) nameEl.value = '';
+            if (passEl) passEl.value = '';
+            err.classList.add('hidden');
 
             window.closeRegisterModal();
             window.openLoginModal();
+            const loginNameEl = document.getElementById('loginName');
+            if (loginNameEl) loginNameEl.value = name;
         };
 
         window.handleLoginSubmit = function() {
