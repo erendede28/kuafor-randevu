@@ -36,9 +36,6 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
-        .gold-glow {
-            box-shadow: 0 0 25px rgba(197, 160, 89, 0.15);
-        }
         /* Custom Scrollbar */
         ::-webkit-scrollbar {
             width: 8px;
@@ -55,7 +52,7 @@
         }
     </style>
 </head>
-<body class="bg-[#0A0A0A] text-gray-200 antialiased selection:bg-[#C5A059] selection:text-black min-h-screen flex flex-col">
+<body class="bg-[#0A0A0A] text-gray-200 antialiased selection:bg-[#C5A059] selection:text-black">
 
     <!-- Üst Hatırlatma Bandı -->
     <div id="reminderBanner" class="hidden bg-gradient-to-r from-[#C5A059] via-[#F3E5AB] to-[#C5A059] text-black text-xs sm:text-sm font-semibold py-2.5 px-4 text-center shadow-lg transition-all">
@@ -65,7 +62,7 @@
         </div>
     </div>
 
-    <!-- Navigasyon Barı (Admin Butonu Kaldırılmış Temiz Müşteri Arayüzü) -->
+    <!-- Navigasyon Barı -->
     <nav class="sticky top-0 z-40 bg-[#0A0A0A]/90 backdrop-blur-md border-b border-gray-800/80">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
             
@@ -120,18 +117,18 @@
                 </a>
             </div>
 
-            <!-- Sağ Butonlar (Kullanıcı Giriş/Üye Ol) -->
+            <!-- Sağ Butonlar (Kullanıcı Giriş / Üye Ol) -->
             <div class="flex items-center gap-3">
-                <div id="authButtonsContainer" class="flex items-center gap-2">
-                    <button onclick="window.openLoginModal()" class="text-xs font-semibold text-gray-300 hover:text-white px-3 py-2 rounded-xl transition">
+                <div id="authButtonsContainer" class="flex items-center gap-3">
+                    <button onclick="window.openLoginModal()" class="text-sm font-semibold text-gray-200 hover:text-white px-3 py-2 transition">
                         Giriş Yap
                     </button>
-                    <button onclick="window.openRegisterModal()" class="text-xs font-semibold gold-gradient text-black px-4 py-2 rounded-xl shadow hover:opacity-90 transition">
+                    <button onclick="window.openRegisterModal()" class="text-sm font-bold gold-gradient text-black px-6 py-2.5 rounded-full shadow-lg hover:opacity-90 transition">
                         Üye Ol
                     </button>
                 </div>
 
-                <div id="userProfileContainer" class="hidden items-center gap-3 bg-[#121212] border border-[#C5A059]/40 px-3.5 py-1.5 rounded-full">
+                <div id="userProfileContainer" class="hidden items-center gap-3 bg-[#121212] border border-[#C5A059]/40 px-4 py-2 rounded-full">
                     <span class="text-xs font-semibold text-[#C5A059]" id="navUserName"></span>
                     <button onclick="window.handleLogout()" class="text-xs text-gray-400 hover:text-red-400 transition ml-1" title="Çıkış Yap">
                         <i class="fa-solid fa-right-from-bracket"></i>
@@ -311,17 +308,17 @@
 
     <!-- Randevu Oluşturma Bölümü -->
     <section id="randevu" class="py-24 px-4 max-w-4xl mx-auto">
-        <div class="bg-[#121212] p-8 md:p-12 rounded-3xl shadow-2xl border border-[#C5A059]/30">
-            <div class="text-center mb-10">
-                <span class="gold-text text-sm tracking-widest uppercase">VIP Rezervasyon</span>
-                <h2 class="text-3xl font-bold font-serif-title gold-text mt-2">Randevu Oluşturun</h2>
-                <p class="text-gray-400 text-sm mt-1">Size en uygun zamanı seçin, talebinizi hemen oluşturalım.</p>
-            </div>
-
+            <!-- Randevu Formu -->
             <form onsubmit="window.handleBooking(event)" class="space-y-6">
-                <div>
-                    <label class="block text-xs font-semibold text-gray-300 uppercase tracking-wider mb-2">Adınız Soyadınız</label>
-                    <input type="text" id="bName" required placeholder="Örn: Elif Demir" class="w-full bg-[#0A0A0A] border border-gray-800 focus:border-[#C5A059] text-white px-4 py-3 rounded-xl focus:outline-none">
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-300 uppercase tracking-wider mb-2">Adınız Soyadınız</label>
+                        <input type="text" id="bName" required placeholder="Örn: Elif Demir" class="w-full bg-[#0A0A0A] border border-gray-800 focus:border-[#C5A059] text-white px-4 py-3 rounded-xl focus:outline-none">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-300 uppercase tracking-wider mb-2">Telefon Numarası</label>
+                        <input type="tel" id="bPhone" required placeholder="05XX XXX XX XX" class="w-full bg-[#0A0A0A] border border-gray-800 focus:border-[#C5A059] text-white px-4 py-3 rounded-xl focus:outline-none">
+                    </div>
                 </div>
 
                 <div>
@@ -502,9 +499,157 @@
     </section>
 
     <!-- Footer -->
-    <footer class="py-12 px-4 text-center border-t border-gray-900 text-gray-500 text-sm mt-auto">
-        <p>&copy; 2026 NES KUAFÖR SALONU. Tüm hakları saklıdır.</p>
+    <footer class="py-12 px-4 text-center border-t border-gray-900 text-gray-500 text-sm">
+        <p>&copy; 2026 NES KUAFOR SALONU. Tüm hakları saklıdır.</p>
     </footer>
+
+    <!-- Admin Modal -->
+    <div id="adminModal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-[#121212] border border-[#C5A059]/40 rounded-3xl max-w-5xl w-full p-6 md:p-8 max-h-[90vh] overflow-y-auto shadow-2xl">
+            <div class="flex justify-between items-center mb-6 border-b border-gray-800 pb-4">
+                <h3 class="text-2xl font-bold font-serif-title gold-text flex items-center gap-2">
+                    <i class="fa-solid fa-user-shield"></i> NES Yönetim Paneli
+                </h3>
+                <button onclick="window.closeAdminModal()" class="text-gray-400 hover:text-white text-3xl">&times;</button>
+            </div>
+
+            <!-- Şifre Ekranı -->
+            <div id="adminAuthScreen" class="py-12 text-center max-w-sm mx-auto">
+                <i class="fa-solid fa-lock text-5xl gold-text mb-4"></i>
+                <h4 class="text-xl font-semibold mb-2 text-white">Yönetici Girişi</h4>
+                <p class="text-xs text-gray-400 mb-6">Lütfen yönetici şifrenizi giriniz</p>
+                <input type="password" id="adminPassInput" placeholder="Şifre" class="w-full bg-[#0A0A0A] border border-gray-800 text-center text-white px-4 py-3 rounded-xl mb-4 focus:border-[#C5A059] focus:outline-none">
+                <button onclick="window.verifyAdmin()" class="w-full gold-gradient text-black font-semibold py-3 rounded-xl">Giriş Yap</button>
+                <p id="adminErr" class="text-red-400 text-xs mt-3 hidden">Hatalı şifre!</p>
+            </div>
+
+            <!-- Admin İçerik -->
+            <div id="adminPanelContent" class="hidden">
+                <div class="flex flex-wrap gap-2 mb-6 border-b border-gray-800 pb-3">
+                    <button onclick="window.switchAdminTab('appointments')" id="adminTabAppBtn" class="px-4 py-2 rounded-xl text-xs font-semibold bg-[#C5A059] text-black transition">Randevular</button>
+                    <button onclick="window.switchAdminTab('messages')" id="adminTabMsgBtn" class="px-4 py-2 rounded-xl text-xs font-semibold bg-gray-800 text-gray-300 hover:text-white transition">Müşteri Mesajları</button>
+                    <button onclick="window.switchAdminTab('users')" id="adminTabUserBtn" class="px-4 py-2 rounded-xl text-xs font-semibold bg-gray-800 text-gray-300 hover:text-white transition">Kullanıcı Hesapları</button>
+                    <button onclick="window.switchAdminTab('spending')" id="adminTabSpendBtn" class="px-4 py-2 rounded-xl text-xs font-semibold bg-gray-800 text-gray-300 hover:text-white transition">Harcama Takibi</button>
+                </div>
+
+                <!-- Randevular Sekmesi -->
+                <div id="adminAppointmentsView" class="space-y-4">
+                    <div class="flex flex-wrap justify-between items-center gap-4">
+                        <h4 class="font-semibold text-lg text-gray-200">Tüm Müşteri Randevu Talepleri</h4>
+                        <div class="flex items-center gap-2">
+                            <button onclick="window.renderAdminTable()" class="text-xs bg-[#C5A059]/20 border border-[#C5A059] text-[#C5A059] px-3.5 py-2 rounded-xl flex items-center gap-1.5 hover:bg-[#C5A059] hover:text-black transition font-semibold">
+                                <i class="fa-solid fa-rotate"></i> Yenile
+                            </button>
+                            <button onclick="window.clearAllApp()" class="text-xs bg-red-900/40 text-red-400 border border-red-800 px-3 py-2 rounded-xl">Tümünü Temizle</button>
+                        </div>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse text-sm">
+                            <thead>
+                                <tr class="border-b border-gray-800 text-[#C5A059]">
+                                    <th class="p-3">Müşteri</th>
+                                    <th class="p-3">Hizmet Detayı</th>
+                                    <th class="p-3">Tarih / Saat</th>
+                                    <th class="p-3">Durum</th>
+                                    <th class="p-3">İşlemler</th>
+                                </tr>
+                            </thead>
+                            <tbody id="adminTableBody" class="divide-y divide-gray-800"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Müşteri Mesajları Sekmesi -->
+                <div id="adminMessagesView" class="space-y-4 hidden">
+                    <div class="flex justify-between items-center">
+                        <h4 class="font-semibold text-lg text-gray-200">Müşteri Notları & İletişim Kutusu</h4>
+                        <button onclick="window.renderAdminMessagesTable()" class="text-xs bg-[#C5A059]/20 border border-[#C5A059] text-[#C5A059] px-3.5 py-2 rounded-xl hover:bg-[#C5A059] hover:text-black transition font-semibold">
+                            <i class="fa-solid fa-rotate"></i> Yenile
+                        </button>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse text-sm">
+                            <thead>
+                                <tr class="border-b border-gray-800 text-[#C5A059]">
+                                    <th class="p-3">Müşteri</th>
+                                    <th class="p-3">Hizmet & Randevu</th>
+                                    <th class="p-3">Müşteri Notu / Mesajı</th>
+                                    <th class="p-3">Görsel</th>
+                                    <th class="p-3">Yanıt Durumu & İşlem</th>
+                                </tr>
+                            </thead>
+                            <tbody id="adminMessagesTableBody" class="divide-y divide-gray-800"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Kullanıcı Hesapları Sekmesi -->
+                <div id="adminUsersView" class="space-y-4 hidden">
+                    <div class="flex justify-between items-center">
+                        <h4 class="font-semibold text-lg text-gray-200">Kayıtlı Müşteri Hesapları & Kupon Yönetimi</h4>
+                        <button onclick="window.renderAdminUsersTable()" class="text-xs bg-[#C5A059]/20 border border-[#C5A059] text-[#C5A059] px-3.5 py-2 rounded-xl hover:bg-[#C5A059] hover:text-black transition font-semibold">
+                            <i class="fa-solid fa-rotate"></i> Yenile
+                        </button>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse text-sm">
+                            <thead>
+                                <tr class="border-b border-gray-800 text-[#C5A059]">
+                                    <th class="p-3">Ad Soyad</th>
+                                    <th class="p-3">Kayıtlı Şifre</th>
+                                    <th class="p-3">Aktif Kupon Durumu</th>
+                                    <th class="p-3">Kupon Tanımla</th>
+                                    <th class="p-3">İşlemler</th>
+                                </tr>
+                            </thead>
+                            <tbody id="adminUsersTableBody" class="divide-y divide-gray-800"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Harcama Takibi Sekmesi -->
+                <div id="adminSpendingView" class="space-y-4 hidden">
+                    <div class="flex justify-between items-center">
+                        <h4 class="font-semibold text-lg text-gray-200">Müşteri Gün, Ay ve Yıl Bazlı Harcama Analizi</h4>
+                        <button onclick="window.renderAdminSpendingTable()" class="text-xs bg-[#C5A059]/20 border border-[#C5A059] text-[#C5A059] px-3.5 py-2 rounded-xl hover:bg-[#C5A059] hover:text-black transition font-semibold">
+                            <i class="fa-solid fa-rotate"></i> Yenile
+                        </button>
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse text-sm">
+                            <thead>
+                                <tr class="border-b border-gray-800 text-[#C5A059]">
+                                    <th class="p-3">Müşteri Adı</th>
+                                    <th class="p-3">Toplam Harcama</th>
+                                    <th class="p-3">Yıl Bazlı Harcamalar</th>
+                                    <th class="p-3">Ay Bazlı Harcamalar</th>
+                                    <th class="p-3">Gün Bazlı Harcamalar</th>
+                                </tr>
+                            </thead>
+                            <tbody id="adminSpendingTableBody" class="divide-y divide-gray-800"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Lightbox Modal -->
+    <div id="lightboxModal" class="fixed inset-0 bg-black/90 z-[70] hidden flex items-center justify-center p-4">
+        <div class="bg-[#121212] border border-[#C5A059]/50 rounded-2xl max-w-2xl w-full p-6 relative flex flex-col md:flex-row gap-6 items-center">
+            <button onclick="window.closeLightbox()" class="absolute top-4 right-4 text-gray-400 hover:text-white text-2xl">&times;</button>
+            <div id="lightboxMediaContainer" class="w-full md:w-1/2"></div>
+            <div class="w-full md:w-1/2 space-y-4">
+                <h4 class="gold-text font-serif-title font-bold text-xl">Müşteri Notu / İstekleri</h4>
+                <p id="lightboxNoteText" class="text-gray-300 text-sm bg-[#0A0A0A] p-4 rounded-xl border border-gray-800"></p>
+                <div>
+                    <label class="block text-xs font-semibold text-gray-400 uppercase mb-2">Müşteriye Yanıt Gönder</label>
+                    <textarea id="adminReplyText" rows="2" placeholder="Yanıtınızı buraya yazın..." class="w-full bg-[#0A0A0A] border border-gray-800 text-white text-sm p-3 rounded-xl focus:border-[#C5A059] focus:outline-none mb-2"></textarea>
+                    <button onclick="window.sendAdminReply()" class="w-full gold-gradient text-black text-sm font-semibold py-2.5 rounded-xl">Yanıtı Gönder</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- Giriş Yap Modal -->
     <div id="loginModal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
@@ -568,72 +713,7 @@
         </div>
     </div>
 
-    <!-- Custom Toast & Notification Container -->
-    <div id="toastContainer" class="fixed bottom-6 right-6 z-[100] flex flex-col gap-3 pointer-events-none"></div>
-
-    <!-- Application Logic Script -->
     <script>
-        let currentUser = localStorage.getItem('nes_logged_user') || null;
-        const ALL_TIME_SLOTS = ['10:00', '12:00', '14:00', '16:00', '18:00'];
-        let selectedServiceIds = [];
-        let appliedDiscountRate = 0;
-        let appliedCouponCode = '';
-
-        const DEFAULT_SERVICES_DATA = [
-            { id: 'ombre', name: 'Ombre Tasarımı', price: 3500, durationMin: 180 },
-            { id: 'renklendirme', name: 'Özel Renklendirme & Balyaj', price: 3000, durationMin: 150 },
-            { id: 'kesim', name: 'Kesim & Şekillendirme', price: 750, durationMin: 45 },
-            { id: 'keratin', name: 'Keratin Bakım', price: 1800, durationMin: 90 },
-            { id: 'gelin', name: 'Gelin Paketi', price: 7500, durationMin: 240 },
-            { id: 'boya', name: 'Dip / Tüm Boya', price: 1200, durationMin: 90 },
-            { id: 'manikur', name: 'Spa Manikür & Pedikür', price: 900, durationMin: 60 }
-        ];
-
-        // Format duration utility - Top level hoisted definition
-        function formatDuration(mins) {
-            if (!mins || mins <= 0) return '0 Dk';
-            const hours = Math.floor(mins / 60);
-            const remainingMins = mins % 60;
-            if (hours > 0 && remainingMins > 0) {
-                return `${hours} Saat ${remainingMins} Dk`;
-            } else if (hours > 0) {
-                return `${hours} Saat`;
-            }
-            return `${remainingMins} Dk`;
-        }
-
-        function getServicesData() {
-            try {
-                return JSON.parse(localStorage.getItem('nes_services_catalog')) || DEFAULT_SERVICES_DATA;
-            } catch (e) {
-                return DEFAULT_SERVICES_DATA;
-            }
-        }
-
-        function getApps() {
-            try {
-                return JSON.parse(localStorage.getItem('nes_apps')) || [];
-            } catch (e) {
-                return [];
-            }
-        }
-
-        function saveApps(apps) {
-            localStorage.setItem('nes_apps', JSON.stringify(apps));
-        }
-
-        function getUsersList() {
-            try {
-                return JSON.parse(localStorage.getItem('nes_users_list')) || [];
-            } catch (e) {
-                return [];
-            }
-        }
-
-        function saveUsersList(users) {
-            localStorage.setItem('nes_users_list', JSON.stringify(users));
-        }
-
         document.addEventListener('DOMContentLoaded', () => {
             const bDateEl = document.getElementById('bDate');
             if (bDateEl) {
@@ -652,118 +732,30 @@
             });
         });
 
+        let currentUser = localStorage.getItem('nes_logged_user') || null;
+
+        const ALL_TIME_SLOTS = ['10:00', '12:00', '14:00', '16:00', '18:00'];
+
+        const SERVICES_DATA = [
+            { id: 'ombre', name: 'Ombre Tasarımı', price: 3500, durationMin: 180 },
+            { id: 'renklendirme', name: 'Özel Renklendirme & Balyaj', price: 3000, durationMin: 150 },
+            { id: 'kesim', name: 'Kesim & Şekillendirme', price: 750, durationMin: 45 },
+            { id: 'keratin', name: 'Keratin Bakım', price: 1800, durationMin: 90 },
+            { id: 'gelin', name: 'Gelin Paketi', price: 7500, durationMin: 240 },
+            { id: 'boya', name: 'Dip / Tüm Boya', price: 1200, durationMin: 90 },
+            { id: 'manikur', name: 'Spa Manikür & Pedikür', price: 900, durationMin: 60 }
+        ];
+
+        let selectedServiceIds = [];
+        let appliedDiscountRate = 0;
+        let appliedCouponCode = '';
+
         window.toggleDropdownMenu = function() {
             const dropdown = document.getElementById('dropdownMenu');
             if (dropdown) {
                 dropdown.classList.toggle('hidden');
             }
         };
-
-        window.renderServiceSelectionGrid = function() {
-            const container = document.getElementById('serviceSelectionGrid');
-            if (!container) return;
-            container.innerHTML = '';
-
-            const services = getServicesData();
-
-            services.forEach(srv => {
-                const isSelected = selectedServiceIds.includes(srv.id);
-                const card = document.createElement('div');
-                card.onclick = () => window.toggleServiceSelection(srv.id);
-                card.className = `p-3 rounded-xl border cursor-pointer transition flex justify-between items-center ${
-                    isSelected 
-                    ? 'bg-[#C5A059]/15 border-[#C5A059] text-white shadow-md' 
-                    : 'bg-[#0A0A0A] border-gray-800 text-gray-400 hover:border-gray-600'
-                }`;
-
-                card.innerHTML = `
-                    <div class="pr-2">
-                        <div class="font-medium text-xs text-gray-200 flex items-center gap-1.5">
-                            <i class="fa-solid ${isSelected ? 'fa-square-check gold-text' : 'fa-square text-gray-700'}"></i>
-                            <span>${srv.name}</span>
-                        </div>
-                        <div class="text-[10px] text-gray-400 mt-1 flex items-center gap-2">
-                            <span><i class="fa-solid fa-clock gold-text mr-1"></i>${formatDuration(srv.durationMin)}</span>
-                        </div>
-                    </div>
-                    <span class="gold-text font-bold text-xs shrink-0">${srv.price.toLocaleString('tr-TR')} ₺</span>
-                `;
-                container.appendChild(card);
-            });
-
-            updateBasketSummary();
-        };
-
-        window.toggleServiceSelection = function(id) {
-            if (selectedServiceIds.includes(id)) {
-                selectedServiceIds = selectedServiceIds.filter(item => item !== id);
-            } else {
-                selectedServiceIds.push(id);
-            }
-            window.renderServiceSelectionGrid();
-        };
-
-        window.toggleServiceFromGrid = function(id) {
-            if (!selectedServiceIds.includes(id)) {
-                selectedServiceIds.push(id);
-            }
-            window.renderServiceSelectionGrid();
-            const randevuSec = document.getElementById('randevu');
-            if (randevuSec) {
-                randevuSec.scrollIntoView({ behavior: 'smooth' });
-            }
-        };
-
-        function updateBasketSummary() {
-            const listEl = document.getElementById('basketItemsList');
-            const badgeEl = document.getElementById('basketCountBadge');
-            const totalDurEl = document.getElementById('basketTotalDuration');
-            const totalPriceEl = document.getElementById('basketTotalPrice');
-
-            if (!listEl || !badgeEl || !totalDurEl || !totalPriceEl) return;
-
-            const services = getServicesData();
-
-            if (selectedServiceIds.length === 0) {
-                listEl.innerHTML = '<p class="text-gray-500 italic">Lütfen yukarıdan en az bir hizmet seçiniz.</p>';
-                badgeEl.innerText = '0 Hizmet Seçildi';
-                totalDurEl.innerText = '0 Dk';
-                totalPriceEl.innerText = '0 ₺';
-                return;
-            }
-
-            let totalMin = 0;
-            let rawTotalPrice = 0;
-            let htmlList = '<ul class="space-y-1">';
-
-            selectedServiceIds.forEach(id => {
-                const srv = services.find(s => s.id === id);
-                if (srv) {
-                    totalMin += srv.durationMin;
-                    rawTotalPrice += srv.price;
-                    htmlList += `
-                        <li class="flex justify-between items-center text-xs">
-                            <span class="text-gray-200"><i class="fa-solid fa-circle-check gold-text mr-1 text-[10px]"></i>${srv.name} (${formatDuration(srv.durationMin)})</span>
-                            <span class="gold-text font-semibold">${srv.price.toLocaleString('tr-TR')} ₺</span>
-                        </li>
-                    `;
-                }
-            });
-
-            htmlList += '</ul>';
-            listEl.innerHTML = htmlList;
-            badgeEl.innerText = `${selectedServiceIds.length} Hizmet Seçildi`;
-            totalDurEl.innerText = formatDuration(totalMin);
-
-            let finalPrice = rawTotalPrice;
-            if (appliedDiscountRate > 0) {
-                const discountAmount = rawTotalPrice * appliedDiscountRate;
-                finalPrice = rawTotalPrice - discountAmount;
-                totalPriceEl.innerHTML = `<span class="line-through text-gray-500 text-xs mr-2">${rawTotalPrice.toLocaleString('tr-TR')} ₺</span>${finalPrice.toLocaleString('tr-TR')} ₺ <span class="text-emerald-400 text-xs font-normal">(-%${appliedDiscountRate * 100})</span>`;
-            } else {
-                totalPriceEl.innerText = `${finalPrice.toLocaleString('tr-TR')} ₺`;
-            }
-        }
 
         window.updateTimeSlotAvailability = function() {
             const dateVal = document.getElementById('bDate').value;
@@ -824,6 +816,120 @@
                 }
             }
         };
+
+        function formatDuration(mins) {
+            if (mins <= 0) return '0 Dk';
+            const hours = Math.floor(mins / 60);
+            const remainingMins = mins % 60;
+            if (hours > 0 && remainingMins > 0) {
+                return `${hours} Saat ${remainingMins} Dk`;
+            } else if (hours > 0) {
+                return `${hours} Saat`;
+            }
+            return `${remainingMins} Dk`;
+        }
+
+        window.renderServiceSelectionGrid = function() {
+            const container = document.getElementById('serviceSelectionGrid');
+            if (!container) return;
+            container.innerHTML = '';
+
+            SERVICES_DATA.forEach(srv => {
+                const isSelected = selectedServiceIds.includes(srv.id);
+                const card = document.createElement('div');
+                card.onclick = () => window.toggleServiceSelection(srv.id);
+                card.className = `p-3 rounded-xl border cursor-pointer transition flex justify-between items-center ${
+                    isSelected 
+                    ? 'bg-[#C5A059]/15 border-[#C5A059] text-white shadow-md' 
+                    : 'bg-[#0A0A0A] border-gray-800 text-gray-400 hover:border-gray-600'
+                }`;
+
+                card.innerHTML = `
+                    <div class="pr-2">
+                        <div class="font-medium text-xs text-gray-200 flex items-center gap-1.5">
+                            <i class="fa-solid ${isSelected ? 'fa-square-check gold-text' : 'fa-square text-gray-700'}"></i>
+                            <span>${srv.name}</span>
+                        </div>
+                        <div class="text-[10px] text-gray-400 mt-1 flex items-center gap-2">
+                            <span><i class="fa-solid fa-clock gold-text mr-1"></i>${formatDuration(srv.durationMin)}</span>
+                        </div>
+                    </div>
+                    <span class="gold-text font-bold text-xs shrink-0">${srv.price.toLocaleString('tr-TR')} ₺</span>
+                `;
+                container.appendChild(card);
+            });
+
+            updateBasketSummary();
+        };
+
+        window.toggleServiceSelection = function(id) {
+            if (selectedServiceIds.includes(id)) {
+                selectedServiceIds = selectedServiceIds.filter(item => item !== id);
+            } else {
+                selectedServiceIds.push(id);
+            }
+            window.renderServiceSelectionGrid();
+        };
+
+        window.toggleServiceFromGrid = function(id) {
+            if (!selectedServiceIds.includes(id)) {
+                selectedServiceIds.push(id);
+            }
+            window.renderServiceSelectionGrid();
+            const randevuSec = document.getElementById('randevu');
+            if (randevuSec) {
+                randevuSec.scrollIntoView({ behavior: 'smooth' });
+            }
+        };
+
+        function updateBasketSummary() {
+            const listEl = document.getElementById('basketItemsList');
+            const badgeEl = document.getElementById('basketCountBadge');
+            const totalDurEl = document.getElementById('basketTotalDuration');
+            const totalPriceEl = document.getElementById('basketTotalPrice');
+
+            if (!listEl || !badgeEl || !totalDurEl || !totalPriceEl) return;
+
+            if (selectedServiceIds.length === 0) {
+                listEl.innerHTML = '<p class="text-gray-500 italic">Lütfen yukarıdan en az bir hizmet seçiniz.</p>';
+                badgeEl.innerText = '0 Hizmet Seçildi';
+                totalDurEl.innerText = '0 Dk';
+                totalPriceEl.innerText = '0 ₺';
+                return;
+            }
+
+            let totalMin = 0;
+            let rawTotalPrice = 0;
+            let htmlList = '<ul class="space-y-1">';
+
+            selectedServiceIds.forEach(id => {
+                const srv = SERVICES_DATA.find(s => s.id === id);
+                if (srv) {
+                    totalMin += srv.durationMin;
+                    rawTotalPrice += srv.price;
+                    htmlList += `
+                        <li class="flex justify-between items-center text-xs">
+                            <span class="text-gray-200"><i class="fa-solid fa-circle-check gold-text mr-1 text-[10px]"></i>${srv.name} (${formatDuration(srv.durationMin)})</span>
+                            <span class="gold-text font-semibold">${srv.price.toLocaleString('tr-TR')} ₺</span>
+                        </li>
+                    `;
+                }
+            });
+
+            htmlList += '</ul>';
+            listEl.innerHTML = htmlList;
+            badgeEl.innerText = `${selectedServiceIds.length} Hizmet Seçildi`;
+            totalDurEl.innerText = formatDuration(totalMin);
+
+            let finalPrice = rawTotalPrice;
+            if (appliedDiscountRate > 0) {
+                const discountAmount = rawTotalPrice * appliedDiscountRate;
+                finalPrice = rawTotalPrice - discountAmount;
+                totalPriceEl.innerHTML = `<span class="line-through text-gray-500 text-xs mr-2">${rawTotalPrice.toLocaleString('tr-TR')} ₺</span>${finalPrice.toLocaleString('tr-TR')} ₺ <span class="text-emerald-400 text-xs font-normal">(-%${appliedDiscountRate * 100})</span>`;
+            } else {
+                totalPriceEl.innerText = `${finalPrice.toLocaleString('tr-TR')} ₺`;
+            }
+        }
 
         window.applyCoupon = function() {
             const codeInput = document.getElementById('couponInput');
@@ -1014,6 +1120,30 @@
             localStorage.setItem('nes_spending_records', JSON.stringify(spendingRecords));
         }
 
+        function getUserSpendingSummary(userName) {
+            let spendingRecords = {};
+            try {
+                spendingRecords = JSON.parse(localStorage.getItem('nes_spending_records')) || {};
+            } catch(e) {}
+
+            const userKey = userName.toLowerCase();
+            const records = spendingRecords[userKey] || [];
+
+            let totalAll = 0;
+            let byYear = {};
+            let byMonth = {};
+            let byDay = {};
+
+            records.forEach(r => {
+                totalAll += r.amount;
+                byYear[r.year] = (byYear[r.year] || 0) + r.amount;
+                byMonth[r.month] = (byMonth[r.month] || 0) + r.amount;
+                byDay[r.date] = (byDay[r.date] || 0) + r.amount;
+            });
+
+            return { totalAll, byYear, byMonth, byDay, records };
+        }
+
         window.updateNavAuthUI = function() {
             const authButtons = document.getElementById('authButtonsContainer');
             const userProfile = document.getElementById('userProfileContainer');
@@ -1041,6 +1171,30 @@
                 if (reminderBanner) reminderBanner.classList.add('hidden');
             }
         };
+
+        function getApps() {
+            try {
+                return JSON.parse(localStorage.getItem('nes_apps')) || [];
+            } catch (e) {
+                return [];
+            }
+        }
+
+        function saveApps(apps) {
+            localStorage.setItem('nes_apps', JSON.stringify(apps));
+        }
+
+        function getUsersList() {
+            try {
+                return JSON.parse(localStorage.getItem('nes_users_list')) || [];
+            } catch (e) {
+                return [];
+            }
+        }
+
+        function saveUsersList(users) {
+            localStorage.setItem('nes_users_list', JSON.stringify(users));
+        }
 
         function checkReminders() {
             const apps = getApps();
@@ -1084,7 +1238,7 @@
             }
 
             if (selectedServiceIds.length === 0) {
-                showToast('Lütfen en az bir hizmet seçiniz!', 'warning');
+                alert('Lütfen en az bir hizmet seçiniz!');
                 return;
             }
 
@@ -1092,25 +1246,24 @@
             const selectedTime = document.getElementById('bTime').value;
 
             if (!selectedDate || !selectedTime) {
-                showToast('Lütfen geçerli bir tarih ve saat seçiniz.', 'warning');
+                alert('Lütfen geçerli bir tarih ve saat seçiniz.');
                 return;
             }
 
             const currentApps = getApps();
             const isSlotTaken = currentApps.some(a => a.date === selectedDate && a.time === selectedTime && a.status !== 'İptal');
             if (isSlotTaken) {
-                showToast('Seçtiğiniz saat dilimi doludur. Lütfen farklı bir saat seçiniz.', 'warning');
+                alert('Seçtiğiniz tarih ve saat dilimi doludur. Lütfen farklı bir saat seçiniz.');
                 window.updateTimeSlotAvailability();
                 return;
             }
 
-            const services = getServicesData();
             let totalMin = 0;
             let totalPrice = 0;
             let selectedObjects = [];
 
             selectedServiceIds.forEach(id => {
-                const srv = services.find(s => s.id === id);
+                const srv = SERVICES_DATA.find(s => s.id === id);
                 if (srv) {
                     totalMin += srv.durationMin;
                     totalPrice += srv.price;
@@ -1134,6 +1287,7 @@
                 const newRecord = {
                     id: Date.now(),
                     name: document.getElementById('bName').value,
+                    phone: document.getElementById('bPhone') ? document.getElementById('bPhone').value : '',
                     service: fullServiceSummary,
                     serviceList: selectedObjects,
                     totalPrice: finalPrice,
@@ -1209,7 +1363,361 @@
             });
         };
 
-        // User Auth Modals
+        window.openAdminModal = function() {
+            const modal = document.getElementById('adminModal');
+            if (modal) modal.classList.remove('hidden');
+        };
+
+        window.closeAdminModal = function() {
+            const modal = document.getElementById('adminModal');
+            if (modal) modal.classList.add('hidden');
+        };
+
+        window.verifyAdmin = function() {
+            const val = document.getElementById('adminPassInput').value;
+            if(val === '1234') {
+                document.getElementById('adminAuthScreen').classList.add('hidden');
+                document.getElementById('adminPanelContent').classList.remove('hidden');
+                window.renderAdminTable();
+            } else {
+                document.getElementById('adminErr').classList.remove('hidden');
+            }
+        };
+
+        window.switchAdminTab = function(tab) {
+            const appBtn = document.getElementById('adminTabAppBtn');
+            const msgBtn = document.getElementById('adminTabMsgBtn');
+            const userBtn = document.getElementById('adminTabUserBtn');
+            const spendBtn = document.getElementById('adminTabSpendBtn');
+
+            const appView = document.getElementById('adminAppointmentsView');
+            const msgView = document.getElementById('adminMessagesView');
+            const userView = document.getElementById('adminUsersView');
+            const spendView = document.getElementById('adminSpendingView');
+
+            [appBtn, msgBtn, userBtn, spendBtn].forEach(b => {
+                if(b) {
+                    b.className = "px-4 py-2 rounded-xl text-xs font-semibold bg-gray-800 text-gray-300 hover:text-white transition";
+                }
+            });
+            [appView, msgView, userView, spendView].forEach(v => {
+                if(v) v.classList.add('hidden');
+            });
+
+            if (tab === 'appointments') {
+                if(appBtn) appBtn.className = "px-4 py-2 rounded-xl text-xs font-semibold bg-[#C5A059] text-black transition";
+                if(appView) appView.classList.remove('hidden');
+                window.renderAdminTable();
+            } else if (tab === 'messages') {
+                if(msgBtn) msgBtn.className = "px-4 py-2 rounded-xl text-xs font-semibold bg-[#C5A059] text-black transition";
+                if(msgView) msgView.classList.remove('hidden');
+                window.renderAdminMessagesTable();
+            } else if (tab === 'users') {
+                if(userBtn) userBtn.className = "px-4 py-2 rounded-xl text-xs font-semibold bg-[#C5A059] text-black transition";
+                if(userView) userView.classList.remove('hidden');
+                window.renderAdminUsersTable();
+            } else if (tab === 'spending') {
+                if(spendBtn) spendBtn.className = "px-4 py-2 rounded-xl text-xs font-semibold bg-[#C5A059] text-black transition";
+                if(spendView) spendView.classList.remove('hidden');
+                window.renderAdminSpendingTable();
+            }
+        };
+
+        window.renderAdminTable = function() {
+            const apps = getApps();
+            const tbody = document.getElementById('adminTableBody');
+            if (!tbody) return;
+            tbody.innerHTML = '';
+            if(apps.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" class="text-center p-6 text-gray-500">Henüz randevu yok.</td></tr>';
+                return;
+            }
+            apps.forEach(app => {
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-gray-900/50";
+                tr.innerHTML = `
+                    <td class="p-3 font-semibold text-white">${app.name}</td>
+                    <td class="p-3">
+                        <span class="gold-text">${app.service}</span>
+                    </td>
+                    <td class="p-3 text-gray-300">${app.date} <br><b>${app.time}</b></td>
+                    <td class="p-3"><span class="px-2.5 py-1 rounded-full text-xs font-medium ${app.status==='Onaylandı'?'bg-emerald-900/50 text-emerald-400 border border-emerald-800':app.status==='Tamamlandı'?'bg-blue-900/50 text-blue-400 border border-blue-800':'bg-amber-900/50 text-amber-400 border border-amber-800'}">${app.status}</span></td>
+                    <td class="p-3 space-x-2">
+                        <button onclick="window.updateStatus(${app.id}, 'Onaylandı')" class="text-emerald-400 hover:text-emerald-300" title="Onayla"><i class="fa-solid fa-check"></i></button>
+                        <button onclick="window.updateStatus(${app.id}, 'Tamamlandı')" class="text-blue-400 hover:text-blue-300" title="Tamamlandı Olarak İşaretle (Harcamalara Ekle)"><i class="fa-solid fa-circle-check"></i></button>
+                        <button onclick="window.updateStatus(${app.id}, 'İptal')" class="text-red-400 hover:text-red-300" title="İptal Et"><i class="fa-solid fa-ban"></i></button>
+                        <button onclick="window.deleteApp(${app.id})" class="text-gray-500 hover:text-red-400" title="Sil (Harcamalar etkilenmez)"><i class="fa-solid fa-trash"></i></button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        };
+
+        window.renderAdminMessagesTable = function() {
+            const apps = getApps();
+            const tbody = document.getElementById('adminMessagesTableBody');
+            if (!tbody) return;
+            tbody.innerHTML = '';
+            if(apps.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" class="text-center p-6 text-gray-500">Henüz müşteri mesajı yok.</td></tr>';
+                return;
+            }
+            apps.forEach(app => {
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-gray-900/50";
+                tr.innerHTML = `
+                    <td class="p-3 font-semibold text-white">${app.name}</td>
+                    <td class="p-3 text-xs text-gray-300"><span class="gold-text font-semibold">${app.service}</span><br>${app.date} / ${app.time}</td>
+                    <td class="p-3 text-xs text-gray-200">${app.note || 'Not belirtilmemiş'}</td>
+                    <td class="p-3">
+                        ${app.image ? `<button onclick="window.openLightboxImage('${app.image}', '${app.note || ''}', ${app.id})" class="text-xs text-[#C5A059] underline"><i class="fa-solid fa-image"></i> Görseli Gör</button>` : '<span class="text-gray-600 text-xs">Görsel yok</span>'}
+                    </td>
+                    <td class="p-3">
+                        <button onclick="window.openLightboxImage('${app.image || ''}', '${app.note || 'Not yok'}', ${app.id})" class="text-xs bg-[#C5A059]/20 text-[#C5A059] border border-[#C5A059] px-3 py-1.5 rounded-lg hover:bg-[#C5A059] hover:text-black transition font-semibold">
+                            <i class="fa-solid fa-reply"></i> Yanıt Ver ${app.reply ? '(Yanıtlandı)' : ''}
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        };
+
+        window.renderAdminUsersTable = function() {
+            const users = getUsersList();
+            const tbody = document.getElementById('adminUsersTableBody');
+            if (!tbody) return;
+            tbody.innerHTML = '';
+
+            if (users.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" class="text-center p-6 text-gray-500">Henüz kayıtlı kullanıcı bulunmuyor.</td></tr>';
+                return;
+            }
+
+            let couponsMap = {};
+            try {
+                couponsMap = JSON.parse(localStorage.getItem('nes_user_coupons')) || {};
+            } catch(e) {}
+
+            users.forEach((u) => {
+                const userKey = u.name.toLowerCase();
+                const couponInfo = couponsMap[userKey];
+                const hasActiveCoupon = couponInfo && !couponInfo.used && (new Date() - new Date(couponInfo.issuedAt) <= 15*24*60*60*1000);
+
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-gray-900/50 align-top";
+                tr.innerHTML = `
+                    <td class="p-3 font-semibold text-white">
+                        ${u.name}
+                        ${u.phone ? `<br><span class="text-xs text-gray-400 font-normal"><i class="fa-solid fa-phone gold-text mr-1 text-[10px]"></i>${u.phone}</span>` : ''}
+                    </td>
+                    <td class="p-3 text-gray-400">${u.pass}</td>
+                    <td class="p-3">
+                        ${hasActiveCoupon ? `<span class="text-xs text-amber-400 font-bold bg-amber-950/40 border border-amber-800 px-2.5 py-1 rounded-full">${couponInfo.code} (%${couponInfo.discountRate*100})</span>` : '<span class="text-xs text-gray-500">Aktif Kupon Yok</span>'}
+                    </td>
+                    <td class="p-3 flex items-center gap-1.5">
+                        <select id="couponSelect_${u.name.replace(/\s+/g, '_')}" class="bg-[#0A0A0A] border border-gray-800 text-white text-xs p-1.5 rounded-lg">
+                            <option value="0.10|NES10">%10 (NES10)</option>
+                            <option value="0.20|NES20">%20 (NES20)</option>
+                            <option value="0.30|NES30">%30 (NES30)</option>
+                        </select>
+                        <button onclick="window.assignCouponToUser('${u.name}')" class="text-xs bg-[#C5A059] text-black font-semibold px-2.5 py-1.5 rounded-lg hover:opacity-90">Gönder</button>
+                    </td>
+                    <td class="p-3">
+                        <button onclick="window.deleteUserAccount('${u.name}')" class="text-red-400 hover:text-red-300 text-xs bg-red-950/40 border border-red-900 px-3 py-1.5 rounded-lg flex items-center gap-1">
+                            <i class="fa-solid fa-trash"></i> Sil
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        };
+
+        window.renderAdminSpendingTable = function() {
+            const users = getUsersList();
+            const tbody = document.getElementById('adminSpendingTableBody');
+            if (!tbody) return;
+            tbody.innerHTML = '';
+
+            if (users.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" class="text-center p-6 text-gray-500">Henüz kayıtlı kullanıcı bulunmuyor.</td></tr>';
+                return;
+            }
+
+            users.forEach((u) => {
+                const summary = getUserSpendingSummary(u.name);
+
+                let yearsHtml = `<ul class="space-y-0.5 text-xs text-gray-300">`;
+                if (Object.keys(summary.byYear).length === 0) {
+                    yearsHtml += `<li class="text-gray-500 italic">Yıl kaydı yok</li>`;
+                } else {
+                    for (let [yr, amt] of Object.entries(summary.byYear)) {
+                        yearsHtml += `<li>• ${yr}: <b class="gold-text">${amt.toLocaleString('tr-TR')} ₺</b></li>`;
+                    }
+                }
+                yearsHtml += `</ul>`;
+
+                let monthsHtml = `<ul class="space-y-0.5 text-xs text-gray-300 max-h-24 overflow-y-auto">`;
+                if (Object.keys(summary.byMonth).length === 0) {
+                    monthsHtml += `<li class="text-gray-500 italic">Ay kaydı yok</li>`;
+                } else {
+                    for (let [mKey, amt] of Object.entries(summary.byMonth)) {
+                        monthsHtml += `<li>• ${mKey}: <b class="text-emerald-400">${amt.toLocaleString('tr-TR')} ₺</b></li>`;
+                    }
+                }
+                monthsHtml += `</ul>`;
+
+                let daysHtml = `<ul class="space-y-0.5 text-[11px] text-gray-400 max-h-24 overflow-y-auto">`;
+                if (Object.keys(summary.byDay).length === 0) {
+                    daysHtml += `<li class="text-gray-500 italic">Gün kaydı yok</li>`;
+                } else {
+                    for (let [dKey, amt] of Object.entries(summary.byDay)) {
+                        daysHtml += `<li>• ${dKey}: <b class="text-blue-400">${amt.toLocaleString('tr-TR')} ₺</b></li>`;
+                    }
+                }
+                daysHtml += `</ul>`;
+
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-gray-900/50 align-top";
+                tr.innerHTML = `
+                    <td class="p-3 font-semibold text-white">${u.name}</td>
+                    <td class="p-3"><span class="gold-text font-bold">${summary.totalAll.toLocaleString('tr-TR')} ₺</span></td>
+                    <td class="p-3">${yearsHtml}</td>
+                    <td class="p-3">${monthsHtml}</td>
+                    <td class="p-3">${daysHtml}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        };
+
+        window.assignCouponToUser = function(userName) {
+            const selectEl = document.getElementById(`couponSelect_${userName.replace(/\s+/g, '_')}`);
+            if (!selectEl) return;
+            const parts = selectEl.value.split('|');
+            const rate = parseFloat(parts[0]);
+            const code = parts[1];
+
+            let couponsMap = {};
+            try {
+                couponsMap = JSON.parse(localStorage.getItem('nes_user_coupons')) || {};
+            } catch(e) {}
+
+            couponsMap[userName.toLowerCase()] = {
+                code: code,
+                discountRate: rate,
+                issuedAt: new Date().toISOString(),
+                used: false
+            };
+
+            localStorage.setItem('nes_user_coupons', JSON.stringify(couponsMap));
+            alert(`"${userName}" adlı müşteriye ${code} (${rate*100}%) kuponu başarıyla tanımlandı!`);
+            window.renderAdminUsersTable();
+        };
+
+        window.deleteUserAccount = function(userName) {
+            if (confirm(`"${userName}" adlı kullanıcı hesabını ve ilişkili tüm randevuları silmek istediğinize emin misiniz?`)) {
+                let users = getUsersList();
+                users = users.filter(u => u.name.toLowerCase() !== userName.toLowerCase());
+                saveUsersList(users);
+
+                let apps = getApps();
+                apps = apps.filter(a => a.name.toLowerCase() !== userName.toLowerCase());
+                saveApps(apps);
+
+                if (currentUser && currentUser.toLowerCase() === userName.toLowerCase()) {
+                    window.handleLogout();
+                }
+
+                window.renderAdminUsersTable();
+                window.renderAdminTable();
+                window.renderAdminSpendingTable();
+            }
+        };
+
+        let activeLightboxId = null;
+        window.openLightboxImage = function(imgSrc, noteText, appId) {
+            activeLightboxId = appId;
+            const container = document.getElementById('lightboxMediaContainer');
+            if(imgSrc && imgSrc !== '') {
+                container.innerHTML = `<img src="${imgSrc}" class="w-full h-auto rounded-xl border border-gray-800">`;
+            } else {
+                container.innerHTML = `<div class="text-gray-500 text-sm italic p-8 text-center bg-[#0A0A0A] rounded-xl">Fotoğraf yüklenmemiş</div>`;
+            }
+            document.getElementById('lightboxNoteText').innerText = noteText;
+            document.getElementById('adminReplyText').value = '';
+            document.getElementById('lightboxModal').classList.remove('hidden');
+        };
+
+        window.closeLightbox = function() {
+            const modal = document.getElementById('lightboxModal');
+            if (modal) modal.classList.add('hidden');
+        };
+
+        window.sendAdminReply = function() {
+            const replyVal = document.getElementById('adminReplyText').value;
+            if(!replyVal) return alert('Lütfen yanıt yazın.');
+            const apps = getApps();
+            const target = apps.find(a => a.id === activeLightboxId);
+            if(target) {
+                target.reply = replyVal;
+                saveApps(apps);
+                window.closeLightbox();
+                window.renderAdminMessagesTable();
+                window.renderUserAppointments();
+            }
+        };
+
+        window.updateStatus = function(id, st) {
+            const apps = getApps();
+            const target = apps.find(a => a.id === id);
+            if(target) { 
+                if (st === 'Tamamlandı' && target.status !== 'Tamamlandı') {
+                    let amountToAdd = 0;
+                    if (target.totalPrice) {
+                        amountToAdd = target.totalPrice;
+                    } else if (target.service) {
+                        const match = target.service.match(/([\d\.]+)\s*₺/);
+                        if (match) {
+                            const val = parseInt(match[1].replace(/\./g, ''), 10);
+                            if (!isNaN(val)) amountToAdd = val;
+                        }
+                    }
+                    if (amountToAdd > 0 && target.name) {
+                        addUserSpendingByDate(target.name, amountToAdd, target.date || new Date().toISOString().split('T')[0]);
+                    }
+                }
+
+                target.status = st; 
+                saveApps(apps); 
+                window.renderAdminTable(); 
+                window.renderAdminMessagesTable();
+                window.renderUserAppointments(); 
+                window.updateTimeSlotAvailability();
+                if(st === 'Tamamlandı') {
+                    window.renderAdminSpendingTable();
+                }
+            }
+        };
+
+        window.deleteApp = function(id) {
+            let apps = getApps();
+            apps = apps.filter(a => a.id !== id);
+            saveApps(apps);
+            window.renderAdminTable();
+            window.renderAdminMessagesTable();
+            window.renderUserAppointments();
+            window.updateTimeSlotAvailability();
+        };
+
+        window.clearAllApp = function() {
+            if(confirm('Tüm randevu kayıtları silinsin mi?')) {
+                localStorage.removeItem('nes_apps');
+                window.renderAdminTable();
+                window.renderAdminMessagesTable();
+                window.renderUserAppointments();
+                window.updateTimeSlotAvailability();
+            }
+        };
+
         window.openLoginModal = function() {
             const modal = document.getElementById('loginModal');
             if (modal) {
@@ -1286,11 +1794,12 @@
 
         window.handleRegisterSubmit = function() {
             const name = document.getElementById('regName').value.trim();
+            const phone = document.getElementById('regPhone').value.trim();
             const pass = document.getElementById('regPass').value;
             const err = document.getElementById('regErrorMsg');
 
-            if(!name || pass.length < 6 || !/[A-Z]/.test(pass)) {
-                err.innerText = "Ad soyad doldurun; şifre en az 6 karakter ve 1 büyük harf içermelidir!";
+            if(!name || !phone || pass.length < 6 || !/[A-Z]/.test(pass)) {
+                err.innerText = "Ad soyad ve telefon numarası doldurun; şifre en az 6 karakter ve 1 büyük harf içermelidir!";
                 err.classList.remove('hidden');
                 return;
             }
@@ -1302,12 +1811,11 @@
                 return;
             }
 
-            users.push({ name, pass });
+            users.push({ name, phone, pass });
             saveUsersList(users);
 
             window.closeRegisterModal();
             window.openLoginModal();
-            showToast('Hesabınız oluşturuldu. Giriş yapabilirsiniz.', 'success');
         };
 
         window.handleLoginSubmit = function() {
@@ -1323,7 +1831,6 @@
                 localStorage.setItem('nes_logged_user', foundUser.name);
                 window.closeLoginModal();
                 window.updateNavAuthUI();
-                showToast(`Hoş geldiniz, ${foundUser.name}!`, 'success');
             } else {
                 err.innerText = "Hatalı Ad Soyad veya Şifre!";
                 err.classList.remove('hidden');
@@ -1334,28 +1841,7 @@
             currentUser = null;
             localStorage.removeItem('nes_logged_user');
             window.updateNavAuthUI();
-            showToast('Oturum kapatıldı.', 'info');
         };
-
-        function showToast(message, type = 'info') {
-            const container = document.getElementById('toastContainer');
-            if (!container) return;
-
-            const toast = document.createElement('div');
-            toast.className = `pointer-events-auto px-4 py-3 rounded-xl border text-xs font-semibold shadow-2xl transition-all duration-300 ${
-                type === 'success' ? 'bg-[#121212] border-emerald-500 text-emerald-400' :
-                type === 'warning' ? 'bg-[#121212] border-amber-500 text-amber-400' :
-                'bg-[#121212] border-[#C5A059] text-[#C5A059]'
-            }`;
-
-            toast.innerText = message;
-            container.appendChild(toast);
-
-            setTimeout(() => {
-                toast.classList.add('opacity-0', 'translate-y-2');
-                setTimeout(() => toast.remove(), 300);
-            }, 3000);
-        }
     </script>
 </body>
 </html>
