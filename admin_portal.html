@@ -111,7 +111,7 @@
                     <i class="fa-solid fa-list-check w-4 text-center text-[#C5A059]"></i> Hizmet & Fiyat Kataloğu
                 </button>
                 <button onclick="window.switchTab('customers')" id="nav_customers" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-xs font-semibold text-gray-400 hover:text-white hover:bg-gray-900 transition">
-                    <i class="fa-solid fa-users w-4 text-center text-[#C5A059]"></i> Müşteri CRM & Kuponlar
+                    <i class="fa-solid fa-users w-4 text-center text-[#C5A059]"></i> Müşteri CRM Yönetimi
                 </button>
                 <button onclick="window.switchTab('financials')" id="nav_financials" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-xs font-semibold text-gray-400 hover:text-white hover:bg-gray-900 transition">
                     <i class="fa-solid fa-wallet w-4 text-center text-[#C5A059]"></i> Finans & Harcama Raporu
@@ -268,8 +268,8 @@
 
                 <div id="view_customers" class="space-y-6 hidden">
                     <div class="border-b border-gray-800 pb-4">
-                        <h1 class="text-2xl font-bold font-serif-title text-white">Müşteri CRM & Kuponlar</h1>
-                        <p class="text-xs text-gray-400 mt-1">Müşteri hesaplarını yönetin, kupon tanımlayın veya müşterileri sistemden silin.</p>
+                        <h1 class="text-2xl font-bold font-serif-title text-white">Müşteri CRM Yönetimi</h1>
+                        <p class="text-xs text-gray-400 mt-1">Müşteri hesaplarını görüntüleyin ve yönetin.</p>
                     </div>
 
                     <div class="bg-[#121212] border border-gray-800 rounded-2xl overflow-hidden shadow-xl">
@@ -280,8 +280,6 @@
                                         <th class="p-4">Müşteri Adı</th>
                                         <th class="p-4">Sistem Şifresi</th>
                                         <th class="p-4">Toplam Harcama</th>
-                                        <th class="p-4">Aktif Kuponlar</th>
-                                        <th class="p-4">Özel Kupon Tanımla</th>
                                         <th class="p-4 text-center">İşlem</th>
                                     </tr>
                                 </thead>
@@ -390,18 +388,6 @@
         </div>
     </div>
 
-    <div id="couponManageModal" class="fixed inset-0 bg-black/80 backdrop-blur z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-[#121212] border border-[#C5A059]/40 rounded-3xl max-w-xl w-full p-6 space-y-4 shadow-2xl relative">
-            <button onclick="window.closeCouponManageModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white text-2xl">&times;</button>
-            <h3 class="text-xl font-bold font-serif-title text-white flex items-center gap-2">
-                <i class="fa-solid fa-ticket gold-text"></i> Müşteri Kuponları Yönetimi
-            </h3>
-            <p class="text-xs text-gray-400" id="couponModalSub">Müşteriye ait kuponları yönetin.</p>
-            
-            <div id="couponManageList" class="space-y-3 max-h-80 overflow-y-auto text-xs pr-1"></div>
-        </div>
-    </div>
-
     <div id="toastContainer" class="fixed bottom-6 right-6 z-50 space-y-2 pointer-events-none"></div>
 
     <script>
@@ -418,7 +404,6 @@
         let activeTab = 'dashboard';
         let revenueChartInstance = null;
         let activeReplyAppId = null;
-        let currentManagingUser = null;
 
         document.addEventListener('DOMContentLoaded', () => {
             updateLiveClock();
@@ -895,49 +880,17 @@
             tbody.innerHTML = '';
 
             if (users.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="6" class="text-center py-6 text-gray-500">Kayıtlı kullanıcı hesabı bulunmuyor.</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="4" class="text-center py-6 text-gray-500">Kayıtlı kullanıcı hesabı bulunmuyor.</td></tr>';
                 return;
             }
-
-            let couponsMap = {};
-            try { couponsMap = JSON.parse(localStorage.getItem('nes_user_coupons')) || {}; } catch(e){}
 
             let spendingMap = {};
             try { spendingMap = JSON.parse(localStorage.getItem('nes_spending_records')) || {}; } catch(e){}
 
             users.forEach((u, index) => {
                 const userKey = u.name.toLowerCase();
-                let foundKey = Object.keys(couponsMap).find(k => k.toLowerCase() === userKey) || userKey;
-                let userCoupons = couponsMap[foundKey] || [];
-                if (!Array.isArray(userCoupons)) {
-                    userCoupons = userCoupons ? [userCoupons] : [];
-                }
-
                 const records = spendingMap[userKey] || [];
                 const totalSpend = records.reduce((sum, r) => sum + r.amount, 0);
-
-                const activeCoupons = userCoupons.filter(c => c && !c.used);
-
-                let couponsBadgeHtml = '<span class="text-gray-600 text-[10px]">Aktif Kupon Yok</span>';
-                if (activeCoupons.length > 0) {
-                    couponsBadgeHtml = `
-                        <div class="flex flex-wrap items-center gap-1">
-                            ${activeCoupons.map(c => 
-                                `<span class="inline-block px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-950/60 border border-amber-800 text-amber-300">${c.code} (%${Math.round(c.discountRate * 100)})</span>`
-                            ).join(' ')}
-                            <button onclick="window.openCouponManageModal(${index})" class="text-[10px] bg-[#C5A059]/20 border border-[#C5A059]/60 text-[#C5A059] px-2 py-0.5 rounded-lg hover:bg-[#C5A059] hover:text-black transition ml-1 font-semibold" title="Kuponları Yönet">
-                                <i class="fa-solid fa-gear"></i> Yönet (${userCoupons.length})
-                            </button>
-                        </div>
-                    `;
-                } else if (userCoupons.length > 0) {
-                    couponsBadgeHtml = `
-                        <div class="flex items-center gap-1">
-                            <span class="text-gray-500 text-[10px]">Kullanılmış (${userCoupons.length})</span>
-                            <button onclick="window.openCouponManageModal(${index})" class="text-[10px] bg-gray-800 text-gray-300 px-2 py-0.5 rounded-lg hover:bg-gray-700 transition">Yönet</button>
-                        </div>
-                    `;
-                }
 
                 const tr = document.createElement('tr');
                 tr.className = "hover:bg-gray-900/40 transition";
@@ -945,18 +898,6 @@
                     <td class="p-4 font-bold text-white">${u.name}</td>
                     <td class="p-4 text-gray-400 font-mono">${u.pass}</td>
                     <td class="p-4 font-bold gold-gradient-text">${totalSpend.toLocaleString('tr-TR')} ₺</td>
-                    <td class="p-4 font-medium">${couponsBadgeHtml}</td>
-                    <td class="p-4">
-                        <div class="flex items-center gap-1.5">
-                            <select id="couponRate_${index}" class="bg-[#0A0A0A] border border-gray-800 text-white text-xs p-1.5 rounded-lg focus:outline-none">
-                                <option value="0.10|NES10">%10 İndirim (NES10)</option>
-                                <option value="0.20|NES20">%20 İndirim (NES20)</option>
-                                <option value="0.30|NES30">%30 VIP (NES30)</option>
-                                <option value="0.50|NES50">%50 Özel (NES50)</option>
-                            </select>
-                            <button onclick="window.assignUserCoupon(${index})" class="gold-gradient text-black font-bold text-xs px-3 py-1.5 rounded-lg hover:opacity-90 shadow shrink-0">+ Kupon Gönder</button>
-                        </div>
-                    </td>
                     <td class="p-4 text-center">
                         <button onclick="window.deleteUser(${index})" class="p-1.5 bg-red-950/40 border border-red-900 text-red-400 rounded-lg hover:bg-red-900 transition" title="Kullanıcıyı Sil"><i class="fa-solid fa-trash"></i></button>
                     </td>
@@ -964,46 +905,6 @@
                 tbody.appendChild(tr);
             });
         }
-
-        window.assignUserCoupon = function(userIndex) {
-            const users = getStoredUsers();
-            const u = users[userIndex];
-            if (!u) return;
-
-            const selectEl = document.getElementById(`couponRate_${userIndex}`);
-            if (!selectEl) return;
-
-            const [rateStr, codePrefix] = selectEl.value.split('|');
-            const rate = parseFloat(rateStr);
-
-            let couponsMap = {};
-            try { couponsMap = JSON.parse(localStorage.getItem('nes_user_coupons')) || {}; } catch(e){}
-
-            const userKey = u.name.toLowerCase();
-            let userCoupons = couponsMap[userKey] || [];
-            if (!Array.isArray(userCoupons)) {
-                userCoupons = userCoupons ? [userCoupons] : [];
-            }
-
-            const randomSuffix = Math.floor(100 + Math.random() * 900);
-            const finalCode = `${codePrefix}-${randomSuffix}`;
-
-            const newCoupon = {
-                id: 'cp_' + Date.now() + '_' + Math.random().toString(36).substring(2, 5),
-                code: finalCode,
-                discountRate: rate,
-                issuedAt: new Date().toISOString(),
-                used: false
-            };
-
-            userCoupons.push(newCoupon);
-            couponsMap[userKey] = userCoupons;
-
-            localStorage.setItem('nes_user_coupons', JSON.stringify(couponsMap));
-            addAuditLog('Kupon Tanımlandı', `"${u.name}" müşterisine ${finalCode} (%${rate * 100}) kuponu eklendi.`);
-            window.syncAllData();
-            showToast(`"${u.name}" için ${finalCode} kuponu başarıyla gönderildi!`, 'success');
-        };
 
         window.deleteUser = function(userIndex) {
             let users = getStoredUsers();
@@ -1014,132 +915,9 @@
             users.splice(userIndex, 1);
             saveStoredUsers(users);
 
-            let couponsMap = {};
-            try { couponsMap = JSON.parse(localStorage.getItem('nes_user_coupons')) || {}; } catch(e){}
-            const foundKey = Object.keys(couponsMap).find(k => k.toLowerCase() === userName.toLowerCase());
-            if (foundKey) {
-                delete couponsMap[foundKey];
-                localStorage.setItem('nes_user_coupons', JSON.stringify(couponsMap));
-            }
-
-            addAuditLog('Kullanıcı Silindi', `"${userName}" hesabı ve kuponları sistemden kaldırıldı.`);
+            addAuditLog('Kullanıcı Silindi', `"${userName}" hesabı sistemden kaldırıldı.`);
             window.syncAllData();
             showToast(`"${userName}" hesabı silindi.`, 'info');
-        };
-
-        window.openCouponManageModal = function(userIndex) {
-            const users = getStoredUsers();
-            const u = users[userIndex];
-            if (!u) return;
-
-            currentManagingUser = u.name;
-            const subEl = document.getElementById('couponModalSub');
-            if (subEl) subEl.innerText = `"${u.name}" adlı müşteriye ait kuponlar aşağıdadır.`;
-
-            renderCouponManageList();
-            document.getElementById('couponManageModal').classList.remove('hidden');
-        };
-
-        window.closeCouponManageModal = function() {
-            document.getElementById('couponManageModal').classList.add('hidden');
-            currentManagingUser = null;
-        };
-
-        function renderCouponManageList() {
-            const container = document.getElementById('couponManageList');
-            if (!container || !currentManagingUser) return;
-            container.innerHTML = '';
-
-            let couponsMap = {};
-            try { couponsMap = JSON.parse(localStorage.getItem('nes_user_coupons')) || {}; } catch(e){}
-
-            const userKey = currentManagingUser.toLowerCase();
-            let foundKey = Object.keys(couponsMap).find(k => k.toLowerCase() === userKey) || userKey;
-            let userCoupons = couponsMap[foundKey] || [];
-            if (!Array.isArray(userCoupons)) userCoupons = [];
-
-            if (userCoupons.length === 0) {
-                container.innerHTML = '<p class="text-gray-500 italic text-center py-6">Müşterinin kuponu yok.</p>';
-                return;
-            }
-
-            userCoupons.forEach((c, index) => {
-                const issuedDate = new Date(c.issuedAt).toLocaleDateString('tr-TR');
-                const div = document.createElement('div');
-                div.className = "bg-[#0A0A0A] border border-gray-800 p-3.5 rounded-2xl flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3";
-                div.innerHTML = `
-                    <div class="space-y-1">
-                        <div class="flex items-center gap-2">
-                            <strong class="text-white text-sm font-mono">${c.code}</strong>
-                            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${c.used ? 'bg-red-950/60 text-red-400 border border-red-800' : 'bg-emerald-950/60 text-emerald-400 border border-emerald-800'}">
-                                ${c.used ? 'Kullanıldı' : 'Aktif'}
-                            </span>
-                        </div>
-                        <p class="text-[11px] text-gray-400">Tarih: ${issuedDate} | Oran: %${Math.round(c.discountRate * 100)}</p>
-                    </div>
-                    <div class="flex items-center gap-2 w-full sm:w-auto justify-end">
-                        <select id="editRate_${index}" class="bg-[#121212] border border-gray-800 text-white text-[11px] p-1.5 rounded-lg focus:outline-none">
-                            <option value="0.10" ${c.discountRate === 0.1 ? 'selected' : ''}>%10</option>
-                            <option value="0.20" ${c.discountRate === 0.2 ? 'selected' : ''}>%20</option>
-                            <option value="0.30" ${c.discountRate === 0.3 ? 'selected' : ''}>%30</option>
-                            <option value="0.50" ${c.discountRate === 0.5 ? 'selected' : ''}>%50</option>
-                        </select>
-                        <button onclick="window.saveCouponChanges(${index})" class="bg-blue-950/60 border border-blue-800 text-blue-300 px-2.5 py-1.5 rounded-lg hover:bg-blue-900 transition text-[11px]" title="Güncelle">
-                            <i class="fa-solid fa-pen"></i>
-                        </button>
-                        <button onclick="window.deleteSingleCoupon(${index})" class="bg-red-950/60 border border-red-800 text-red-300 px-2.5 py-1.5 rounded-lg hover:bg-red-900 transition text-[11px]" title="Sil">
-                            <i class="fa-solid fa-trash"></i>
-                        </button>
-                    </div>
-                `;
-                container.appendChild(div);
-            });
-        }
-
-        window.saveCouponChanges = function(couponIndex) {
-            if (!currentManagingUser) return;
-            const selectEl = document.getElementById(`editRate_${couponIndex}`);
-            if (!selectEl) return;
-            const newRate = parseFloat(selectEl.value);
-
-            let couponsMap = {};
-            try { couponsMap = JSON.parse(localStorage.getItem('nes_user_coupons')) || {}; } catch(e){}
-
-            let foundKey = Object.keys(couponsMap).find(k => k.toLowerCase() === currentManagingUser.toLowerCase()) || currentManagingUser.toLowerCase();
-            let userCoupons = couponsMap[foundKey] || [];
-            if (userCoupons[couponIndex]) {
-                userCoupons[couponIndex].discountRate = newRate;
-                userCoupons[couponIndex].issuedAt = new Date().toISOString();
-                userCoupons[couponIndex].used = false;
-
-                couponsMap[foundKey] = userCoupons;
-                localStorage.setItem('nes_user_coupons', JSON.stringify(couponsMap));
-                addAuditLog('Kupon Güncellendi', `"${currentManagingUser}" için kupon oranı %${newRate * 100} yapıldı.`);
-                renderCouponManageList();
-                window.syncAllData();
-                showToast('Kupon güncellendi.', 'success');
-            }
-        };
-
-        window.deleteSingleCoupon = function(couponIndex) {
-            if (!currentManagingUser) return;
-            let couponsMap = {};
-            try { couponsMap = JSON.parse(localStorage.getItem('nes_user_coupons')) || {}; } catch(e){}
-
-            let foundKey = Object.keys(couponsMap).find(k => k.toLowerCase() === currentManagingUser.toLowerCase()) || currentManagingUser.toLowerCase();
-            let userCoupons = couponsMap[foundKey] || [];
-            if (!Array.isArray(userCoupons)) userCoupons = [];
-
-            if (userCoupons[couponIndex]) {
-                const deletedCode = userCoupons[couponIndex].code;
-                userCoupons.splice(couponIndex, 1);
-                couponsMap[foundKey] = userCoupons;
-                localStorage.setItem('nes_user_coupons', JSON.stringify(couponsMap));
-                addAuditLog('Kupon Silindi', `"${currentManagingUser}" müşterisinin ${deletedCode} kuponu silindi.`);
-                renderCouponManageList();
-                window.syncAllData();
-                showToast('Kupon silindi.', 'info');
-            }
         };
 
         function renderSpendingTable(users) {
@@ -1186,7 +964,7 @@
 
         function addAuditLog(action, details) {
             let logs = [];
-            try { logs = JSON.parse(localStorage.getItem('nes_audit_logs')) || []; } catch(e){}
+            try { logs = JSON.parse(localStorage.getItem('nes_audit_logs')) || {}; } catch(e){}
 
             logs.unshift({
                 timestamp: new Date().toLocaleString('tr-TR'),
@@ -1205,7 +983,7 @@
             container.innerHTML = '';
 
             let logs = [];
-            try { logs = JSON.parse(localStorage.getItem('nes_audit_logs')) || []; } catch(e){}
+            try { logs = JSON.parse(localStorage.getItem('nes_audit_logs')) || {}; } catch(e){}
 
             if (logs.length === 0) {
                 container.innerHTML = '<p class="text-gray-500 italic py-4">Kayıt yok.</p>';
