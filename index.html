@@ -64,7 +64,7 @@
                                 <i class="fa-solid fa-calendar-plus w-4 text-[#C5A059]"></i> Randevu Al
                             </a>
                             <a href="#randevularim" onclick="window.toggleDropdownMenu()" class="flex items-center gap-3 px-4 py-2.5 text-xs font-semibold text-gray-300 hover:text-[#C5A059] hover:bg-gray-900/60 transition">
-                                <i class="fa-solid fa-calendar-check w-4 text-[#C5A059]"></i> Randevularım
+                                <i class="fa-solid fa-calendar-check w-4 text-[#C5A059]"></i> Randevularım & Saç Kartım
                             </a>
                             <a href="#konum" onclick="window.toggleDropdownMenu()" class="flex items-center gap-3 px-4 py-2.5 text-xs font-semibold text-gray-300 hover:text-[#C5A059] hover:bg-gray-900/60 transition">
                                 <i class="fa-solid fa-map-location-dot w-4 text-[#C5A059]"></i> Konum & İletişim
@@ -261,12 +261,30 @@
             <div class="flex flex-col sm:flex-row justify-between items-center gap-4 border-b border-gray-800 pb-6">
                 <div>
                     <span class="gold-text text-sm tracking-widest uppercase">Müşteri Paneli</span>
-                    <h2 class="text-3xl font-bold font-serif-title gold-text mt-2">Randevularım & Mesajlar</h2>
+                    <h2 class="text-3xl font-bold font-serif-title gold-text mt-2">Randevularım & Saç Kartım</h2>
                     <p id="userWelcomeSub" class="text-gray-400 text-sm mt-1"></p>
                 </div>
                 <button onclick="window.renderUserAppointments()" class="text-xs bg-[#C5A059]/20 border border-[#C5A059] text-[#C5A059] px-4 py-2.5 rounded-xl hover:bg-[#C5A059] hover:text-black transition font-semibold flex items-center gap-2 shrink-0">
                     <i class="fa-solid fa-rotate"></i> Yenile
                 </button>
+            </div>
+
+            <!-- Müşteri Saç Bilgi Kartı Görünümü -->
+            <div id="clientHairCardWidget" class="hidden bg-[#0A0A0A] border border-[#C5A059]/40 p-6 rounded-2xl space-y-3">
+                <div class="flex items-center gap-2 text-[#C5A059] font-bold text-sm">
+                    <i class="fa-solid fa-wand-magic-sparkles"></i>
+                    <span>Kişisel Saç & Boya Reçeteniz (Salon Kaydı)</span>
+                </div>
+                <div class="grid sm:grid-cols-3 gap-3 text-xs text-gray-300">
+                    <div class="bg-[#121212] p-3 rounded-xl border border-gray-800">
+                        <strong class="text-gray-400 block mb-1">Saç Tipi:</strong>
+                        <span id="clientWidgetHairType" class="text-white">-</span>
+                    </div>
+                    <div class="bg-[#121212] p-3 rounded-xl border border-gray-800 sm:col-span-2">
+                        <strong class="text-gray-400 block mb-1">Boya Formülü / Reçete:</strong>
+                        <span id="clientWidgetFormula" class="text-[#C5A059] font-mono">-</span>
+                    </div>
+                </div>
             </div>
 
             <div id="myAppointmentsContainer" class="space-y-4"></div>
@@ -637,12 +655,41 @@
                 if (navUserName) navUserName.innerText = currentUser;
                 if (userWelcomeSub) userWelcomeSub.innerText = `${currentUser} hesap randevuları.`;
                 window.renderUserAppointments();
+                window.renderClientHairCardWidget();
             } else {
                 if (authButtons) authButtons.classList.remove('hidden');
                 if (userProfile) {
                     userProfile.classList.remove('flex');
                     userProfile.classList.add('hidden');
                 }
+                const hairWidget = document.getElementById('clientHairCardWidget');
+                if (hairWidget) hairWidget.classList.add('hidden');
+            }
+        };
+
+        window.renderClientHairCardWidget = function() {
+            const widget = document.getElementById('clientHairCardWidget');
+            const typeEl = document.getElementById('clientWidgetHairType');
+            const formulaEl = document.getElementById('clientWidgetFormula');
+
+            if (!widget || !typeEl || !formulaEl) return;
+            if (!currentUser) {
+                widget.classList.add('hidden');
+                return;
+            }
+
+            let notepad = [];
+            try { notepad = JSON.parse(localStorage.getItem('nes_customer_notepad')) || []; } catch(e){}
+
+            const userKey = currentUser.trim().toLowerCase();
+            const info = notepad.find(n => (n.customerName || '').trim().toLowerCase() === userKey);
+
+            if (info) {
+                typeEl.innerText = info.hairType || 'Belirtilmemiş';
+                formulaEl.innerText = info.formula || 'Reçete girilmemiş';
+                widget.classList.remove('hidden');
+            } else {
+                widget.classList.add('hidden');
             }
         };
 
@@ -868,7 +915,7 @@
                 showToast(`Hoş geldiniz, ${foundUser.name}!`, 'success');
             } else {
                 err.innerText = "Hatalı Ad Soyad veya Şifre!";
-                err.classList.remove('hidden');
+                err.classList.add('hidden');
             }
         };
 
