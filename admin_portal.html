@@ -703,11 +703,23 @@
                         <button onclick="window.updateAppStatus(${a.id}, 'Tamamlandı')" class="p-2 bg-blue-950/50 border border-blue-800 text-blue-400 rounded-lg hover:bg-blue-900 transition" title="Tamamlandı İşaretle (Ciroya Ekle)"><i class="fa-solid fa-flag-checkered"></i></button>
                         <button onclick="window.openReplyModalForApp(${a.id})" class="p-2 bg-amber-950/50 border border-amber-800 text-amber-400 rounded-lg hover:bg-amber-900 transition" title="Müşteri Notu / Görsel"><i class="fa-solid fa-comment"></i></button>
                         <button onclick="window.updateAppStatus(${a.id}, 'İptal')" class="p-2 bg-red-950/50 border border-red-800 text-red-400 rounded-lg hover:bg-red-900 transition" title="İptal Et"><i class="fa-solid fa-xmark"></i></button>
+                        <button onclick="window.deleteAppointment(${a.id})" class="p-2 bg-red-950/80 border border-red-800 text-red-300 rounded-lg hover:bg-red-900 transition" title="Randevuyu Kalıcı Olarak Sil"><i class="fa-solid fa-trash"></i></button>
                     </td>
                 `;
                 tbody.appendChild(tr);
             });
         }
+
+        window.deleteAppointment = function(id) {
+            if (confirm('Bu randevuyu kalıcı olarak silmek istediğinize emin misiniz?')) {
+                let apps = getStoredApps();
+                apps = apps.filter(a => a.id !== id);
+                saveStoredApps(apps);
+                addAuditLog('Randevu Silindi', `#${id} ID'li randevu kalıcı olarak silindi.`);
+                window.syncAllData();
+                showToast('Randevu silindi.', 'info');
+            }
+        };
 
         window.filterApps = function(status) {
             const apps = getStoredApps();
@@ -923,7 +935,8 @@
 
             users.forEach(u => {
                 const userKey = u.name.toLowerCase();
-                let userCoupons = couponsMap[userKey] || [];
+                let foundKey = Object.keys(couponsMap).find(k => k.toLowerCase() === userKey) || userKey;
+                let userCoupons = couponsMap[foundKey] || [];
                 if (!Array.isArray(userCoupons)) {
                     userCoupons = userCoupons ? [userCoupons] : [];
                 }
@@ -940,7 +953,7 @@
                             ${activeCoupons.map(c => 
                                 `<span class="inline-block px-2 py-0.5 rounded-full text-[10px] font-bold bg-amber-950/60 border border-amber-800 text-amber-300">${c.code} (%${Math.round(c.discountRate * 100)})</span>`
                             ).join(' ')}
-                            <button onclick="window.openCouponManageModal('${u.name}')" class="text-[10px] bg-[#C5A059]/20 border border-[#C5A059]/60 text-[#C5A059] px-2 py-0.5 rounded-lg hover:bg-[#C5A059] hover:text-black transition ml-1 font-semibold" title="Kuponları Yönet (Sil / Düzenle)">
+                            <button onclick="window.openCouponManageModal(${JSON.stringify(u.name)})" class="text-[10px] bg-[#C5A059]/20 border border-[#C5A059]/60 text-[#C5A059] px-2 py-0.5 rounded-lg hover:bg-[#C5A059] hover:text-black transition ml-1 font-semibold" title="Kuponları Yönet (Sil / Düzenle)">
                                 <i class="fa-solid fa-gear"></i> Yönet (${userCoupons.length})
                             </button>
                         </div>
@@ -949,7 +962,7 @@
                     couponsBadgeHtml = `
                         <div class="flex items-center gap-1">
                             <span class="text-gray-500 text-[10px]">Tüm kuponlar kullanılmış/eski</span>
-                            <button onclick="window.openCouponManageModal('${u.name}')" class="text-[10px] bg-gray-800 text-gray-300 px-2 py-0.5 rounded-lg hover:bg-gray-700 transition">Yönet (${userCoupons.length})</button>
+                            <button onclick="window.openCouponManageModal(${JSON.stringify(u.name)})" class="text-[10px] bg-gray-800 text-gray-300 px-2 py-0.5 rounded-lg hover:bg-gray-700 transition">Yönet (${userCoupons.length})</button>
                         </div>
                     `;
                 }
@@ -969,11 +982,11 @@
                                 <option value="0.30|NES30">%30 VIP İndirim (NES30)</option>
                                 <option value="0.50|NES50">%50 Özel Fırsat (NES50)</option>
                             </select>
-                            <button onclick="window.assignUserCoupon('${u.name}')" class="gold-gradient text-black font-bold text-xs px-3 py-1.5 rounded-lg hover:opacity-90 shadow">+ Kupon Gönder</button>
+                            <button onclick="window.assignUserCoupon(${JSON.stringify(u.name)})" class="gold-gradient text-black font-bold text-xs px-3 py-1.5 rounded-lg hover:opacity-90 shadow">+ Kupon Gönder</button>
                         </div>
                     </td>
                     <td class="p-4 text-center">
-                        <button onclick="window.deleteUser('${u.name}')" class="p-1.5 bg-red-950/40 border border-red-900 text-red-400 rounded-lg hover:bg-red-900 transition" title="Kullanıcıyı Sil"><i class="fa-solid fa-trash"></i></button>
+                        <button onclick="window.deleteUser(${JSON.stringify(u.name)})" class="p-1.5 bg-red-950/40 border border-red-900 text-red-400 rounded-lg hover:bg-red-900 transition" title="Kullanıcıyı Sil"><i class="fa-solid fa-trash"></i></button>
                     </td>
                 `;
                 tbody.appendChild(tr);
@@ -1005,7 +1018,8 @@
             try { couponsMap = JSON.parse(localStorage.getItem('nes_user_coupons')) || {}; } catch(e){}
 
             const userKey = currentManagingUser.toLowerCase();
-            let userCoupons = couponsMap[userKey] || [];
+            let foundKey = Object.keys(couponsMap).find(k => k.toLowerCase() === userKey) || userKey;
+            let userCoupons = couponsMap[foundKey] || [];
             if (!Array.isArray(userCoupons)) userCoupons = [];
 
             if (userCoupons.length === 0) {
@@ -1034,11 +1048,11 @@
                             <option value="0.50" ${c.discountRate === 0.5 ? 'selected' : ''}>%50 İndirim</option>
                             <option value="0.80" ${c.discountRate === 0.8 ? 'selected' : ''}>%80 İndirim</option>
                         </select>
-                        <button onclick="window.saveCouponChanges('${currentManagingUser}', ${index})" class="bg-blue-950/60 border border-blue-800 text-blue-300 px-2.5 py-1.5 rounded-lg hover:bg-blue-900 transition text-[11px]" title="Oranı ve Süreyi Güncelle/Uzat">
+                        <button onclick="window.saveCouponChanges(${JSON.stringify(currentManagingUser)}, ${index})" class="bg-blue-950/60 border border-blue-800 text-blue-300 px-2.5 py-1.5 rounded-lg hover:bg-blue-900 transition text-[11px]" title="Oranı ve Süreyi Güncelle/Uzat">
                             <i class="fa-solid fa-pen"></i> Güncelle
                         </button>
-                        <button onclick="window.deleteSingleCoupon('${currentManagingUser}', ${index})" class="bg-red-950/60 border border-red-800 text-red-300 px-2.5 py-1.5 rounded-lg hover:bg-red-900 transition text-[11px]" title="Kuponu Sil">
-                            <i class="fa-solid fa-trash"></i>
+                        <button onclick="window.deleteSingleCoupon(${JSON.stringify(currentManagingUser)}, ${index})" class="bg-red-950/60 border border-red-800 text-red-300 px-2.5 py-1.5 rounded-lg hover:bg-red-900 transition text-[11px]" title="Kuponu Sil">
+                            <i class="fa-solid fa-trash"></i> Sil
                         </button>
                     </div>
                 `;
@@ -1054,15 +1068,14 @@
             let couponsMap = {};
             try { couponsMap = JSON.parse(localStorage.getItem('nes_user_coupons')) || {}; } catch(e){}
 
-            const userKey = userName.toLowerCase();
-            let userCoupons = couponsMap[userKey] || [];
+            let foundKey = Object.keys(couponsMap).find(k => k.toLowerCase() === userName.toLowerCase()) || userName.toLowerCase();
+            let userCoupons = couponsMap[foundKey] || [];
             if (userCoupons[couponIndex]) {
                 userCoupons[couponIndex].discountRate = newRate;
-                // Süreyi uzat / sıfırla (geçerlilik süresini bugün itibarıyla tazeleyelim)
                 userCoupons[couponIndex].issuedAt = new Date().toISOString();
-                userCoupons[couponIndex].used = false; // Aktif yap
+                userCoupons[couponIndex].used = false;
 
-                couponsMap[userKey] = userCoupons;
+                couponsMap[foundKey] = userCoupons;
                 localStorage.setItem('nes_user_coupons', JSON.stringify(couponsMap));
                 addAuditLog('Kupon Güncellendi', `"${userName}" için kupon oranı %${newRate * 100} olarak güncellendi ve süresi uzatıldı.`);
                 renderCouponManageList();
@@ -1075,12 +1088,14 @@
             let couponsMap = {};
             try { couponsMap = JSON.parse(localStorage.getItem('nes_user_coupons')) || {}; } catch(e){}
 
-            const userKey = userName.toLowerCase();
-            let userCoupons = couponsMap[userKey] || [];
+            let foundKey = Object.keys(couponsMap).find(k => k.toLowerCase() === userName.toLowerCase()) || userName.toLowerCase();
+            let userCoupons = couponsMap[foundKey] || [];
+            if (!Array.isArray(userCoupons)) userCoupons = [];
+
             if (userCoupons[couponIndex]) {
                 const deletedCode = userCoupons[couponIndex].code;
                 userCoupons.splice(couponIndex, 1);
-                couponsMap[userKey] = userCoupons;
+                couponsMap[foundKey] = userCoupons;
                 localStorage.setItem('nes_user_coupons', JSON.stringify(couponsMap));
                 addAuditLog('Kupon Silindi', `"${userName}" müşterisinin ${deletedCode} kodlu kuponu silindi.`);
                 renderCouponManageList();
