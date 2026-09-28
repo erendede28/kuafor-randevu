@@ -1,0 +1,1012 @@
+<!DOCTYPE html>
+<html lang="tr" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NES Kuaför - Kurumsal Yönetim Portalı</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        gold: {
+                            400: '#D4AF37',
+                            500: '#C5A059',
+                            600: '#B8934A',
+                        },
+                        darkbg: '#0A0A0A',
+                        cardbg: '#121212',
+                        borderbg: '#1F1F1F'
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0A0A0A;
+            color: #E5E5E5;
+        }
+        .font-serif-title { font-family: 'Cinzel', serif; }
+        .gold-gradient {
+            background: linear-gradient(135deg, #C5A059 0%, #F3E5AB 50%, #B8934A 100%);
+        }
+        .gold-gradient-text {
+            background: linear-gradient(135deg, #C5A059 0%, #F3E5AB 50%, #B8934A 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #0A0A0A; }
+        ::-webkit-scrollbar-thumb { background: #262626; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #C5A059; }
+    </style>
+</head>
+<body class="bg-[#0A0A0A] text-gray-200 min-h-screen flex flex-col antialiased selection:bg-[#C5A059] selection:text-black">
+
+    <div id="authOverlay" class="fixed inset-0 z-50 bg-[#0A0A0A] flex items-center justify-center p-4">
+        <div class="max-w-md w-full bg-[#121212] border border-[#C5A059]/40 p-8 rounded-3xl shadow-2xl space-y-6 text-center">
+            <div class="w-16 h-16 rounded-full gold-gradient text-black flex items-center justify-center text-2xl mx-auto shadow-lg shadow-[#C5A059]/20">
+                <i class="fa-solid fa-shield-halved"></i>
+            </div>
+            <div>
+                <span class="text-[10px] uppercase tracking-[0.3em] text-[#C5A059] font-bold block">GÜVENLİ YÖNETİM PORTALI</span>
+                <h1 class="text-2xl font-bold font-serif-title text-white mt-1">NES VIP Control Center</h1>
+                <p class="text-xs text-gray-400 mt-2">Bu panele sadece yetkili salon personeli erişebilir. Şirket içi VPN / Zero Trust ağı aktif.</p>
+            </div>
+            
+            <div class="space-y-4 pt-2">
+                <div>
+                    <input type="password" id="portalPassInput" placeholder="Yönetici Güvenlik Şifresi (Varsayılan: 1234)" class="w-full bg-[#0A0A0A] border border-gray-800 focus:border-[#C5A059] text-white text-center py-3.5 rounded-xl text-sm focus:outline-none transition">
+                </div>
+                <button onclick="window.loginToPortal()" class="w-full gold-gradient text-black font-bold py-3.5 rounded-xl hover:opacity-90 transition text-sm uppercase tracking-wider shadow-lg">
+                    Sisteme Giriş Yap
+                </button>
+                <p id="portalLoginErr" class="text-red-400 text-xs hidden"><i class="fa-solid fa-triangle-exclamation mr-1"></i> Hatalı Yetkilendirme Şifresi!</p>
+            </div>
+
+            <div class="pt-4 border-t border-gray-800/80 flex items-center justify-between text-[11px] text-gray-500">
+                <span><i class="fa-solid fa-network-wired text-emerald-400 mr-1"></i> Zero Trust: Aktif</span>
+                <span>IP: 10.0.4.82 (Korumalı)</span>
+            </div>
+        </div>
+    </div>
+
+    <div id="portalMainApp" class="hidden flex-1 flex flex-col md:flex-row min-h-screen">
+        
+        <!-- Sol Kenar Menüsü (Sidebar) -->
+        <aside class="w-full md:w-64 bg-[#121212] border-r border-gray-800 flex flex-col shrink-0">
+            <div class="p-6 border-b border-gray-800 flex items-center justify-between">
+                <div class="flex items-center gap-3">
+                    <div class="w-9 h-9 rounded-full gold-gradient flex items-center justify-center text-black font-bold text-sm">
+                        <i class="fa-solid fa-scissors"></i>
+                    </div>
+                    <div>
+                        <h2 class="font-serif-title font-bold gold-gradient-text leading-none text-lg">NES ADMIN</h2>
+                        <span class="text-[9px] text-gray-500 uppercase tracking-widest block mt-0.5">Yönetim Portalı</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Navigasyon Linkleri -->
+            <nav class="p-4 space-y-1 flex-1">
+                <button onclick="window.switchTab('dashboard')" id="nav_dashboard" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-xs font-semibold bg-[#C5A059] text-black transition">
+                    <i class="fa-solid fa-chart-pie w-4 text-center"></i> Gösterge Paneli
+                </button>
+                <button onclick="window.switchTab('appointments')" id="nav_appointments" class="w-full flex items-center justify-between px-4 py-3 rounded-xl text-xs font-semibold text-gray-400 hover:text-white hover:bg-gray-900 transition">
+                    <span class="flex items-center gap-3">
+                        <i class="fa-solid fa-calendar-check w-4 text-center text-[#C5A059]"></i> Randevular
+                    </span>
+                    <span id="badgePendingCount" class="bg-amber-500/20 text-amber-400 border border-amber-500/40 text-[10px] px-2 py-0.5 rounded-full font-bold">0</span>
+                </button>
+                <button onclick="window.switchTab('services')" id="nav_services" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-xs font-semibold text-gray-400 hover:text-white hover:bg-gray-900 transition">
+                    <i class="fa-solid fa-list-check w-4 text-center text-[#C5A059]"></i> Hizmet & Fiyat Kataloğu
+                </button>
+                <button onclick="window.switchTab('customers')" id="nav_customers" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-xs font-semibold text-gray-400 hover:text-white hover:bg-gray-900 transition">
+                    <i class="fa-solid fa-users w-4 text-center text-[#C5A059]"></i> Müşteri CRM & Kuponlar
+                </button>
+                <button onclick="window.switchTab('financials')" id="nav_financials" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-xs font-semibold text-gray-400 hover:text-white hover:bg-gray-900 transition">
+                    <i class="fa-solid fa-wallet w-4 text-center text-[#C5A059]"></i> Finans & Harcama Raporu
+                </button>
+                <button onclick="window.switchTab('audit')" id="nav_audit" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-xs font-semibold text-gray-400 hover:text-white hover:bg-gray-900 transition">
+                    <i class="fa-solid fa-clock-rotate-left w-4 text-center text-[#C5A059]"></i> Denetim İzleri (Audit Logs)
+                </button>
+            </nav>
+
+            <!-- Profil & Oturumu Kapat -->
+            <div class="p-4 border-t border-gray-800 bg-[#0A0A0A]/50 space-y-3">
+                <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-full bg-gray-800 border border-[#C5A059]/40 flex items-center justify-center text-xs text-[#C5A059] font-bold">
+                        SA
+                    </div>
+                    <div class="overflow-hidden">
+                        <p class="text-xs font-semibold text-white truncate">Süper Yönetici</p>
+                        <p class="text-[10px] text-gray-500 truncate">admin@neskuafor.com</p>
+                    </div>
+                </div>
+                <button onclick="window.logoutPortal()" class="w-full text-center text-xs bg-red-950/30 border border-red-900/60 text-red-400 py-2 rounded-xl hover:bg-red-900 hover:text-white transition">
+                    <i class="fa-solid fa-right-from-bracket mr-1"></i> Güvenli Çıkış
+                </button>
+            </div>
+        </aside>
+
+        <!-- Sağ Ana İçerik Alanı -->
+        <main class="flex-1 flex flex-col min-w-0 overflow-y-auto">
+            
+            <header class="h-16 bg-[#121212]/80 backdrop-blur border-b border-gray-800 px-6 flex items-center justify-between sticky top-0 z-30">
+                <div class="flex items-center gap-3">
+                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                    <span class="text-xs text-gray-300 font-medium">Canlı Veritabanı Senkronizasyonu Aktif</span>
+                </div>
+                <div class="flex items-center gap-4 text-xs">
+                    <button onclick="window.syncAllData()" class="bg-[#0A0A0A] border border-gray-800 hover:border-[#C5A059] text-[#C5A059] px-3 py-1.5 rounded-xl transition flex items-center gap-1.5 font-medium">
+                        <i class="fa-solid fa-rotate"></i> Verileri Yenile
+                    </button>
+                    <span class="text-gray-500">|</span>
+                    <span class="text-gray-400"><i class="fa-regular fa-clock mr-1"></i> Sunucu Saati: <strong id="liveClock" class="text-white font-mono">--:--</strong></span>
+                </div>
+            </header>
+
+            <div class="p-6 md:p-8 space-y-8 max-w-7xl mx-auto w-full">
+                
+                <div id="view_dashboard" class="space-y-6">
+                    <div>
+                        <h1 class="text-2xl font-bold font-serif-title text-white">Yönetim Gösterge Paneli</h1>
+                        <p class="text-xs text-gray-400 mt-1">Salon performansı, Bugünkü Randevular ve Anlık Doluluk Oranları.</p>
+                    </div>
+
+                    <!-- Özet Metrik Kartları -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                        <div class="bg-[#121212] border border-gray-800 p-5 rounded-2xl space-y-2">
+                            <span class="text-[10px] text-gray-500 uppercase tracking-wider font-semibold block">Toplam Tamamlanan Ciro</span>
+                            <div class="flex justify-between items-end">
+                                <span class="text-2xl font-bold font-serif-title gold-gradient-text" id="dashTotalRevenue">0 ₺</span>
+                                <span class="text-xs text-emerald-400 bg-emerald-950/50 border border-emerald-800 px-2 py-0.5 rounded-full"><i class="fa-solid fa-arrow-trend-up"></i> Canlı</span>
+                            </div>
+                        </div>
+
+                        <div class="bg-[#121212] border border-gray-800 p-5 rounded-2xl space-y-2">
+                            <span class="text-[10px] text-gray-500 uppercase tracking-wider font-semibold block">Toplam Müşteri Randevuları</span>
+                            <div class="flex justify-between items-end">
+                                <span class="text-2xl font-bold font-serif-title text-white" id="dashTotalApps">0</span>
+                                <span class="text-xs text-blue-400 bg-blue-950/50 border border-blue-800 px-2 py-0.5 rounded-full" id="dashCompletedApps">0 Tamamlanan</span>
+                            </div>
+                        </div>
+
+                        <div class="bg-[#121212] border border-gray-800 p-5 rounded-2xl space-y-2">
+                            <span class="text-[10px] text-gray-500 uppercase tracking-wider font-semibold block">Bekleyen Onay Talepleri</span>
+                            <div class="flex justify-between items-end">
+                                <span class="text-2xl font-bold font-serif-title text-amber-400" id="dashPendingApps">0</span>
+                                <span class="text-xs text-amber-400 bg-amber-950/50 border border-amber-800 px-2 py-0.5 rounded-full">Aksiyon Bekliyor</span>
+                            </div>
+                        </div>
+
+                        <div class="bg-[#121212] border border-gray-800 p-5 rounded-2xl space-y-2">
+                            <span class="text-[10px] text-gray-500 uppercase tracking-wider font-semibold block">Kayıtlı Müşteri Sayısı</span>
+                            <div class="flex justify-between items-end">
+                                <span class="text-2xl font-bold font-serif-title text-white" id="dashTotalUsers">0</span>
+                                <span class="text-xs text-purple-400 bg-purple-950/50 border border-purple-800 px-2 py-0.5 rounded-full"><i class="fa-solid fa-user-check"></i> Üye CRM</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Grafik ve Hızlı İşlemler Grid -->
+                    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                        <!-- Ciro Grafiği -->
+                        <div class="lg:col-span-2 bg-[#121212] border border-gray-800 p-6 rounded-2xl space-y-4">
+                            <div class="flex justify-between items-center border-b border-gray-800 pb-4">
+                                <h3 class="font-bold text-sm text-gray-200 flex items-center gap-2">
+                                    <i class="fa-solid fa-chart-line text-[#C5A059]"></i> Ciro & Kazanç Trendi
+                                </h3>
+                                <span class="text-[11px] text-gray-500">Tamamlanan Randevulardan Üretilen</span>
+                            </div>
+                            <div class="h-64 relative">
+                                <canvas id="revenueChart"></canvas>
+                            </div>
+                        </div>
+
+                        <!-- Bugünün Hızlı Akışı -->
+                        <div class="bg-[#121212] border border-gray-800 p-6 rounded-2xl space-y-4">
+                            <h3 class="font-bold text-sm text-gray-200 border-b border-gray-800 pb-4 flex items-center gap-2">
+                                <i class="fa-solid fa-calendar-day text-[#C5A059]"></i> Bugünkü Ajanda & Bekleyenler
+                            </h3>
+                            <div id="dashTodayList" class="space-y-3 max-h-64 overflow-y-auto text-xs">
+                                <!-- JS ile Doldurulacak -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="view_appointments" class="space-y-6 hidden">
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-gray-800 pb-4">
+                        <div>
+                            <h1 class="text-2xl font-bold font-serif-title text-white">Müşteri Randevu Yönetimi</h1>
+                            <p class="text-xs text-gray-400 mt-1">Gelen randevu taleplerini onaylayın, iptal edin veya tamamlandı olarak işaretleyin.</p>
+                        </div>
+                        <div class="flex gap-2">
+                            <button onclick="window.filterApps('Hepsi')" class="text-xs bg-gray-800 px-3 py-1.5 rounded-xl text-gray-300 font-semibold hover:text-white">Tümü</button>
+                            <button onclick="window.filterApps('Beklemede')" class="text-xs bg-amber-950/50 border border-amber-800 text-amber-300 px-3 py-1.5 rounded-xl font-semibold">Bekleyenler</button>
+                            <button onclick="window.filterApps('Onaylandı')" class="text-xs bg-emerald-950/50 border border-emerald-800 text-emerald-300 px-3 py-1.5 rounded-xl font-semibold">Onaylananlar</button>
+                        </div>
+                    </div>
+
+                    <div class="bg-[#121212] border border-gray-800 rounded-2xl overflow-hidden shadow-xl">
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left border-collapse text-xs">
+                                <thead>
+                                    <tr class="bg-[#0A0A0A] border-b border-gray-800 text-[#C5A059] uppercase tracking-wider font-semibold">
+                                        <th class="p-4">ID / Müşteri</th>
+                                        <th class="p-4">Seçilen Hizmetler</th>
+                                        <th class="p-4">Tarih & Saat</th>
+                                        <th class="p-4">Tutar & Süre</th>
+                                        <th class="p-4">Durum</th>
+                                        <th class="p-4 text-center">Aksiyon / Yanıt</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="appTableBody" class="divide-y divide-gray-800/80">
+                                    <!-- JS ile doldurulacak -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="view_services" class="space-y-6 hidden">
+                    <div class="flex justify-between items-center border-b border-gray-800 pb-4">
+                        <div>
+                            <h1 class="text-2xl font-bold font-serif-title text-white">Hizmet & Fiyat Kataloğu Yönetimi</h1>
+                            <p class="text-xs text-gray-400 mt-1">Buradan güncellediğiniz fiyatlar müşterilerin rezervasyon ekranına anında yansır.</p>
+                        </div>
+                        <button onclick="window.openAddServiceModal()" class="gold-gradient text-black text-xs font-bold px-4 py-2.5 rounded-xl shadow hover:opacity-90 transition">
+                            <i class="fa-solid fa-plus mr-1"></i> Yeni Hizmet Ekle
+                        </button>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="servicesGridContainer">
+                        <!-- Dynamic Cards -->
+                    </div>
+                </div>
+
+                <div id="view_customers" class="space-y-6 hidden">
+                    <div class="border-b border-gray-800 pb-4">
+                        <h1 class="text-2xl font-bold font-serif-title text-white">Müşteri CRM & Sadakat Programı</h1>
+                        <p class="text-xs text-gray-400 mt-1">Sistemdeki müşterileri görün, özel indirim kuponları tanımlayın ve hesap yönetimi yapın.</p>
+                    </div>
+
+                    <div class="bg-[#121212] border border-gray-800 rounded-2xl overflow-hidden shadow-xl">
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left border-collapse text-xs">
+                                <thead>
+                                    <tr class="bg-[#0A0A0A] border-b border-gray-800 text-[#C5A059] uppercase tracking-wider font-semibold">
+                                        <th class="p-4">Müşteri Adı</th>
+                                        <th class="p-4">Sistem Şifresi</th>
+                                        <th class="p-4">Toplam Harcama Hacmi</th>
+                                        <th class="p-4">Aktif Kupon Durumu</th>
+                                        <th class="p-4">Özel Kupon Tanımla</th>
+                                        <th class="p-4 text-center">İşlem</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="userTableBody" class="divide-y divide-gray-800/80">
+                                    <!-- Dynamic -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="view_financials" class="space-y-6 hidden">
+                    <div class="border-b border-gray-800 pb-4">
+                        <h1 class="text-2xl font-bold font-serif-title text-white">Finansal Harcama & Raporlama</h1>
+                        <p class="text-xs text-gray-400 mt-1">Müşteri bazlı Yıllık, Aylık ve Günlük harcama kırılımları.</p>
+                    </div>
+
+                    <div class="bg-[#121212] border border-gray-800 rounded-2xl overflow-hidden shadow-xl">
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left border-collapse text-xs">
+                                <thead>
+                                    <tr class="bg-[#0A0A0A] border-b border-gray-800 text-[#C5A059] uppercase tracking-wider font-semibold">
+                                        <th class="p-4">Müşteri</th>
+                                        <th class="p-4">Toplam Ciro Katkısı</th>
+                                        <th class="p-4">Yıl Bazlı Detay</th>
+                                        <th class="p-4">Ay Bazlı Detay</th>
+                                        <th class="p-4">Gün Bazlı Detay</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="spendingTableBody" class="divide-y divide-gray-800/80">
+                                    <!-- Dynamic -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="view_audit" class="space-y-6 hidden">
+                    <div class="border-b border-gray-800 pb-4 flex justify-between items-center">
+                        <div>
+                            <h1 class="text-2xl font-bold font-serif-title text-white">Sistem Denetim İzleri (Audit Logs)</h1>
+                            <p class="text-xs text-gray-400 mt-1">Admin panelinde yapılan tüm değişiklikler tahrif edilemez güvenlik günlüğüne kaydedilir.</p>
+                        </div>
+                        <button onclick="window.clearAuditLogs()" class="text-xs bg-red-950/40 border border-red-900 text-red-300 px-3 py-1.5 rounded-xl hover:bg-red-900 transition">
+                            Logları Temizle
+                        </button>
+                    </div>
+
+                    <div class="bg-[#121212] border border-gray-800 rounded-2xl overflow-hidden p-4 space-y-2">
+                        <div id="auditLogContainer" class="space-y-2 max-h-[500px] overflow-y-auto font-mono text-xs">
+                            <!-- Logs -->
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- HİZMET DÜZENLEME / EKLEME MODAL -->
+    <div id="serviceEditModal" class="fixed inset-0 bg-black/80 backdrop-blur z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-[#121212] border border-[#C5A059]/40 rounded-3xl max-w-md w-full p-6 space-y-4 shadow-2xl relative">
+            <button onclick="window.closeServiceModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white text-2xl">&times;</button>
+            <h3 class="text-xl font-bold font-serif-title text-white" id="serviceModalTitle">Hizmet Bilgilerini Düzenle</h3>
+            
+            <input type="hidden" id="modalSrvId">
+            <div>
+                <label class="block text-xs font-semibold text-gray-400 mb-1">Hizmet Adı</label>
+                <input type="text" id="modalSrvName" class="w-full bg-[#0A0A0A] border border-gray-800 text-white p-3 rounded-xl text-xs focus:border-[#C5A059] focus:outline-none">
+            </div>
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-xs font-semibold text-gray-400 mb-1">Fiyat (₺)</label>
+                    <input type="number" id="modalSrvPrice" class="w-full bg-[#0A0A0A] border border-gray-800 text-white p-3 rounded-xl text-xs focus:border-[#C5A059] focus:outline-none">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-gray-400 mb-1">Süre (Dakika)</label>
+                    <input type="number" id="modalSrvDuration" class="w-full bg-[#0A0A0A] border border-gray-800 text-white p-3 rounded-xl text-xs focus:border-[#C5A059] focus:outline-none">
+                </div>
+            </div>
+
+            <button onclick="window.saveServiceForm()" class="w-full gold-gradient text-black font-bold py-3 rounded-xl text-xs uppercase tracking-wider shadow">
+                Kaydet & Yayınla
+            </button>
+        </div>
+    </div>
+
+    <!-- YANIT & GÖRSEL İNCELEME MODAL -->
+    <div id="replyModal" class="fixed inset-0 bg-black/80 backdrop-blur z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-[#121212] border border-[#C5A059]/40 rounded-3xl max-w-2xl w-full p-6 space-y-4 shadow-2xl relative">
+            <button onclick="window.closeReplyModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white text-2xl">&times;</button>
+            <h3 class="text-xl font-bold font-serif-title gold-gradient-text">Müşteri Notu & Görsel İnceleme</h3>
+
+            <div class="grid md:grid-cols-2 gap-4">
+                <div id="replyModalMedia" class="bg-[#0A0A0A] rounded-2xl border border-gray-800 p-2 flex items-center justify-center min-h-[180px]">
+                    <!-- Image -->
+                </div>
+                <div class="space-y-3">
+                    <div>
+                        <span class="text-[10px] text-gray-500 uppercase tracking-wider block font-semibold">Müşteri Notu</span>
+                        <p id="replyModalNote" class="text-xs text-gray-200 bg-[#0A0A0A] p-3 rounded-xl border border-gray-800 mt-1"></p>
+                    </div>
+                    <div>
+                        <label class="block text-[10px] text-gray-500 uppercase tracking-wider mb-1 font-semibold">Salon Yanıtınız</label>
+                        <textarea id="replyModalInput" rows="3" placeholder="Müşteriye iletilecek mesaj..." class="w-full bg-[#0A0A0A] border border-gray-800 text-white p-3 rounded-xl text-xs focus:border-[#C5A059] focus:outline-none"></textarea>
+                    </div>
+                    <button onclick="window.submitAdminReply()" class="w-full gold-gradient text-black font-bold py-2.5 rounded-xl text-xs uppercase">
+                        Yanıtı İlet
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TOAST BİLDİRİM KONTEYNERİ -->
+    <div id="toastContainer" class="fixed bottom-6 right-6 z-50 space-y-2 pointer-events-none"></div>
+
+    <script>
+        // Veri Modelleri & Varsayılan Hizmet Kataloğu
+        const DEFAULT_SERVICES = [
+            { id: 'ombre', name: 'Ombre Tasarımı', price: 3500, durationMin: 180 },
+            { id: 'renklendirme', name: 'Özel Renklendirme & Balyaj', price: 3000, durationMin: 150 },
+            { id: 'kesim', name: 'Kesim & Şekillendirme', price: 750, durationMin: 45 },
+            { id: 'keratin', name: 'Keratin Bakım', price: 1800, durationMin: 90 },
+            { id: 'gelin', name: 'Gelin Paketi', price: 7500, durationMin: 240 },
+            { id: 'boya', name: 'Dip / Tüm Boya', price: 1200, durationMin: 90 },
+            { id: 'manikur', name: 'Spa Manikür & Pedikür', price: 900, durationMin: 60 }
+        ];
+
+        let activeTab = 'dashboard';
+        let revenueChartInstance = null;
+        let activeReplyAppId = null;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            updateLiveClock();
+            setInterval(updateLiveClock, 1000);
+
+            // Hizmet kataloğu yoksa ilklendir
+            if (!localStorage.getItem('nes_services_catalog')) {
+                localStorage.setItem('nes_services_catalog', JSON.stringify(DEFAULT_SERVICES));
+            }
+        });
+
+        function updateLiveClock() {
+            const el = document.getElementById('liveClock');
+            if (el) {
+                const now = new Date();
+                el.innerText = now.toLocaleTimeString('tr-TR');
+            }
+        }
+
+        window.loginToPortal = function() {
+            const pass = document.getElementById('portalPassInput').value;
+            const err = document.getElementById('portalLoginErr');
+
+            if (pass === '1234') {
+                document.getElementById('authOverlay').classList.add('hidden');
+                document.getElementById('portalMainApp').classList.remove('hidden');
+                if (err) err.classList.add('hidden');
+                
+                addAuditLog('Sisteme Giriş', 'Yönetici portalına başarıyla erişildi.');
+                window.syncAllData();
+                showToast('Yönetim portalına hoş geldiniz.', 'success');
+            } else {
+                if (err) err.classList.remove('hidden');
+                addAuditLog('Güvenlik Uyarısı', 'Hatalı şifre denemesi yapıldı!');
+            }
+        };
+
+        window.logoutPortal = function() {
+            document.getElementById('portalMainApp').classList.add('hidden');
+            document.getElementById('authOverlay').classList.remove('hidden');
+            document.getElementById('portalPassInput').value = '';
+            addAuditLog('Oturum Kapatıldı', 'Yönetici güvenli çıkış yaptı.');
+        };
+
+        window.switchTab = function(tabName) {
+            activeTab = tabName;
+            ['dashboard', 'appointments', 'services', 'customers', 'financials', 'audit'].forEach(t => {
+                const view = document.getElementById(`view_${t}`);
+                const nav = document.getElementById(`nav_${t}`);
+                if (view) view.classList.add('hidden');
+                if (nav) {
+                    nav.className = "w-full flex items-center justify-between px-4 py-3 rounded-xl text-xs font-semibold text-gray-400 hover:text-white hover:bg-gray-900 transition";
+                }
+            });
+
+            const activeView = document.getElementById(`view_${tabName}`);
+            const activeNav = document.getElementById(`nav_${tabName}`);
+            if (activeView) activeView.classList.remove('hidden');
+            if (activeNav) {
+                activeNav.className = "w-full flex items-center justify-between px-4 py-3 rounded-xl text-xs font-semibold bg-[#C5A059] text-black transition";
+            }
+
+            window.syncAllData();
+        };
+
+        window.syncAllData = function() {
+            const apps = getStoredApps();
+            const users = getStoredUsers();
+            const services = getStoredServices();
+
+            // Badge Güncelle
+            const pending = apps.filter(a => a.status === 'Beklemede').length;
+            const badge = document.getElementById('badgePendingCount');
+            if (badge) badge.innerText = pending;
+
+            // Görünümlere Göre Render
+            renderDashboard(apps, users);
+            renderAppointmentsTable(apps);
+            renderServicesGrid(services);
+            renderCustomersTable(users);
+            renderSpendingTable(users);
+            renderAuditLogs();
+        };
+
+        function getStoredApps() {
+            try { return JSON.parse(localStorage.getItem('nes_apps')) || []; } catch(e) { return []; }
+        }
+        function saveStoredApps(apps) { localStorage.setItem('nes_apps', JSON.stringify(apps)); }
+
+        function getStoredUsers() {
+            try { return JSON.parse(localStorage.getItem('nes_users_list')) || []; } catch(e) { return []; }
+        }
+        function saveStoredUsers(users) { localStorage.setItem('nes_users_list', JSON.stringify(users)); }
+
+        function getStoredServices() {
+            try { return JSON.parse(localStorage.getItem('nes_services_catalog')) || DEFAULT_SERVICES; } catch(e) { return DEFAULT_SERVICES; }
+        }
+        function saveStoredServices(srvs) { localStorage.setItem('nes_services_catalog', JSON.stringify(srvs)); }
+
+        function renderDashboard(apps, users) {
+            let totalRevenue = 0;
+            let completedCount = 0;
+            let pendingCount = 0;
+
+            apps.forEach(a => {
+                if (a.status === 'Tamamlandı') {
+                    completedCount++;
+                    if (a.totalPrice) totalRevenue += a.totalPrice;
+                } else if (a.status === 'Beklemede') {
+                    pendingCount++;
+                }
+            });
+
+            document.getElementById('dashTotalRevenue').innerText = `${totalRevenue.toLocaleString('tr-TR')} ₺`;
+            document.getElementById('dashTotalApps').innerText = apps.length;
+            document.getElementById('dashCompletedApps').innerText = `${completedCount} Tamamlanan`;
+            document.getElementById('dashPendingApps').innerText = pendingCount;
+            document.getElementById('dashTotalUsers').innerText = users.length;
+
+            // Bugünün Ajandası
+            const todayStr = new Date().toISOString().split('T')[0];
+            const todayApps = apps.filter(a => a.date === todayStr || a.status === 'Beklemede');
+            const todayContainer = document.getElementById('dashTodayList');
+            
+            if (todayContainer) {
+                todayContainer.innerHTML = '';
+                if (todayApps.length === 0) {
+                    todayContainer.innerHTML = '<p class="text-gray-500 italic text-center py-4">Yakın tarihli işlem yok.</p>';
+                } else {
+                    todayApps.slice(0, 5).forEach(a => {
+                        const item = document.createElement('div');
+                        item.className = "bg-[#0A0A0A] p-3 rounded-xl border border-gray-800/80 flex justify-between items-center";
+                        item.innerHTML = `
+                            <div>
+                                <strong class="text-white block">${a.name}</strong>
+                                <span class="text-gray-400 text-[10px]">${a.date} / ${a.time} - ${a.service}</span>
+                            </div>
+                            <span class="text-[10px] px-2 py-0.5 rounded-full ${a.status === 'Onaylandı' ? 'bg-emerald-950 text-emerald-400 border border-emerald-800' : 'bg-amber-950 text-amber-400 border border-amber-800'}">${a.status}</span>
+                        `;
+                        todayContainer.appendChild(item);
+                    });
+                }
+            }
+
+            // Chart Render
+            renderRevenueChart(apps);
+        }
+
+        function renderRevenueChart(apps) {
+            const ctx = document.getElementById('revenueChart');
+            if (!ctx) return;
+
+            if (revenueChartInstance) {
+                revenueChartInstance.destroy();
+            }
+
+            const days = {};
+            apps.forEach(a => {
+                if (a.status === 'Tamamlandı' && a.date) {
+                    days[a.date] = (days[a.date] || 0) + (a.totalPrice || 0);
+                }
+            });
+
+            const labels = Object.keys(days).sort().slice(-7);
+            const data = labels.map(l => days[l]);
+
+            revenueChartInstance = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels.length ? labels : ['Bugün'],
+                    datasets: [{
+                        label: 'Tamamlanan Ciro (₺)',
+                        data: data.length ? data : [0],
+                        borderColor: '#C5A059',
+                        backgroundColor: 'rgba(197, 160, 89, 0.1)',
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        x: { grid: { color: '#1F1F1F' }, ticks: { color: '#888' } },
+                        y: { grid: { color: '#1F1F1F' }, ticks: { color: '#888' } }
+                    }
+                }
+            });
+        }
+
+        function renderAppointmentsTable(apps, filterStatus = 'Hepsi') {
+            const tbody = document.getElementById('appTableBody');
+            if (!tbody) return;
+            tbody.innerHTML = '';
+
+            let filtered = apps;
+            if (filterStatus !== 'Hepsi') {
+                filtered = apps.filter(a => a.status === filterStatus);
+            }
+
+            if (filtered.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" class="text-center py-6 text-gray-500">Kayıtlı randevu bulunmuyor.</td></tr>';
+                return;
+            }
+
+            filtered.forEach(a => {
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-gray-900/40 transition";
+                tr.innerHTML = `
+                    <td class="p-4">
+                        <strong class="text-white block">${a.name}</strong>
+                        <span class="text-[10px] text-gray-500">ID: #${a.id}</span>
+                    </td>
+                    <td class="p-4 font-semibold text-[#C5A059]">${a.service}</td>
+                    <td class="p-4 text-gray-300">${a.date} <br><b class="text-white">${a.time}</b></td>
+                    <td class="p-4">
+                        <span class="text-white font-bold block">${(a.totalPrice || 0).toLocaleString('tr-TR')} ₺</span>
+                        <span class="text-[10px] text-gray-500">${a.totalDurationMin || 0} Dk</span>
+                    </td>
+                    <td class="p-4">
+                        <span class="px-2.5 py-1 rounded-full text-[10px] font-bold ${
+                            a.status === 'Onaylandı' ? 'bg-emerald-950/60 text-emerald-400 border border-emerald-800' :
+                            a.status === 'Tamamlandı' ? 'bg-blue-950/60 text-blue-400 border border-blue-800' :
+                            a.status === 'İptal' ? 'bg-red-950/60 text-red-400 border border-red-800' :
+                            'bg-amber-950/60 text-amber-400 border border-amber-800'
+                        }">${a.status}</span>
+                    </td>
+                    <td class="p-4 text-center space-x-1">
+                        <button onclick="window.updateAppStatus(${a.id}, 'Onaylandı')" class="p-2 bg-emerald-950/50 border border-emerald-800 text-emerald-400 rounded-lg hover:bg-emerald-900 transition" title="Onayla"><i class="fa-solid fa-check"></i></button>
+                        <button onclick="window.updateAppStatus(${a.id}, 'Tamamlandı')" class="p-2 bg-blue-950/50 border border-blue-800 text-blue-400 rounded-lg hover:bg-blue-900 transition" title="Tamamlandı İşaretle (Ciroya Ekle)"><i class="fa-solid fa-flag-checkered"></i></button>
+                        <button onclick="window.openReplyModalForApp(${a.id})" class="p-2 bg-amber-950/50 border border-amber-800 text-amber-400 rounded-lg hover:bg-amber-900 transition" title="Müşteri Notu / Görsel"><i class="fa-solid fa-comment"></i></button>
+                        <button onclick="window.updateAppStatus(${a.id}, 'İptal')" class="p-2 bg-red-950/50 border border-red-800 text-red-400 rounded-lg hover:bg-red-900 transition" title="İptal Et"><i class="fa-solid fa-xmark"></i></button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        window.filterApps = function(status) {
+            const apps = getStoredApps();
+            renderAppointmentsTable(apps, status);
+        };
+
+        window.updateAppStatus = function(id, newStatus) {
+            const apps = getStoredApps();
+            const target = apps.find(a => a.id === id);
+            if (target) {
+                target.status = newStatus;
+                saveStoredApps(apps);
+                addAuditLog('Randevu Güncelleme', `#${id} ID'li randevu durumu "${newStatus}" yapıldı.`);
+                window.syncAllData();
+                showToast(`Randevu durumu "${newStatus}" olarak güncellendi.`, 'info');
+            }
+        };
+
+        window.openReplyModalForApp = function(id) {
+            activeReplyAppId = id;
+            const apps = getStoredApps();
+            const target = apps.find(a => a.id === id);
+            if (!target) return;
+
+            const mediaContainer = document.getElementById('replyModalMedia');
+            const noteEl = document.getElementById('replyModalNote');
+            const inputEl = document.getElementById('replyModalInput');
+
+            if (target.image) {
+                mediaContainer.innerHTML = `<img src="${target.image}" class="max-h-48 rounded-xl border border-gray-800">`;
+            } else {
+                mediaContainer.innerHTML = `<span class="text-xs text-gray-500 italic">Müşteri görsel yüklemedi</span>`;
+            }
+
+            noteEl.innerText = target.note || 'Özel not eklenmemiş.';
+            inputEl.value = target.reply || '';
+
+            document.getElementById('replyModal').classList.remove('hidden');
+        };
+
+        window.closeReplyModal = function() {
+            document.getElementById('replyModal').classList.add('hidden');
+        };
+
+        window.submitAdminReply = function() {
+            const text = document.getElementById('replyModalInput').value;
+            const apps = getStoredApps();
+            const target = apps.find(a => a.id === activeReplyAppId);
+            if (target) {
+                target.reply = text;
+                saveStoredApps(apps);
+                addAuditLog('Müşteri Yanıtı', `#${activeReplyAppId} ID'li randevuya yanıt iletildi.`);
+                window.closeReplyModal();
+                window.syncAllData();
+                showToast('Müşteriye yanıtınız kaydedildi.', 'success');
+            }
+        };
+
+        function renderServicesGrid(srvs) {
+            const container = document.getElementById('servicesGridContainer');
+            if (!container) return;
+            container.innerHTML = '';
+
+            srvs.forEach(s => {
+                const card = document.createElement('div');
+                card.className = "bg-[#121212] border border-gray-800 hover:border-[#C5A059]/60 p-5 rounded-2xl flex flex-col justify-between space-y-4 transition";
+                card.innerHTML = `
+                    <div class="space-y-2">
+                        <div class="flex justify-between items-start">
+                            <span class="w-8 h-8 rounded-lg bg-[#C5A059]/10 text-[#C5A059] flex items-center justify-center font-bold text-sm">
+                                <i class="fa-solid fa-scissors"></i>
+                            </span>
+                            <span class="text-lg font-bold font-serif-title gold-gradient-text">${s.price.toLocaleString('tr-TR')} ₺</span>
+                        </div>
+                        <h4 class="font-bold text-white text-sm">${s.name}</h4>
+                        <span class="text-xs text-gray-500 block"><i class="fa-regular fa-clock mr-1"></i>Tahmini Süre: ${s.durationMin} Dakika</span>
+                    </div>
+                    <div class="flex gap-2 pt-2 border-t border-gray-800/80">
+                        <button onclick="window.openEditServiceModal('${s.id}')" class="w-full bg-[#0A0A0A] border border-gray-800 text-gray-300 hover:text-white hover:border-[#C5A059] py-2 rounded-xl text-xs font-semibold transition">
+                            <i class="fa-solid fa-pen-to-square mr-1"></i> Düzenle
+                        </button>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        window.openAddServiceModal = function() {
+            document.getElementById('serviceModalTitle').innerText = "Yeni Hizmet Ekle";
+            document.getElementById('modalSrvId').value = "";
+            document.getElementById('modalSrvName').value = "";
+            document.getElementById('modalSrvPrice').value = "";
+            document.getElementById('modalSrvDuration').value = "";
+            document.getElementById('serviceEditModal').classList.remove('hidden');
+        };
+
+        window.openEditServiceModal = function(srvId) {
+            const srvs = getStoredServices();
+            const target = srvs.find(s => s.id === srvId);
+            if (!target) return;
+
+            document.getElementById('serviceModalTitle').innerText = "Hizmeti Düzenle";
+            document.getElementById('modalSrvId').value = target.id;
+            document.getElementById('modalSrvName').value = target.name;
+            document.getElementById('modalSrvPrice').value = target.price;
+            document.getElementById('modalSrvDuration').value = target.durationMin;
+            document.getElementById('serviceEditModal').classList.remove('hidden');
+        };
+
+        window.closeServiceModal = function() {
+            document.getElementById('serviceEditModal').classList.add('hidden');
+        };
+
+        window.saveServiceForm = function() {
+            const id = document.getElementById('modalSrvId').value;
+            const name = document.getElementById('modalSrvName').value.trim();
+            const price = parseFloat(document.getElementById('modalSrvPrice').value);
+            const durationMin = parseInt(document.getElementById('modalSrvDuration').value, 10);
+
+            if (!name || isNaN(price) || isNaN(durationMin)) {
+                return showToast('Lütfen tüm hizmet alanlarını eksiksiz doldurun.', 'warning');
+            }
+
+            let srvs = getStoredServices();
+
+            if (id) {
+                const idx = srvs.findIndex(s => s.id === id);
+                if (idx !== -1) {
+                    srvs[idx] = { id, name, price, durationMin };
+                    addAuditLog('Hizmet Güncellendi', `"${name}" hizmet fiyatı ${price}₺ olarak değiştirildi.`);
+                }
+            } else {
+                const newId = 'srv_' + Date.now();
+                srvs.push({ id: newId, name, price, durationMin });
+                addAuditLog('Yeni Hizmet Eklendi', `"${name}" (${price}₺) kataloğa eklendi.`);
+            }
+
+            saveStoredServices(srvs);
+            window.closeServiceModal();
+            window.syncAllData();
+            showToast('Hizmet kataloğu güncellendi!', 'success');
+        };
+
+        function renderCustomersTable(users) {
+            const tbody = document.getElementById('userTableBody');
+            if (!tbody) return;
+            tbody.innerHTML = '';
+
+            if (users.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="6" class="text-center py-6 text-gray-500">Kayıtlı kullanıcı hesabı bulunmuyor.</td></tr>';
+                return;
+            }
+
+            let couponsMap = {};
+            try { couponsMap = JSON.parse(localStorage.getItem('nes_user_coupons')) || {}; } catch(e){}
+
+            let spendingMap = {};
+            try { spendingMap = JSON.parse(localStorage.getItem('nes_spending_records')) || {}; } catch(e){}
+
+            users.forEach(u => {
+                const userKey = u.name.toLowerCase();
+                const couponInfo = couponsMap[userKey];
+                const records = spendingMap[userKey] || [];
+                const totalSpend = records.reduce((sum, r) => sum + r.amount, 0);
+
+                const hasActive = couponInfo && !couponInfo.used;
+
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-gray-900/40 transition";
+                tr.innerHTML = `
+                    <td class="p-4 font-bold text-white">${u.name}</td>
+                    <td class="p-4 text-gray-400 font-mono">${u.pass}</td>
+                    <td class="p-4 font-bold gold-gradient-text">${totalSpend.toLocaleString('tr-TR')} ₺</td>
+                    <td class="p-4">
+                        ${hasActive ? `<span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-amber-950/60 border border-amber-800 text-amber-300">${couponInfo.code} (%${couponInfo.discountRate * 100})</span>` : '<span class="text-gray-600 text-[10px]">Aktif Kupon Yok</span>'}
+                    </td>
+                    <td class="p-4">
+                        <div class="flex items-center gap-1.5">
+                            <select id="couponRate_${u.name.replace(/\s+/g, '_')}" class="bg-[#0A0A0A] border border-gray-800 text-white text-xs p-1.5 rounded-lg focus:outline-none">
+                                <option value="0.10|NES10">%10 Indirim (NES10)</option>
+                                <option value="0.20|NES20">%20 Indirim (NES20)</option>
+                                <option value="0.30|NES30">%30 VIP Indirim (NES30)</option>
+                            </select>
+                            <button onclick="window.assignUserCoupon('${u.name}')" class="gold-gradient text-black font-bold text-xs px-3 py-1.5 rounded-lg hover:opacity-90">Ata</button>
+                        </div>
+                    </td>
+                    <td class="p-4 text-center">
+                        <button onclick="window.deleteUser('${u.name}')" class="p-1.5 bg-red-950/40 border border-red-900 text-red-400 rounded-lg hover:bg-red-900 transition"><i class="fa-solid fa-trash"></i></button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        window.assignUserCoupon = function(userName) {
+            const selectEl = document.getElementById(`couponRate_${userName.replace(/\s+/g, '_')}`);
+            if (!selectEl) return;
+
+            const [rateStr, code] = selectEl.value.split('|');
+            const rate = parseFloat(rateStr);
+
+            let couponsMap = {};
+            try { couponsMap = JSON.parse(localStorage.getItem('nes_user_coupons')) || {}; } catch(e){}
+
+            couponsMap[userName.toLowerCase()] = {
+                code: code,
+                discountRate: rate,
+                issuedAt: new Date().toISOString(),
+                used: false
+            };
+
+            localStorage.setItem('nes_user_coupons', JSON.stringify(couponsMap));
+            addAuditLog('Kupon Tanımlandı', `"${userName}" müşterisine ${code} (%${rate * 100}) kuponu eklendi.`);
+            window.syncAllData();
+            showToast(`"${userName}" için kupon tanımlandı.`, 'success');
+        };
+
+        window.deleteUser = function(userName) {
+            if (confirm(`"${userName}" kullanıcısını silmek istiyor musunuz?`)) {
+                let users = getStoredUsers();
+                users = users.filter(u => u.name.toLowerCase() !== userName.toLowerCase());
+                saveStoredUsers(users);
+                addAuditLog('Kullanıcı Silindi', `"${userName}" hesabı sistemden kaldırıldı.`);
+                window.syncAllData();
+                showToast('Kullanıcı silindi.', 'info');
+            }
+        };
+
+        function renderSpendingTable(users) {
+            const tbody = document.getElementById('spendingTableBody');
+            if (!tbody) return;
+            tbody.innerHTML = '';
+
+            let spendingMap = {};
+            try { spendingMap = JSON.parse(localStorage.getItem('nes_spending_records')) || {}; } catch(e){}
+
+            if (users.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" class="text-center py-6 text-gray-500">Müşteri verisi yok.</td></tr>';
+                return;
+            }
+
+            users.forEach(u => {
+                const userKey = u.name.toLowerCase();
+                const records = spendingMap[userKey] || [];
+
+                let total = 0;
+                let byYear = {};
+                let byMonth = {};
+                let byDay = {};
+
+                records.forEach(r => {
+                    total += r.amount;
+                    byYear[r.year] = (byYear[r.year] || 0) + r.amount;
+                    byMonth[r.month] = (byMonth[r.month] || 0) + r.amount;
+                    byDay[r.date] = (byDay[r.date] || 0) + r.amount;
+                });
+
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-gray-900/40 transition";
+                tr.innerHTML = `
+                    <td class="p-4 font-bold text-white">${u.name}</td>
+                    <td class="p-4 font-bold text-emerald-400">${total.toLocaleString('tr-TR')} ₺</td>
+                    <td class="p-4 text-gray-400 text-[11px]">${Object.entries(byYear).map(([k,v])=>`${k}: ${v}₺`).join(', ') || 'Yok'}</td>
+                    <td class="p-4 text-gray-400 text-[11px]">${Object.entries(byMonth).map(([k,v])=>`${k}: ${v}₺`).join(', ') || 'Yok'}</td>
+                    <td class="p-4 text-gray-400 text-[11px]">${Object.entries(byDay).map(([k,v])=>`${k}: ${v}₺`).join(', ') || 'Yok'}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function addAuditLog(action, details) {
+            let logs = [];
+            try { logs = JSON.parse(localStorage.getItem('nes_audit_logs')) || []; } catch(e){}
+
+            logs.unshift({
+                timestamp: new Date().toLocaleString('tr-TR'),
+                action: action,
+                details: details,
+                user: 'Admin'
+            });
+
+            if (logs.length > 100) logs = logs.slice(0, 100);
+            localStorage.setItem('nes_audit_logs', JSON.stringify(logs));
+        }
+
+        function renderAuditLogs() {
+            const container = document.getElementById('auditLogContainer');
+            if (!container) return;
+            container.innerHTML = '';
+
+            let logs = [];
+            try { logs = JSON.parse(localStorage.getItem('nes_audit_logs')) || []; } catch(e){}
+
+            if (logs.length === 0) {
+                container.innerHTML = '<p class="text-gray-500 italic py-4">Henüz denetim izi kaydı yok.</p>';
+                return;
+            }
+
+            logs.forEach(l => {
+                const div = document.createElement('div');
+                div.className = "p-2.5 bg-[#0A0A0A] rounded-xl border border-gray-800/80 flex justify-between items-center";
+                div.innerHTML = `
+                    <div class="space-x-2">
+                        <span class="text-gray-500">[${l.timestamp}]</span>
+                        <strong class="text-[#C5A059]">${l.action}:</strong>
+                        <span class="text-gray-300">${l.details}</span>
+                    </div>
+                    <span class="text-[10px] bg-gray-800 text-gray-400 px-2 py-0.5 rounded-full">${l.user}</span>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        window.clearAuditLogs = function() {
+            if (confirm('Tüm denetim kayıtlarını silmek istiyor musunuz?')) {
+                localStorage.removeItem('nes_audit_logs');
+                renderAuditLogs();
+                showToast('Audit logları temizlendi.', 'info');
+            }
+        };
+
+        function showToast(message, type = 'info') {
+            const container = document.getElementById('toastContainer');
+            if (!container) return;
+
+            const toast = document.createElement('div');
+            toast.className = `pointer-events-auto px-4 py-3 rounded-xl border text-xs font-semibold shadow-2xl transition-all duration-300 ${
+                type === 'success' ? 'bg-[#121212] border-emerald-500 text-emerald-400' :
+                type === 'warning' ? 'bg-[#121212] border-amber-500 text-amber-400' :
+                'bg-[#121212] border-[#C5A059] text-[#C5A059]'
+            }`;
+
+            toast.innerText = message;
+            container.appendChild(toast);
+
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'translate-y-2');
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
