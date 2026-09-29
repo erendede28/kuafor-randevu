@@ -21,11 +21,7 @@
             theme: {
                 extend: {
                     colors: {
-                        gold: {
-                            400: '#D4AF37',
-                            500: '#C5A059',
-                            600: '#B8934A',
-                        },
+                        gold: { 400: '#D4AF37', 500: '#C5A059', 600: '#B8934A' },
                         darkbg: '#0A0A0A',
                         cardbg: '#121212',
                         borderbg: '#1F1F1F'
@@ -112,6 +108,9 @@
                 </button>
                 <button onclick="window.switchTab('notepad')" id="nav_notepad" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-xs font-semibold text-gray-400 hover:text-white hover:bg-gray-900 transition">
                     <i class="fa-solid fa-book w-4 text-center text-[#C5A059]"></i> Müşteri Not Defteri
+                </button>
+                <button onclick="window.switchTab('coupons')" id="nav_coupons" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-xs font-semibold text-gray-400 hover:text-white hover:bg-gray-900 transition">
+                    <i class="fa-solid fa-ticket w-4 text-center text-[#C5A059]"></i> İndirim Kuponları (7 Gün)
                 </button>
                 <button onclick="window.switchTab('customers')" id="nav_customers" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-xs font-semibold text-gray-400 hover:text-white hover:bg-gray-900 transition">
                     <i class="fa-solid fa-users w-4 text-center text-[#C5A059]"></i> Müşteri CRM Yönetimi
@@ -284,6 +283,35 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="notepadGridContainer"></div>
                 </div>
 
+                <div id="view_coupons" class="space-y-6 hidden">
+                    <div class="flex justify-between items-center border-b border-gray-800 pb-4">
+                        <div>
+                            <h1 class="text-2xl font-bold font-serif-title text-white">Müşteri İndirim Kuponları Yönetimi</h1>
+                            <p class="text-xs text-gray-400 mt-1">Müşterilere NES10, NES20, NES30 kuponları tanımlayın (7 gün geçerlidir).</p>
+                        </div>
+                        <button onclick="window.openAddCouponModal()" class="gold-gradient text-black text-xs font-bold px-4 py-2.5 rounded-xl shadow hover:opacity-90 transition">
+                            <i class="fa-solid fa-ticket mr-1"></i> Yeni Kupon Tanımla
+                        </button>
+                    </div>
+
+                    <div class="bg-[#121212] border border-gray-800 rounded-2xl overflow-hidden shadow-xl">
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left border-collapse text-xs">
+                                <thead>
+                                    <tr class="bg-[#0A0A0A] border-b border-gray-800 text-[#C5A059] uppercase tracking-wider font-semibold">
+                                        <th class="p-4">Müşteri Adı</th>
+                                        <th class="p-4">Kupon Kodu</th>
+                                        <th class="p-4">İndirim Oranı</th>
+                                        <th class="p-4">Son Geçerlilik Tarihi (7 Gün)</th>
+                                        <th class="p-4 text-center">İşlem / Sil</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="couponTableBody" class="divide-y divide-gray-800/80"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
                 <div id="view_customers" class="space-y-6 hidden">
                     <div class="border-b border-gray-800 pb-4">
                         <h1 class="text-2xl font-bold font-serif-title text-white">Müşteri CRM Yönetimi</h1>
@@ -365,6 +393,7 @@
         </main>
     </div>
 
+    <!-- Modals -->
     <div id="serviceEditModal" class="fixed inset-0 bg-black/80 backdrop-blur z-50 hidden flex items-center justify-center p-4">
         <div class="bg-[#121212] border border-[#C5A059]/40 rounded-3xl max-w-md w-full p-6 space-y-4 shadow-2xl relative">
             <button onclick="window.closeServiceModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white text-2xl">&times;</button>
@@ -417,10 +446,39 @@
         </div>
     </div>
 
-    <!-- Orijinal Görsel Yükleme Modalı -->
+    <div id="couponModal" class="fixed inset-0 bg-black/80 backdrop-blur z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-[#121212] border border-[#C5A059]/40 rounded-3xl max-w-md w-full p-6 space-y-4 shadow-2xl relative">
+            <button onclick="window.closeCouponModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white text-2xl">&times;</button>
+            <h3 class="text-xl font-bold font-serif-title text-white">Müşteriye İndirim Kuponu Tanımla (7 Gün)</h3>
+            
+            <div>
+                <label class="block text-xs font-semibold text-gray-400 mb-1">Müşteri Seçin</label>
+                <select id="modalCouponCustomer" class="w-full bg-[#0A0A0A] border border-gray-800 text-white p-3 rounded-xl text-xs focus:border-[#C5A059] focus:outline-none">
+                    <option value="">Müşteri Seçiniz</option>
+                </select>
+            </div>
+            <div>
+                <label class="block text-xs font-semibold text-gray-400 mb-1">Kupon Adı / Kodu</label>
+                <select id="modalCouponCode" class="w-full bg-[#0A0A0A] border border-gray-800 text-white p-3 rounded-xl text-xs focus:border-[#C5A059] focus:outline-none">
+                    <option value="NES10">NES10 (%10 İndirim)</option>
+                    <option value="NES20">NES20 (%20 İndirim)</option>
+                    <option value="NES30">NES30 (%30 İndirim)</option>
+                </select>
+            </div>
+            <div>
+                <label class="block text-xs font-semibold text-gray-400 mb-1">İndirim Oranı (%)</label>
+                <input type="number" id="modalCouponDiscount" value="10" readonly class="w-full bg-[#0A0A0A] border border-gray-800 text-[#C5A059] font-bold p-3 rounded-xl text-xs focus:outline-none">
+            </div>
+
+            <button onclick="window.saveCouponForm()" class="w-full gold-gradient text-black font-bold py-3 rounded-xl text-xs uppercase tracking-wider shadow">
+                Kuponu Tanımla (7 Gün)
+            </button>
+        </div>
+    </div>
+
     <div id="portfolioModal" class="fixed inset-0 bg-black/80 backdrop-blur z-50 hidden flex items-center justify-center p-4">
         <div class="bg-[#121212] border border-[#C5A059]/40 rounded-3xl max-w-md w-full p-5 space-y-4 shadow-2xl relative max-h-[90vh] overflow-y-auto">
-            <button onclick="window.closePortfolioModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-gray-800/80 hover:bg-red-950 hover:text-red-400 text-gray-300 flex items-center justify-center text-lg transition z-10" title="Kapat">&times;</button>
+            <button onclick="window.closePortfolioModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-gray-800/80 hover:bg-red-950 hover:text-red-400 text-gray-300 flex items-center justify-center text-lg transition z-10">&times;</button>
             <h3 class="text-lg font-bold font-serif-title text-white pr-8">Galeriye Orijinal Fotoğraf Ekle</h3>
             
             <div>
@@ -428,24 +486,30 @@
                 <input type="text" id="modalPortTitle" placeholder="Örn: Sarı Balyaj & Ombre" class="w-full bg-[#0A0A0A] border border-gray-800 text-white p-2.5 rounded-xl text-xs focus:border-[#C5A059] focus:outline-none">
             </div>
             <div>
-                <label class="block text-[11px] font-semibold text-gray-400 mb-1">Cihazdan Fotoğraf Yükle</label>
+                <label class="block text-[11px] font-semibold text-gray-400 mb-1">Cihazdan Fotoğraf Yükle (Orijinal)</label>
                 <input type="file" id="modalPortFile" accept="image/*" onchange="window.handlePortImageSelect()" class="w-full text-xs text-gray-400 file:mr-3 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-[#C5A059] file:text-black cursor-pointer">
             </div>
 
             <div id="portPreviewWrapper" class="hidden space-y-2 pt-1">
-                <span class="font-semibold text-gray-300 text-[11px] block">Önizleme (Orijinal Yükleme)</span>
-                <div class="relative w-full h-60 bg-[#0A0A0A] rounded-2xl border border-gray-800 overflow-hidden flex items-center justify-center">
-                    <img id="portPreviewImg" src="" class="max-h-full max-w-full object-contain">
+                <div class="flex justify-between items-center">
+                    <span class="font-semibold text-gray-300 text-[11px]">Önizleme & Zoom</span>
+                    <span id="zoomPercentBadge" class="text-[10px] bg-[#C5A059]/20 text-[#C5A059] px-2 py-0.5 rounded-full font-bold">%100</span>
+                </div>
+                <div class="relative w-full h-56 bg-[#0A0A0A] rounded-2xl border border-gray-800 overflow-hidden flex items-center justify-center">
+                    <img id="portPreviewImg" src="" class="w-full h-full object-cover transition-transform duration-100 origin-center">
+                </div>
+                <div class="space-y-1 pt-1">
+                    <div class="flex justify-between text-[10px] text-gray-400">
+                        <span>Küçült (%20)</span>
+                        <span>Büyüt (%300)</span>
+                    </div>
+                    <input type="range" id="portZoomRange" min="0.2" max="3.0" step="0.05" value="1.0" oninput="window.updatePortZoom(this.value)" class="w-full accent-[#C5A059] cursor-pointer">
                 </div>
             </div>
 
             <div class="flex gap-2 pt-2">
-                <button onclick="window.closePortfolioModal()" class="w-1/3 bg-gray-800 hover:bg-gray-700 text-gray-300 font-semibold py-2.5 rounded-xl text-xs transition">
-                    İptal
-                </button>
-                <button onclick="window.savePortfolioForm()" class="w-2/3 gold-gradient text-black font-bold py-2.5 rounded-xl text-xs uppercase tracking-wider shadow hover:opacity-90 transition">
-                    Kaydet & Yayınla
-                </button>
+                <button onclick="window.closePortfolioModal()" class="w-1/3 bg-gray-800 hover:bg-gray-700 text-gray-300 font-semibold py-2.5 rounded-xl text-xs transition">Çıkış / İptal</button>
+                <button onclick="window.savePortfolioForm()" class="w-2/3 gold-gradient text-black font-bold py-2.5 rounded-xl text-xs uppercase tracking-wider shadow hover:opacity-90 transition">Galeriye Kaydet</button>
             </div>
         </div>
     </div>
@@ -502,6 +566,7 @@
         let revenueChartInstance = null;
         let activeReplyAppId = null;
         let currentAppointmentFilter = 'Aktif';
+        let currentPortScale = 1.0;
 
         window.loginToPortal = function() {
             const passInput = document.getElementById('portalPassInput');
@@ -535,6 +600,9 @@
             document.getElementById('modalPortFile').value = "";
             document.getElementById('portPreviewWrapper').classList.add('hidden');
             document.getElementById('portPreviewImg').src = "";
+            document.getElementById('portZoomRange').value = "1.0";
+            currentPortScale = 1.0;
+            document.getElementById('zoomPercentBadge').innerText = "%100";
             document.getElementById('portfolioModal').classList.remove('hidden');
         };
 
@@ -551,12 +619,24 @@
                 const reader = new FileReader();
                 reader.onload = (e) => {
                     previewImg.src = e.target.result;
+                    currentPortScale = 1.0;
+                    document.getElementById('portZoomRange').value = "1.0";
+                    document.getElementById('zoomPercentBadge').innerText = "%100";
+                    previewImg.style.transform = `scale(1)`;
                     previewWrapper.classList.remove('hidden');
                 };
                 reader.readAsDataURL(fileInput.files[0]);
             } else {
                 previewWrapper.classList.add('hidden');
             }
+        };
+
+        window.updatePortZoom = function(val) {
+            currentPortScale = parseFloat(val);
+            const img = document.getElementById('portPreviewImg');
+            const badge = document.getElementById('zoomPercentBadge');
+            if (img) img.style.transform = `scale(${currentPortScale})`;
+            if (badge) badge.innerText = `%${Math.round(currentPortScale * 100)}`;
         };
 
         window.savePortfolioForm = function() {
@@ -571,7 +651,7 @@
             const newItem = {
                 id: 'port_' + Date.now(),
                 title: title,
-                image: previewImg.src // Orijinal tam çözünürlüklü görsel
+                image: previewImg.src
             };
 
             portfolio.unshift(newItem);
@@ -584,7 +664,7 @@
 
         window.switchTab = function(tabName) {
             activeTab = tabName;
-            ['dashboard', 'appointments', 'services', 'notepad', 'customers', 'financials', 'portfolio', 'audit'].forEach(t => {
+            ['dashboard', 'appointments', 'services', 'notepad', 'coupons', 'customers', 'financials', 'portfolio', 'audit'].forEach(t => {
                 const view = document.getElementById(`view_${t}`);
                 const nav = document.getElementById(`nav_${t}`);
                 if (view) view.classList.add('hidden');
@@ -608,6 +688,7 @@
             const users = getStoredUsers();
             const services = getStoredServices();
             const notepad = getStoredNotepad();
+            const coupons = getStoredCoupons();
             const portfolio = getStoredPortfolio();
 
             const pending = apps.filter(a => a.status === 'Beklemede').length;
@@ -618,6 +699,7 @@
             renderAppointmentsTable(apps, currentAppointmentFilter);
             renderServicesGrid(services);
             renderNotepadGrid(notepad);
+            renderCouponsTable(coupons);
             renderCustomersTable(users);
             renderSpendingTable(users);
             renderPortfolioGrid(portfolio);
@@ -643,6 +725,11 @@
             try { return JSON.parse(localStorage.getItem('nes_customer_notepad')) || []; } catch(e) { return []; }
         }
         function saveStoredNotepad(notes) { localStorage.setItem('nes_customer_notepad', JSON.stringify(notes)); }
+
+        function getStoredCoupons() {
+            try { return JSON.parse(localStorage.getItem('nes_customer_coupons')) || []; } catch(e) { return []; }
+        }
+        function saveStoredCoupons(coupons) { localStorage.setItem('nes_customer_coupons', JSON.stringify(coupons)); }
 
         function getStoredPortfolio() {
             try { return JSON.parse(localStorage.getItem('nes_portfolio_gallery')) || DEFAULT_PORTFOLIO; } catch(e) { return DEFAULT_PORTFOLIO; }
@@ -819,10 +906,10 @@
                     </td>
                     <td class="p-4 text-center space-x-1">
                         <button onclick="window.updateAppStatus(${a.id}, 'Onaylandı')" class="p-2 bg-emerald-950/50 border border-emerald-800 text-emerald-400 rounded-lg hover:bg-emerald-900 transition" title="Onayla"><i class="fa-solid fa-check"></i></button>
-                        <button onclick="window.updateAppStatus(${a.id}, 'Tamamlandı')" class="p-2 bg-blue-950/50 border border-blue-800 text-blue-400 rounded-lg hover:bg-blue-900 transition" title="Tamamlandı (Geçmişe Arşivle)"><i class="fa-solid fa-flag-checkered"></i></button>
+                        <button onclick="window.updateAppStatus(${a.id}, 'Tamamlandı')" class="p-2 bg-blue-950/50 border border-blue-800 text-blue-400 rounded-lg hover:bg-blue-900 transition" title="Tamamlandı"><i class="fa-solid fa-flag-checkered"></i></button>
                         <button onclick="window.openReplyModalForApp(${a.id})" class="p-2 bg-amber-950/50 border border-amber-800 text-amber-400 rounded-lg hover:bg-amber-900 transition" title="Not / Görsel"><i class="fa-solid fa-comment"></i></button>
                         <button onclick="window.updateAppStatus(${a.id}, 'İptal')" class="p-2 bg-red-950/50 border border-red-800 text-red-300 rounded-lg hover:bg-red-900 transition" title="İptal Et"><i class="fa-solid fa-xmark"></i></button>
-                        <button onclick="window.deleteAppointment(${a.id})" class="p-2 bg-red-950/80 border border-red-800 text-red-300 rounded-lg hover:bg-red-900 transition" title="Kalıcı Olarak Sil"><i class="fa-solid fa-trash"></i></button>
+                        <button onclick="window.deleteAppointment(${a.id})" class="p-2 bg-red-950/80 border border-red-800 text-red-300 rounded-lg hover:bg-red-900 transition" title="Sil"><i class="fa-solid fa-trash"></i></button>
                     </td>
                 `;
                 tbody.appendChild(tr);
@@ -847,13 +934,6 @@
 
                 if (newStatus === 'Tamamlandı' && oldStatus !== 'Tamamlandı') {
                     let amountToAdd = target.totalPrice || 0;
-                    if (!amountToAdd && target.service) {
-                        const match = target.service.match(/([\d\.]+)\s*₺/);
-                        if (match) {
-                            const val = parseInt(match[1].replace(/\./g, ''), 10);
-                            if (!isNaN(val)) amountToAdd = val;
-                        }
-                    }
                     if (amountToAdd > 0 && target.name) {
                         addUserSpendingByDate(target.name, amountToAdd, target.date || new Date().toISOString().split('T')[0]);
                     }
@@ -1122,8 +1202,6 @@
                 if (idx !== -1) {
                     notes[idx] = { id, customerName, hairType, formula, updatedAt: timeStr };
                     addAuditLog('Not Defteri Güncellendi', `"${customerName}" için saç reçetesi güncellendi.`);
-                } else {
-                    notes.push({ id, customerName, hairType, formula, updatedAt: timeStr });
                 }
             } else {
                 const newId = 'note_' + Date.now();
@@ -1144,6 +1222,101 @@
             addAuditLog('Not Defteri Silindi', `ID #${id} olan not defteri kaydı silindi.`);
             window.syncAllData();
             showToast('Müşteri notu silindi.', 'info');
+        };
+
+        function renderCouponsTable(coupons) {
+            const tbody = document.getElementById('couponTableBody');
+            if (!tbody) return;
+            tbody.innerHTML = '';
+
+            if (!coupons || coupons.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" class="text-center py-6 text-gray-500">Tanımlı aktif kupon bulunmuyor.</td></tr>';
+                return;
+            }
+
+            coupons.forEach(c => {
+                const expiresDateStr = new Date(c.expiresAt).toLocaleString('tr-TR');
+                const isExpired = new Date().getTime() > c.expiresAt;
+
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-gray-900/40 transition";
+                tr.innerHTML = `
+                    <td class="p-4 font-bold text-white">${c.customerName}</td>
+                    <td class="p-4 font-mono font-bold text-[#C5A059]">${c.code}</td>
+                    <td class="p-4"><span class="bg-[#C5A059]/20 text-[#C5A059] px-2.5 py-1 rounded-full font-bold">-%${c.discountPercent}</span></td>
+                    <td class="p-4 text-xs ${isExpired ? 'text-red-400 font-bold' : 'text-emerald-400'}">${expiresDateStr} ${isExpired ? '(Süresi Doldu)' : ''}</td>
+                    <td class="p-4 text-center">
+                        <button onclick="window.deleteCoupon('${c.id}')" class="p-2 bg-red-950/40 border border-red-900 text-red-400 rounded-xl hover:bg-red-900 transition" title="Kuponu Sil"><i class="fa-solid fa-trash"></i></button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        window.openAddCouponModal = function() {
+            const selectEl = document.getElementById('modalCouponCustomer');
+            const users = getStoredUsers();
+            selectEl.innerHTML = '<option value="">Müşteri Seçiniz</option>';
+            users.forEach(u => {
+                const opt = document.createElement('option');
+                opt.value = u.name;
+                opt.textContent = u.name;
+                selectEl.appendChild(opt);
+            });
+
+            document.getElementById('modalCouponCode').value = "NES10";
+            document.getElementById('modalCouponDiscount').value = "10";
+            document.getElementById('couponModal').classList.remove('hidden');
+
+            document.getElementById('modalCouponCode').onchange = function() {
+                const val = this.value;
+                if (val === 'NES10') document.getElementById('modalCouponDiscount').value = "10";
+                else if (val === 'NES20') document.getElementById('modalCouponDiscount').value = "20";
+                else if (val === 'NES30') document.getElementById('modalCouponDiscount').value = "30";
+            };
+        };
+
+        window.closeCouponModal = function() {
+            document.getElementById('couponModal').classList.add('hidden');
+        };
+
+        window.saveCouponForm = function() {
+            const customerName = document.getElementById('modalCouponCustomer').value;
+            const code = document.getElementById('modalCouponCode').value;
+            const discountPercent = parseInt(document.getElementById('modalCouponDiscount').value, 10);
+
+            if (!customerName) {
+                return showToast('Lütfen bir müşteri seçin.', 'warning');
+            }
+
+            let coupons = getStoredCoupons();
+            const now = new Date().getTime();
+            const sevenDaysMs = 7 * 24 * 60 * 60 * 1000; // 7 gün
+
+            const newCoupon = {
+                id: 'coupon_' + Date.now(),
+                customerName: customerName,
+                code: code,
+                discountPercent: discountPercent,
+                createdAt: now,
+                expiresAt: now + sevenDaysMs
+            };
+
+            coupons.unshift(newCoupon);
+            saveStoredCoupons(coupons);
+            addAuditLog('İndirim Kuponu Tanımlandı', `"${customerName}" müşterisine ${code} (%${discountPercent}) kuponu tanımlandı.`);
+            window.closeCouponModal();
+            window.syncAllData();
+            showToast('Kupon başarıyla tanımlandı (7 gün geçerli).', 'success');
+        };
+
+        window.deleteCoupon = function(id) {
+            let coupons = getStoredCoupons();
+            coupons = coupons.filter(c => c.id !== id);
+            saveStoredCoupons(coupons);
+            addAuditLog('İndirim Kuponu Silindi', `Kupon ID #${id} silindi.`);
+            window.syncAllData();
+            showToast('Kupon silindi.', 'info');
         };
 
         function renderPortfolioGrid(items) {
