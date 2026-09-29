@@ -224,7 +224,12 @@
                         <input type="date" id="bDate" required onclick="this.showPicker && this.showPicker()" onchange="window.updateTimeSlotAvailability()" class="w-full bg-[#0A0A0A] border border-gray-800 focus:border-[#C5A059] text-white px-4 py-3 rounded-xl focus:outline-none cursor-pointer">
                     </div>
                     <div>
-                        <label class="block text-xs font-semibold text-gray-300 uppercase tracking-wider mb-2">Saat</label>
+                        <div class="flex justify-between items-center mb-2">
+                            <label class="block text-xs font-semibold text-gray-300 uppercase tracking-wider">Saat</label>
+                            <button type="button" onclick="window.updateTimeSlotAvailability()" class="text-[10px] text-[#C5A059] hover:underline flex items-center gap-1 font-semibold transition">
+                                <i class="fa-solid fa-rotate"></i> Saatleri Yenile
+                            </button>
+                        </div>
                         <select id="bTime" required class="w-full bg-[#0A0A0A] border border-gray-800 focus:border-[#C5A059] text-white px-4 py-3 rounded-xl focus:outline-none">
                             <option value="">Saat Seçiniz</option>
                             <option value="10:00">10:00</option>
@@ -603,8 +608,9 @@
                 return;
             }
 
+            // Sadece Aktif (Beklemede / Onaylandı) randevular saatleri doldursun
             const bookedTimes = apps
-                .filter(a => a.date === dateVal && a.status !== 'İptal')
+                .filter(a => a.date === dateVal && (a.status === 'Beklemede' || a.status === 'Onaylandı'))
                 .map(a => a.time);
 
             let availableCount = 0;
