@@ -224,15 +224,13 @@
                 <div id="view_appointments" class="space-y-6 hidden">
                     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-gray-800 pb-4">
                         <div>
-                            <h1 class="text-2xl font-bold font-serif-title text-white">Müşteri Randevu Yönetimi</h1>
-                            <p class="text-xs text-gray-400 mt-1">Gelen randevu taleplerini onaylayın, tamamlandı yapın veya silin.</p>
+                            <h1 class="text-2xl font-bold font-serif-title text-white">Müşteri Randevu Yönetimi & Arşivi</h1>
+                            <p class="text-xs text-gray-400 mt-1">Aktif randevuları yönetin, tamamlanan veya iptal edilen geçmiş randevuları arşivde inceleyin.</p>
                         </div>
                         <div class="flex flex-wrap gap-2">
-                            <button onclick="window.filterApps('Hepsi')" class="text-xs bg-gray-800 px-3 py-1.5 rounded-xl text-gray-300 font-semibold hover:text-white">Tümü</button>
-                            <button onclick="window.filterApps('Beklemede')" class="text-xs bg-amber-950/50 border border-amber-800 text-amber-300 px-3 py-1.5 rounded-xl font-semibold">Bekleyenler</button>
-                            <button onclick="window.filterApps('Onaylandı')" class="text-xs bg-emerald-950/50 border border-emerald-800 text-emerald-300 px-3 py-1.5 rounded-xl font-semibold">Onaylananlar</button>
-                            <button onclick="window.filterApps('Tamamlandı')" class="text-xs bg-blue-950/50 border border-blue-800 text-blue-300 px-3 py-1.5 rounded-xl font-semibold">Tamamlananlar</button>
-                            <button onclick="window.filterApps('İptal')" class="text-xs bg-red-950/50 border border-red-800 text-red-300 px-3 py-1.5 rounded-xl font-semibold">İptal Edilenler</button>
+                            <button onclick="window.filterApps('Hepsi')" id="btnFilter_Hepsi" class="text-xs bg-gray-800 px-3.5 py-2 rounded-xl text-gray-300 font-semibold hover:text-white transition">Tümü</button>
+                            <button onclick="window.filterApps('Aktif')" id="btnFilter_Aktif" class="text-xs bg-[#C5A059]/20 border border-[#C5A059] text-[#C5A059] px-3.5 py-2 rounded-xl font-semibold transition">Aktif Randevular</button>
+                            <button onclick="window.filterApps('Gecmis')" id="btnFilter_Gecmis" class="text-xs bg-gray-800 px-3.5 py-2 rounded-xl text-gray-300 font-semibold hover:text-white transition">Geçmiş Arşiv (Tamamlanan / İptal)</button>
                         </div>
                     </div>
 
@@ -245,7 +243,7 @@
                                         <th class="p-4">Seçilen Hizmetler</th>
                                         <th class="p-4">Tarih & Saat</th>
                                         <th class="p-4">Tutar & Süre</th>
-                                        <th class="p-4">Durum</th>
+                                        <th class="p-4">Durum / Arşiv</th>
                                         <th class="p-4 text-center">Aksiyon / Yanıt</th>
                                     </tr>
                                 </thead>
@@ -445,6 +443,7 @@
         let activeTab = 'dashboard';
         let revenueChartInstance = null;
         let activeReplyAppId = null;
+        let currentAppointmentFilter = 'Aktif';
 
         document.addEventListener('DOMContentLoaded', () => {
             updateLiveClock();
@@ -520,7 +519,7 @@
             if (badge) badge.innerText = pending;
 
             renderDashboard(apps, users);
-            renderAppointmentsTable(apps);
+            renderAppointmentsTable(apps, currentAppointmentFilter);
             renderServicesGrid(services);
             renderNotepadGrid(notepad);
             renderCustomersTable(users);
@@ -640,18 +639,35 @@
             });
         }
 
-        function renderAppointmentsTable(apps, filterStatus = 'Hepsi') {
+        window.filterApps = function(filterType) {
+            currentAppointmentFilter = filterType;
+            ['Hepsi', 'Aktif', 'Gecmis'].forEach(f => {
+                const btn = document.getElementById(`btnFilter_${f}`);
+                if (btn) {
+                    if (f === filterType) {
+                        btn.className = "text-xs bg-[#C5A059]/20 border border-[#C5A059] text-[#C5A059] px-3.5 py-2 rounded-xl font-semibold transition";
+                    } else {
+                        btn.className = "text-xs bg-gray-800 px-3.5 py-2 rounded-xl text-gray-300 font-semibold hover:text-white transition";
+                    }
+                }
+            });
+            renderAppointmentsTable(getStoredApps(), filterType);
+        };
+
+        function renderAppointmentsTable(apps, filterType = 'Aktif') {
             const tbody = document.getElementById('appTableBody');
             if (!tbody) return;
             tbody.innerHTML = '';
 
             let filtered = apps;
-            if (filterStatus !== 'Hepsi') {
-                filtered = apps.filter(a => a.status === filterStatus);
+            if (filterType === 'Aktif') {
+                filtered = apps.filter(a => a.status === 'Beklemede' || a.status === 'Onaylandı');
+            } else if (filterType === 'Gecmis') {
+                filtered = apps.filter(a => a.status === 'Tamamlandı' || a.status === 'İptal');
             }
 
             if (filtered.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="6" class="text-center py-6 text-gray-500">Kayıtlı randevu bulunmuyor.</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="6" class="text-center py-6 text-gray-500">Bu kategoride randevu bulunmuyor.</td></tr>';
                 return;
             }
 
@@ -696,7 +712,7 @@
                     </td>
                     <td class="p-4 text-center space-x-1">
                         <button onclick="window.updateAppStatus(${a.id}, 'Onaylandı')" class="p-2 bg-emerald-950/50 border border-emerald-800 text-emerald-400 rounded-lg hover:bg-emerald-900 transition" title="Onayla"><i class="fa-solid fa-check"></i></button>
-                        <button onclick="window.updateAppStatus(${a.id}, 'Tamamlandı')" class="p-2 bg-blue-950/50 border border-blue-800 text-blue-400 rounded-lg hover:bg-blue-900 transition" title="Tamamlandı İşaretle"><i class="fa-solid fa-flag-checkered"></i></button>
+                        <button onclick="window.updateAppStatus(${a.id}, 'Tamamlandı')" class="p-2 bg-blue-950/50 border border-blue-800 text-blue-400 rounded-lg hover:bg-blue-900 transition" title="Tamamlandı (Geçmişe Arşivle)"><i class="fa-solid fa-flag-checkered"></i></button>
                         <button onclick="window.openReplyModalForApp(${a.id})" class="p-2 bg-amber-950/50 border border-amber-800 text-amber-400 rounded-lg hover:bg-amber-900 transition" title="Not / Görsel"><i class="fa-solid fa-comment"></i></button>
                         <button onclick="window.updateAppStatus(${a.id}, 'İptal')" class="p-2 bg-red-950/50 border border-red-800 text-red-300 rounded-lg hover:bg-red-900 transition" title="İptal Et"><i class="fa-solid fa-xmark"></i></button>
                         <button onclick="window.deleteAppointment(${a.id})" class="p-2 bg-red-950/80 border border-red-800 text-red-300 rounded-lg hover:bg-red-900 transition" title="Kalıcı Olarak Sil"><i class="fa-solid fa-trash"></i></button>
@@ -713,11 +729,6 @@
             addAuditLog('Randevu Silindi', `#${id} ID'li randevu kalıcı olarak silindi.`);
             window.syncAllData();
             showToast('Randevu başarıyla silindi.', 'info');
-        };
-
-        window.filterApps = function(status) {
-            const apps = getStoredApps();
-            renderAppointmentsTable(apps, status);
         };
 
         window.updateAppStatus = function(id, newStatus) {
@@ -742,9 +753,9 @@
                 }
 
                 saveStoredApps(apps);
-                addAuditLog('Randevu Güncelleme', `#${id} ID'li randevu durumu "${newStatus}" yapıldı.`);
+                addAuditLog('Randevu Güncelleme', `#${id} ID'li randevu durumu "${newStatus}" yapıldı ve arşive işlendi.`);
                 window.syncAllData();
-                showToast(`Randevu durumu "${newStatus}" olarak güncellendi.`, 'success');
+                showToast(`Randevu "${newStatus}" olarak arşivlendi.`, 'success');
             }
         };
 
