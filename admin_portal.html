@@ -363,7 +363,7 @@
                     <div class="flex justify-between items-center border-b border-gray-800 pb-4">
                         <div>
                             <h1 class="text-2xl font-bold font-serif-title text-white">Portfolyo & Galeri Yönetimi</h1>
-                            <p class="text-xs text-gray-400 mt-1">Orijinal kalitesinde eklediğiniz fotoğraflar ana sayfadaki Portfolyo alanına anında yansır.</p>
+                            <p class="text-xs text-gray-400 mt-1">Eklediğiniz fotoğraflar orijinal boyutları ve kalitesiyle ana sayfadaki Portfolyo alanına yansır.</p>
                         </div>
                         <button onclick="window.openAddPortfolioModal()" class="gold-gradient text-black text-xs font-bold px-4 py-2.5 rounded-xl shadow hover:opacity-90 transition">
                             <i class="fa-solid fa-plus mr-1"></i> Yeni Fotoğraf Ekle
@@ -476,6 +476,7 @@
         </div>
     </div>
 
+    <!-- Portfolyo Ekleme Modalı (Orijinal Boyut & Çıkış Butonlu) -->
     <div id="portfolioModal" class="fixed inset-0 bg-black/80 backdrop-blur z-50 hidden flex items-center justify-center p-4">
         <div class="bg-[#121212] border border-[#C5A059]/40 rounded-3xl max-w-md w-full p-5 space-y-4 shadow-2xl relative max-h-[90vh] overflow-y-auto">
             <button onclick="window.closePortfolioModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-gray-800/80 hover:bg-red-950 hover:text-red-400 text-gray-300 flex items-center justify-center text-lg transition z-10">&times;</button>
@@ -486,24 +487,17 @@
                 <input type="text" id="modalPortTitle" placeholder="Örn: Sarı Balyaj & Ombre" class="w-full bg-[#0A0A0A] border border-gray-800 text-white p-2.5 rounded-xl text-xs focus:border-[#C5A059] focus:outline-none">
             </div>
             <div>
-                <label class="block text-[11px] font-semibold text-gray-400 mb-1">Cihazdan Fotoğraf Yükle (Orijinal)</label>
+                <label class="block text-[11px] font-semibold text-gray-400 mb-1">Cihazdan Fotoğraf Yükle (Orijinal Boyut)</label>
                 <input type="file" id="modalPortFile" accept="image/*" onchange="window.handlePortImageSelect()" class="w-full text-xs text-gray-400 file:mr-3 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-[#C5A059] file:text-black cursor-pointer">
             </div>
 
             <div id="portPreviewWrapper" class="hidden space-y-2 pt-1">
                 <div class="flex justify-between items-center">
-                    <span class="font-semibold text-gray-300 text-[11px]">Önizleme & Zoom</span>
-                    <span id="zoomPercentBadge" class="text-[10px] bg-[#C5A059]/20 text-[#C5A059] px-2 py-0.5 rounded-full font-bold">%100</span>
+                    <span class="font-semibold text-gray-300 text-[11px]">Orijinal Önizleme</span>
+                    <span class="text-[10px] bg-emerald-950 text-emerald-400 border border-emerald-800 px-2 py-0.5 rounded-full font-bold">Orijinal Boyut</span>
                 </div>
-                <div class="relative w-full h-56 bg-[#0A0A0A] rounded-2xl border border-gray-800 overflow-hidden flex items-center justify-center">
-                    <img id="portPreviewImg" src="" class="w-full h-full object-cover transition-transform duration-100 origin-center">
-                </div>
-                <div class="space-y-1 pt-1">
-                    <div class="flex justify-between text-[10px] text-gray-400">
-                        <span>Küçült (%20)</span>
-                        <span>Büyüt (%300)</span>
-                    </div>
-                    <input type="range" id="portZoomRange" min="0.2" max="3.0" step="0.05" value="1.0" oninput="window.updatePortZoom(this.value)" class="w-full accent-[#C5A059] cursor-pointer">
+                <div class="relative w-full h-44 bg-[#0A0A0A] rounded-2xl border border-gray-800 overflow-hidden flex items-center justify-center">
+                    <img id="portPreviewImg" src="" class="max-h-full max-w-full object-contain">
                 </div>
             </div>
 
@@ -556,17 +550,16 @@
         ];
 
         const DEFAULT_PORTFOLIO = [
-            { id: 'p1', title: 'Sarı Balyaj', image: 'https://images.unsplash.com/photo-1560869713-7d0a29430803?auto=format&fit=crop&w=600&q=80' },
-            { id: 'p2', title: 'Kahve Tonları', image: 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=600&q=80' },
-            { id: 'p3', title: 'Zarif Topuz', image: 'https://images.unsplash.com/photo-1527799820374-dcf8d9d4a388?auto=format&fit=crop&w=600&q=80' },
-            { id: 'p4', title: 'At Kuyruğu', image: 'https://images.unsplash.com/photo-1519699047748-de8e457a634e?auto=format&fit=crop&w=600&q=80' }
+            { id: 'p1', title: 'Sarı Balyaj', image: 'https://images.unsplash.com/photo-1560869713-7d0a29430803?auto=format&fit=crop&w=1200&q=80' },
+            { id: 'p2', title: 'Kahve Tonları', image: 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=1200&q=80' },
+            { id: 'p3', title: 'Zarif Topuz', image: 'https://images.unsplash.com/photo-1527799820374-dcf8d9d4a388?auto=format&fit=crop&w=1200&q=80' },
+            { id: 'p4', title: 'At Kuyruğu', image: 'https://images.unsplash.com/photo-1519699047748-de8e457a634e?auto=format&fit=crop&w=1200&q=80' }
         ];
 
         let activeTab = 'dashboard';
         let revenueChartInstance = null;
         let activeReplyAppId = null;
         let currentAppointmentFilter = 'Aktif';
-        let currentPortScale = 1.0;
 
         window.loginToPortal = function() {
             const passInput = document.getElementById('portalPassInput');
@@ -600,9 +593,6 @@
             document.getElementById('modalPortFile').value = "";
             document.getElementById('portPreviewWrapper').classList.add('hidden');
             document.getElementById('portPreviewImg').src = "";
-            document.getElementById('portZoomRange').value = "1.0";
-            currentPortScale = 1.0;
-            document.getElementById('zoomPercentBadge').innerText = "%100";
             document.getElementById('portfolioModal').classList.remove('hidden');
         };
 
@@ -619,24 +609,12 @@
                 const reader = new FileReader();
                 reader.onload = (e) => {
                     previewImg.src = e.target.result;
-                    currentPortScale = 1.0;
-                    document.getElementById('portZoomRange').value = "1.0";
-                    document.getElementById('zoomPercentBadge').innerText = "%100";
-                    previewImg.style.transform = `scale(1)`;
                     previewWrapper.classList.remove('hidden');
                 };
                 reader.readAsDataURL(fileInput.files[0]);
             } else {
                 previewWrapper.classList.add('hidden');
             }
-        };
-
-        window.updatePortZoom = function(val) {
-            currentPortScale = parseFloat(val);
-            const img = document.getElementById('portPreviewImg');
-            const badge = document.getElementById('zoomPercentBadge');
-            if (img) img.style.transform = `scale(${currentPortScale})`;
-            if (badge) badge.innerText = `%${Math.round(currentPortScale * 100)}`;
         };
 
         window.savePortfolioForm = function() {
@@ -918,11 +896,22 @@
 
         window.deleteAppointment = function(id) {
             let apps = getStoredApps();
+            const target = apps.find(a => a.id === id);
+            
+            // Eğer randevuda kullanılmış kupon varsa ve iptal/silme yapılıyorsa kuponu iade et
+            if (target && target.usedCouponObject && target.status !== 'Müşteri İptali' && target.status !== 'İptal') {
+                let coupons = getStoredCoupons();
+                if (new Date().getTime() < target.usedCouponObject.expiresAt) {
+                    coupons.push(target.usedCouponObject);
+                    saveStoredCoupons(coupons);
+                }
+            }
+
             apps = apps.filter(a => a.id !== id);
             saveStoredApps(apps);
             addAuditLog('Randevu Silindi', `#${id} ID'li randevu kalıcı olarak silindi.`);
             window.syncAllData();
-            showToast('Randevu başarıyla silindi.', 'info');
+            showToast('Randevu başarıyla silindi ve kupon iade edildi.', 'info');
         };
 
         window.updateAppStatus = function(id, newStatus) {
@@ -931,6 +920,17 @@
             if (target) {
                 const oldStatus = target.status;
                 target.status = newStatus;
+
+                // Eğer admin randevuyu iptal ediyorsa ve kullanılmış kuponu varsa kuponu iade et
+                if ((newStatus === 'İptal' || newStatus === 'Müşteri İptali') && oldStatus !== 'İptal' && oldStatus !== 'Müşteri İptali') {
+                    if (target.usedCouponObject) {
+                        let coupons = getStoredCoupons();
+                        if (new Date().getTime() < target.usedCouponObject.expiresAt) {
+                            coupons.push(target.usedCouponObject);
+                            saveStoredCoupons(coupons);
+                        }
+                    }
+                }
 
                 if (newStatus === 'Tamamlandı' && oldStatus !== 'Tamamlandı') {
                     let amountToAdd = target.totalPrice || 0;
