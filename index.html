@@ -811,7 +811,7 @@
             if (clientActiveAppTab === 'aktif') {
                 filtered = myApps.filter(a => a.status === 'Beklemede' || a.status === 'Onaylandı');
             } else {
-                filtered = myApps.filter(a => a.status === 'Tamamlandı' || a.status === 'İptal');
+                filtered = myApps.filter(a => a.status === 'Tamamlandı' || a.status === 'İptal' || a.status === 'Müşteri İptali');
             }
 
             container.innerHTML = '';
@@ -830,17 +830,46 @@
                         <p class="text-xs text-gray-400">Not: ${app.note || 'Yok'}</p>
                         ${app.reply ? `<p class="text-xs text-emerald-400 mt-2 bg-emerald-950/40 border border-emerald-900 p-3 rounded-xl"><i class="fa-solid fa-reply mr-1"></i> <b>Yanıt:</b> ${app.reply}</p>` : ''}
                     </div>
-                    <div class="flex flex-col items-end gap-2">
+                    <div class="flex flex-col sm:flex-row items-end sm:items-center gap-3">
                         <span class="px-3.5 py-1.5 rounded-full text-xs font-semibold ${
                             app.status === 'Onaylandı' ? 'bg-emerald-900/50 text-emerald-300 border border-emerald-800' :
                             app.status === 'Tamamlandı' ? 'bg-blue-900/50 text-blue-300 border border-blue-800' :
-                            app.status === 'İptal' ? 'bg-red-900/50 text-red-300 border border-red-800' :
+                            app.status === 'Müşteri İptali' || app.status === 'İptal' ? 'bg-red-900/50 text-red-300 border border-red-800' :
                             'bg-amber-900/50 text-amber-300 border border-amber-800'
                         }">${app.status}</span>
+                        ${(app.status === 'Beklemede' || app.status === 'Onaylandı') ? `
+                            <button onclick="window.cancelCustomerAppointment(${app.id})" class="text-xs bg-red-950/60 border border-red-800/80 text-red-400 hover:bg-red-900 hover:text-white px-3 py-1.5 rounded-xl font-semibold transition flex items-center gap-1.5 shadow">
+                                <i class="fa-solid fa-xmark"></i> Randevuyu İptal Et
+                            </button>
+                        ` : ''}
                     </div>
                 `;
                 container.appendChild(div);
             });
+        };
+
+        window.cancelCustomerAppointment = function(appId) {
+            let apps = getApps();
+            const target = apps.find(a => a.id === appId);
+            if (target) {
+                target.status = 'Müşteri İptali';
+                saveApps(apps);
+
+                try {
+                    let logs = JSON.parse(localStorage.getItem('nes_audit_logs')) || [];
+                    logs.unshift({
+                        timestamp: new Date().toLocaleString('tr-TR'),
+                        action: 'Müşteri İptali',
+                        details: `"${currentUser}" kendi randevusunu (#${appId}) iptal etti.`,
+                        user: currentUser
+                    });
+                    localStorage.setItem('nes_audit_logs', JSON.stringify(logs));
+                } catch(e){}
+
+                showToast('Randevunuz başarıyla iptal edildi.', 'warning');
+                window.updateTimeSlotAvailability();
+                window.renderUserAppointments();
+            }
         };
 
         window.openLoginModal = function() {
