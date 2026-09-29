@@ -261,7 +261,7 @@
             <div class="flex flex-col sm:flex-row justify-between items-center gap-4 border-b border-gray-800 pb-6">
                 <div>
                     <span class="gold-text text-sm tracking-widest uppercase">Müşteri Paneli</span>
-                    <h2 class="text-3xl font-bold font-serif-title gold-text mt-2">Randevularım & Saç Kartım</h2>
+                    <h2 class="text-3xl font-bold font-serif-title gold-text mt-2">Randevularım & Geçmiş Arşiv</h2>
                     <p id="userWelcomeSub" class="text-gray-400 text-sm mt-1"></p>
                 </div>
                 <button onclick="window.renderUserAppointments()" class="text-xs bg-[#C5A059]/20 border border-[#C5A059] text-[#C5A059] px-4 py-2.5 rounded-xl hover:bg-[#C5A059] hover:text-black transition font-semibold flex items-center gap-2 shrink-0">
@@ -285,6 +285,12 @@
                         <span id="clientWidgetFormula" class="text-[#C5A059] font-mono">-</span>
                     </div>
                 </div>
+            </div>
+
+            <!-- Tab Seçimi: Aktif vs Geçmiş -->
+            <div class="flex gap-2 border-b border-gray-800 pb-3">
+                <button onclick="window.switchClientAppTab('aktif')" id="clientTabAktif" class="text-xs bg-[#C5A059]/20 border border-[#C5A059] text-[#C5A059] px-4 py-2 rounded-xl font-semibold transition">Aktif Randevularım</button>
+                <button onclick="window.switchClientAppTab('gecmis')" id="clientTabGecmis" class="text-xs bg-gray-800 text-gray-300 hover:text-white px-4 py-2 rounded-xl font-semibold transition">Geçmiş Arşiv (Tamamlanan / İptal)</button>
             </div>
 
             <div id="myAppointmentsContainer" class="space-y-4"></div>
@@ -385,6 +391,7 @@
         let currentUser = localStorage.getItem('nes_logged_user') || null;
         const ALL_TIME_SLOTS = ['10:00', '12:00', '14:00', '16:00', '18:00'];
         let selectedServiceIds = [];
+        let clientActiveAppTab = 'aktif';
 
         const DEFAULT_SERVICES_DATA = [
             { id: 'ombre', name: 'Ombre Tasarımı', price: 3500, durationMin: 180 },
@@ -693,6 +700,21 @@
             }
         };
 
+        window.switchClientAppTab = function(tabName) {
+            clientActiveAppTab = tabName;
+            const btnAktif = document.getElementById('clientTabAktif');
+            const btnGecmis = document.getElementById('clientTabGecmis');
+
+            if (tabName === 'aktif') {
+                if (btnAktif) btnAktif.className = "text-xs bg-[#C5A059]/20 border border-[#C5A059] text-[#C5A059] px-4 py-2 rounded-xl font-semibold transition";
+                if (btnGecmis) btnGecmis.className = "text-xs bg-gray-800 text-gray-300 hover:text-white px-4 py-2 rounded-xl font-semibold transition";
+            } else {
+                if (btnAktif) btnAktif.className = "text-xs bg-gray-800 text-gray-300 hover:text-white px-4 py-2 rounded-xl font-semibold transition";
+                if (btnGecmis) btnGecmis.className = "text-xs bg-[#C5A059]/20 border border-[#C5A059] text-[#C5A059] px-4 py-2 rounded-xl font-semibold transition";
+            }
+            window.renderUserAppointments();
+        };
+
         window.handleBooking = function(e) {
             e.preventDefault();
             const warningEl = document.getElementById('bookingWarning');
@@ -785,13 +807,20 @@
             const apps = getApps();
             const myApps = apps.filter(a => a.name && currentUser && a.name.toLowerCase() === currentUser.toLowerCase());
             
+            let filtered = myApps;
+            if (clientActiveAppTab === 'aktif') {
+                filtered = myApps.filter(a => a.status === 'Beklemede' || a.status === 'Onaylandı');
+            } else {
+                filtered = myApps.filter(a => a.status === 'Tamamlandı' || a.status === 'İptal');
+            }
+
             container.innerHTML = '';
-            if (myApps.length === 0) {
-                container.innerHTML = '<p class="text-center text-gray-400 py-6 text-sm">Randevunuz bulunmuyor.</p>';
+            if (filtered.length === 0) {
+                container.innerHTML = `<p class="text-center text-gray-400 py-6 text-sm">${clientActiveAppTab === 'aktif' ? 'Aktif randevunuz bulunmuyor.' : 'Geçmiş arşivinizde randevu bulunmuyor.'}</p>`;
                 return;
             }
 
-            myApps.forEach(app => {
+            filtered.forEach(app => {
                 const div = document.createElement('div');
                 div.className = "bg-[#0A0A0A] p-6 rounded-2xl border border-gray-800 flex flex-col md:flex-row justify-between items-start md:items-center gap-4";
                 div.innerHTML = `
