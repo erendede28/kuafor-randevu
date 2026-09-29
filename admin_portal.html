@@ -143,6 +143,7 @@
             </div>
         </aside>
 
+        <!-- Main Workspace -->
         <main class="flex-1 flex flex-col min-w-0 overflow-y-auto">
             
             <header class="h-16 bg-[#121212]/80 backdrop-blur border-b border-gray-800 px-6 flex items-center justify-between sticky top-0 z-30">
@@ -161,7 +162,6 @@
 
             <div class="p-6 md:p-8 space-y-8 max-w-7xl mx-auto w-full">
                 
-                <!-- Dashboard View -->
                 <div id="view_dashboard" class="space-y-6">
                     <div>
                         <h1 class="text-2xl font-bold font-serif-title text-white">Yönetim Gösterge Paneli</h1>
@@ -335,7 +335,7 @@
                     <div class="flex justify-between items-center border-b border-gray-800 pb-4">
                         <div>
                             <h1 class="text-2xl font-bold font-serif-title text-white">Portfolyo & Galeri Yönetimi</h1>
-                            <p class="text-xs text-gray-400 mt-1">Buradan eklediğiniz veya sildiğiniz fotoğraflar ana sayfadaki Portfolyo alanına anında yansır.</p>
+                            <p class="text-xs text-gray-400 mt-1">Orijinal kalitesinde eklediğiniz fotoğraflar ana sayfadaki Portfolyo alanına anında yansır.</p>
                         </div>
                         <button onclick="window.openAddPortfolioModal()" class="gold-gradient text-black text-xs font-bold px-4 py-2.5 rounded-xl shadow hover:opacity-90 transition">
                             <i class="fa-solid fa-plus mr-1"></i> Yeni Fotoğraf Ekle
@@ -365,7 +365,6 @@
         </main>
     </div>
 
-    <!-- Service Modal -->
     <div id="serviceEditModal" class="fixed inset-0 bg-black/80 backdrop-blur z-50 hidden flex items-center justify-center p-4">
         <div class="bg-[#121212] border border-[#C5A059]/40 rounded-3xl max-w-md w-full p-6 space-y-4 shadow-2xl relative">
             <button onclick="window.closeServiceModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white text-2xl">&times;</button>
@@ -393,7 +392,6 @@
         </div>
     </div>
 
-    <!-- Notepad Modal -->
     <div id="notepadModal" class="fixed inset-0 bg-black/80 backdrop-blur z-50 hidden flex items-center justify-center p-4">
         <div class="bg-[#121212] border border-[#C5A059]/40 rounded-3xl max-w-md w-full p-6 space-y-4 shadow-2xl relative">
             <button onclick="window.closeNotepadModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white text-2xl">&times;</button>
@@ -419,52 +417,39 @@
         </div>
     </div>
 
-    <!-- Portfolio Modal with Full-Frame Live Zoom Preview -->
+    <!-- Orijinal Görsel Yükleme Modalı -->
     <div id="portfolioModal" class="fixed inset-0 bg-black/80 backdrop-blur z-50 hidden flex items-center justify-center p-4">
-        <div class="bg-[#121212] border border-[#C5A059]/40 rounded-3xl max-w-md w-full p-6 space-y-4 shadow-2xl relative">
-            <button onclick="window.closePortfolioModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white text-2xl">&times;</button>
-            <h3 class="text-xl font-bold font-serif-title text-white">Galeriye Fotoğraf Ekle</h3>
+        <div class="bg-[#121212] border border-[#C5A059]/40 rounded-3xl max-w-md w-full p-5 space-y-4 shadow-2xl relative max-h-[90vh] overflow-y-auto">
+            <button onclick="window.closePortfolioModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-gray-800/80 hover:bg-red-950 hover:text-red-400 text-gray-300 flex items-center justify-center text-lg transition z-10" title="Kapat">&times;</button>
+            <h3 class="text-lg font-bold font-serif-title text-white pr-8">Galeriye Orijinal Fotoğraf Ekle</h3>
             
             <div>
-                <label class="block text-xs font-semibold text-gray-400 mb-1">Tasarım / Çalışma Başlığı</label>
-                <input type="text" id="modalPortTitle" placeholder="Örn: Sarı Balyaj & Ombre" class="w-full bg-[#0A0A0A] border border-gray-800 text-white p-3 rounded-xl text-xs focus:border-[#C5A059] focus:outline-none">
+                <label class="block text-[11px] font-semibold text-gray-400 mb-1">Tasarım / Çalışma Başlığı</label>
+                <input type="text" id="modalPortTitle" placeholder="Örn: Sarı Balyaj & Ombre" class="w-full bg-[#0A0A0A] border border-gray-800 text-white p-2.5 rounded-xl text-xs focus:border-[#C5A059] focus:outline-none">
             </div>
             <div>
-                <label class="block text-xs font-semibold text-gray-400 mb-1">Görsel URL Adresi</label>
-                <input type="url" id="modalPortUrl" placeholder="https://..." onchange="window.handlePortImageSelect()" oninput="window.handlePortImageSelect()" class="w-full bg-[#0A0A0A] border border-gray-800 text-white p-3 rounded-xl text-xs focus:border-[#C5A059] focus:outline-none">
-            </div>
-            <div class="text-center text-xs text-gray-500 font-semibold uppercase tracking-wider">veya</div>
-            <div>
-                <label class="block text-xs font-semibold text-gray-400 mb-1">Cihazdan Fotoğraf Yükle</label>
-                <input type="file" id="modalPortFile" accept="image/*" onchange="window.handlePortImageSelect()" class="w-full text-xs text-gray-400 file:mr-3 file:py-2 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-[#C5A059] file:text-black cursor-pointer">
+                <label class="block text-[11px] font-semibold text-gray-400 mb-1">Cihazdan Fotoğraf Yükle</label>
+                <input type="file" id="modalPortFile" accept="image/*" onchange="window.handlePortImageSelect()" class="w-full text-xs text-gray-400 file:mr-3 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-[#C5A059] file:text-black cursor-pointer">
             </div>
 
-            <div id="portPreviewWrapper" class="hidden space-y-3 pt-2">
-                <div class="flex justify-between items-center text-xs text-gray-400">
-                    <span class="font-semibold text-gray-300">Ölçek & Yakınlaştırma (Zoom)</span>
-                    <span id="portZoomValDisplay" class="font-mono text-[#C5A059] font-bold">%100</span>
-                </div>
-                <!-- Dikey saç resimlerinin tam orijinal oranını koruyan kadraj kutusu -->
-                <div class="relative w-full h-[380px] bg-[#0A0A0A] rounded-2xl border border-gray-800 overflow-hidden flex items-center justify-center p-2">
-                    <img id="portPreviewImg" src="" class="max-h-full max-w-full object-contain transition-transform duration-100 origin-center" style="transform: scale(1);">
-                </div>
-                <div class="space-y-1">
-                    <div class="flex justify-between text-[10px] text-gray-500 font-semibold uppercase">
-                        <span><i class="fa-solid fa-magnifying-glass-minus mr-1"></i> Küçült (%20)</span>
-                        <span>Orijinal Oran (%100)</span>
-                        <span>Büyüt (%300) <i class="fa-solid fa-magnifying-glass-plus ml-1"></i></span>
-                    </div>
-                    <input type="range" id="modalPortZoom" min="0.2" max="3" step="0.05" value="1" oninput="window.updatePortZoom(this.value)" class="w-full accent-[#C5A059] cursor-pointer">
+            <div id="portPreviewWrapper" class="hidden space-y-2 pt-1">
+                <span class="font-semibold text-gray-300 text-[11px] block">Önizleme (Orijinal Yükleme)</span>
+                <div class="relative w-full h-60 bg-[#0A0A0A] rounded-2xl border border-gray-800 overflow-hidden flex items-center justify-center">
+                    <img id="portPreviewImg" src="" class="max-h-full max-w-full object-contain">
                 </div>
             </div>
 
-            <button onclick="window.savePortfolioForm()" class="w-full gold-gradient text-black font-bold py-3 rounded-xl text-xs uppercase tracking-wider shadow">
-                Galeriye Kaydet & Yayınla
-            </button>
+            <div class="flex gap-2 pt-2">
+                <button onclick="window.closePortfolioModal()" class="w-1/3 bg-gray-800 hover:bg-gray-700 text-gray-300 font-semibold py-2.5 rounded-xl text-xs transition">
+                    İptal
+                </button>
+                <button onclick="window.savePortfolioForm()" class="w-2/3 gold-gradient text-black font-bold py-2.5 rounded-xl text-xs uppercase tracking-wider shadow hover:opacity-90 transition">
+                    Kaydet & Yayınla
+                </button>
+            </div>
         </div>
     </div>
 
-    <!-- Reply Modal -->
     <div id="replyModal" class="fixed inset-0 bg-black/80 backdrop-blur z-50 hidden flex items-center justify-center p-4">
         <div class="bg-[#121212] border border-[#C5A059]/40 rounded-3xl max-w-2xl w-full p-6 space-y-4 shadow-2xl relative">
             <button onclick="window.closeReplyModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white text-2xl">&times;</button>
@@ -517,7 +502,6 @@
         let revenueChartInstance = null;
         let activeReplyAppId = null;
         let currentAppointmentFilter = 'Aktif';
-        let portZoomLevel = 1;
 
         window.loginToPortal = function() {
             const passInput = document.getElementById('portalPassInput');
@@ -546,22 +530,11 @@
             showToast('Güvenli çıkış yapıldı.', 'info');
         };
 
-        window.updatePortZoom = function(val) {
-            portZoomLevel = parseFloat(val);
-            const img = document.getElementById('portPreviewImg');
-            const display = document.getElementById('portZoomValDisplay');
-            if (img) img.style.transform = `scale(${portZoomLevel})`;
-            if (display) display.innerText = `%${Math.round(portZoomLevel * 100)}`;
-        };
-
         window.openAddPortfolioModal = function() {
             document.getElementById('modalPortTitle').value = "";
-            document.getElementById('modalPortUrl').value = "";
             document.getElementById('modalPortFile').value = "";
             document.getElementById('portPreviewWrapper').classList.add('hidden');
             document.getElementById('portPreviewImg').src = "";
-            portZoomLevel = 1;
-            window.updatePortZoom(1);
             document.getElementById('portfolioModal').classList.remove('hidden');
         };
 
@@ -570,30 +543,17 @@
         };
 
         window.handlePortImageSelect = function() {
-            const urlInput = document.getElementById('modalPortUrl').value.trim();
             const fileInput = document.getElementById('modalPortFile');
             const previewWrapper = document.getElementById('portPreviewWrapper');
             const previewImg = document.getElementById('portPreviewImg');
-            const zoomSlider = document.getElementById('modalPortZoom');
-
-            const setPreview = (src) => {
-                if (src) {
-                    previewImg.src = src;
-                    previewWrapper.classList.remove('hidden');
-                    portZoomLevel = 1;
-                    if (zoomSlider) zoomSlider.value = 1;
-                    window.updatePortZoom(1);
-                } else {
-                    previewWrapper.classList.add('hidden');
-                }
-            };
 
             if (fileInput.files && fileInput.files[0]) {
                 const reader = new FileReader();
-                reader.onload = (e) => setPreview(e.target.result);
+                reader.onload = (e) => {
+                    previewImg.src = e.target.result;
+                    previewWrapper.classList.remove('hidden');
+                };
                 reader.readAsDataURL(fileInput.files[0]);
-            } else if (urlInput) {
-                setPreview(urlInput);
             } else {
                 previewWrapper.classList.add('hidden');
             }
@@ -604,68 +564,22 @@
             const previewImg = document.getElementById('portPreviewImg');
 
             if (!previewImg.src || previewImg.src === window.location.href) {
-                return showToast('Lütfen bir görsel URL adresi girin veya dosya seçin.', 'warning');
+                return showToast('Lütfen cihazınızdan bir fotoğraf dosyası seçin.', 'warning');
             }
 
-            const img = new Image();
-            img.crossOrigin = "anonymous";
-            img.onload = function() {
-                const canvas = document.createElement('canvas');
-                
-                // Resmin orijinal dikey/yatay en-boy oranını tamamen koruyoruz
-                let targetW = img.naturalWidth || 800;
-                let targetH = img.naturalHeight || 1000;
-                
-                const maxDim = 1200;
-                if (targetW > maxDim || targetH > maxDim) {
-                    if (targetW > targetH) {
-                        targetH = Math.round((targetH * maxDim) / targetW);
-                        targetW = maxDim;
-                    } else {
-                        targetW = Math.round((targetW * maxDim) / targetH);
-                        targetH = maxDim;
-                    }
-                }
-
-                canvas.width = targetW;
-                canvas.height = targetH;
-                const ctx = canvas.getContext('2d');
-
-                ctx.fillStyle = '#0A0A0A';
-                ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-                const scale = portZoomLevel;
-                const drawW = canvas.width * scale;
-                const drawH = canvas.height * scale;
-                const offsetX = (canvas.width - drawW) / 2;
-                const offsetY = (canvas.height - drawH) / 2;
-
-                ctx.drawImage(img, offsetX, offsetY, drawW, drawH);
-
-                let imgSrc;
-                try {
-                    imgSrc = canvas.toDataURL('image/jpeg', 0.90);
-                } catch(e) {
-                    imgSrc = previewImg.src;
-                }
-
-                let portfolio = getStoredPortfolio();
-                const newItem = {
-                    id: 'port_' + Date.now(),
-                    title: title,
-                    image: imgSrc
-                };
-                portfolio.unshift(newItem);
-                saveStoredPortfolio(portfolio);
-                addAuditLog('Portfolyo Eklendi', `"${title}" dikey/orijinal oran korunarak galeriye eklendi.`);
-                window.closePortfolioModal();
-                window.syncAllData();
-                showToast('Fotoğraf orijinal oranı korunarak galeriye eklendi.', 'success');
+            let portfolio = getStoredPortfolio();
+            const newItem = {
+                id: 'port_' + Date.now(),
+                title: title,
+                image: previewImg.src // Orijinal tam çözünürlüklü görsel
             };
-            img.onerror = function() {
-                showToast('Görsel yüklenirken hata oluştu. Lütfen geçerli bir bağlantı veya dosya kullanın.', 'warning');
-            };
-            img.src = previewImg.src;
+
+            portfolio.unshift(newItem);
+            saveStoredPortfolio(portfolio);
+            addAuditLog('Portfolyo Eklendi', `"${title}" orijinal görseli galeriye eklendi.`);
+            window.closePortfolioModal();
+            window.syncAllData();
+            showToast('Orijinal fotoğraf galeriye başarıyla eklendi.', 'success');
         };
 
         window.switchTab = function(tabName) {
@@ -708,8 +622,6 @@
             renderSpendingTable(users);
             renderPortfolioGrid(portfolio);
             renderAuditLogs();
-
-            showToast('Veriler başarıyla yenilendi.', 'success');
         };
 
         function getStoredApps() {
@@ -1248,8 +1160,8 @@
                 const card = document.createElement('div');
                 card.className = "bg-[#121212] border border-gray-800 hover:border-[#C5A059]/60 rounded-2xl overflow-hidden flex flex-col justify-between transition group";
                 card.innerHTML = `
-                    <div class="h-44 overflow-hidden relative">
-                        <img src="${item.image}" alt="${item.title || 'Portfolyo'}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300" onerror="this.src='https://placehold.co/600x400/121212/C5A059?text=Gorsel+Yok'">
+                    <div class="h-48 overflow-hidden relative bg-[#0A0A0A] flex items-center justify-center">
+                        <img src="${item.image}" alt="${item.title || 'Portfolyo'}" class="max-h-full max-w-full object-contain group-hover:scale-105 transition duration-300" onerror="this.src='https://placehold.co/600x400/121212/C5A059?text=Gorsel+Yok'">
                     </div>
                     <div class="p-3 flex items-center justify-between gap-2 border-t border-gray-800">
                         <span class="text-xs font-semibold text-white truncate">${item.title || 'Fotoğraf'}</span>
