@@ -309,7 +309,7 @@
                 <div>
                     <span class="gold-text text-sm tracking-widest uppercase">VIP Ayrıcalıklar</span>
                     <h2 class="text-3xl font-bold font-serif-title gold-text mt-2">Kupon Bilgilerim</h2>
-                    <p class="text-gray-400 text-sm mt-1">Salonumuz tarafından size tanımlanan aktif indirim kuponları ve süre sayaçları.</p>
+                    <p class="text-gray-400 text-sm mt-1">Salonumuz tarafından size tanımlanan aktif indirim kuponları ve süre sayaçları. <b>Kuponun üzerine tıklayarak sepete otomatik ekleyebilirsiniz.</b></p>
                 </div>
                 <button onclick="window.renderCustomerCoupons()" class="text-xs bg-[#C5A059]/20 border border-[#C5A059] text-[#C5A059] px-4 py-2.5 rounded-xl hover:bg-[#C5A059] hover:text-black transition font-semibold flex items-center gap-2">
                     <i class="fa-solid fa-rotate"></i> Yenile
@@ -337,8 +337,8 @@
                     </p>
                     <div class="flex flex-col gap-3 text-gray-300 text-sm">
                         <p class="flex items-center gap-2"><i class="fa-solid fa-phone gold-text"></i> +90 (216) 000 00 00</p>
-                        <p class="flex items-center gap-2"><i class="fa-solid fa-calendar-days gold-text"></i> <strong>Açık Günler:</strong> Pazartesi - Pazar</p>
-                        <p class="flex items-center gap-2"><i class="fa-solid fa-clock gold-text"></i> <strong>Çalışma Saatleri:</strong> 10:00 - 19:00</p>
+                        <p class="flex items-center gap-2"><i class="fa-solid fa-calendar-days gold-text"></i> <b>Açık Günler:</b> Pazartesi - Pazar</p>
+                        <p class="flex items-center gap-2"><i class="fa-solid fa-clock gold-text"></i> <b>Çalışma Saatleri:</b> 10:00 - 19:00</p>
                     </div>
                 </div>
                 <div class="h-96 rounded-3xl overflow-hidden border border-[#C5A059]/30 shadow-2xl bg-white relative">
@@ -612,10 +612,14 @@
             if (randevuSec) randevuSec.scrollIntoView({ behavior: 'smooth' });
         };
 
-        window.applyCouponCode = function() {
+        window.applyCouponCode = function(codeToApply = null) {
             const input = document.getElementById('bCouponCode');
             const feedback = document.getElementById('couponFeedback');
             if (!input || !feedback) return;
+
+            if (codeToApply) {
+                input.value = codeToApply;
+            }
 
             const code = input.value.trim().toUpperCase();
             if (!currentUser) {
@@ -655,6 +659,13 @@
                 feedback.className = "text-xs block font-medium text-red-400";
                 updateBasketSummary();
             }
+        };
+
+        window.useCouponDirectly = function(couponCode) {
+            const randevuSec = document.getElementById('randevu');
+            if (randevuSec) randevuSec.scrollIntoView({ behavior: 'smooth' });
+            window.applyCouponCode(couponCode);
+            showToast(`✓ ${couponCode} kuponu sepete eklendi!`, 'success');
         };
 
         function updateBasketSummary() {
@@ -833,18 +844,22 @@
                 const isExpired = timeLeft <= 0;
 
                 const card = document.createElement('div');
-                card.className = `bg-[#0A0A0A] border p-5 rounded-2xl flex flex-col justify-between space-y-3 ${isExpired ? 'border-red-900/60 opacity-60' : 'border-[#C5A059]/40'}`;
+                card.className = `bg-[#0A0A0A] border p-5 rounded-2xl flex flex-col justify-between space-y-3 cursor-pointer hover:border-[#C5A059] transition ${isExpired ? 'border-red-900/60 opacity-60' : 'border-[#C5A059]/40'}`;
                 
+                if (!isExpired) {
+                    card.onclick = () => window.useCouponDirectly(c.code);
+                }
+
                 card.innerHTML = `
                     <div class="flex justify-between items-start">
                         <div>
-                            <span class="text-[10px] text-gray-500 uppercase tracking-wider block font-semibold">VIP İndirim Kuponu</span>
+                            <span class="text-[10px] text-gray-500 uppercase tracking-wider block font-semibold">VIP İndirim Kuponu (Kullanmak için tıkla)</span>
                             <h3 class="text-xl font-bold font-serif-title gold-text mt-0.5">${c.code}</h3>
                         </div>
                         <span class="text-sm font-bold bg-[#C5A059]/20 text-[#C5A059] px-3 py-1 rounded-full">%${c.discountPercent} İndirim</span>
                     </div>
                     <div class="text-xs space-y-1 text-gray-300">
-                        <p><strong>Durum:</strong> ${isExpired ? '<span class="text-red-400 font-semibold">Süresi Doldu</span>' : '<span class="text-emerald-400 font-semibold">Aktif (7 Gün Geçerli)</span>'}</p>
+                        <p><strong>Durum:</strong> ${isExpired ? '<span class="text-red-400 font-semibold">Süresi Doldu</span>' : '<span class="text-emerald-400 font-semibold">Aktif (Sepete eklemek için tıkla)</span>'}</p>
                         <p class="font-mono text-amber-400 countdown-timer" data-expires="${c.expiresAt}">Kalan Süre: Hesaplanıyor...</p>
                     </div>
                 `;
@@ -987,7 +1002,7 @@
                 apps.push(newRecord);
                 saveApps(apps);
 
-                // Kullanılan kuponu kalıcı olarak sil (tek kullanımlık hale getir)
+                // Kullanılan kuponu kalıcı olarak sil (tek kullanımlık)
                 if (appliedCouponName) {
                     let coupons = [];
                     try { coupons = JSON.parse(localStorage.getItem('nes_customer_coupons')) || []; } catch(e){}
