@@ -319,6 +319,7 @@
                                         <th class="p-4">Yıl Bazlı Detay</th>
                                         <th class="p-4">Ay Bazlı Detay</th>
                                         <th class="p-4">Gün Bazlı Detay</th>
+                                        <th class="p-4 text-center">İşlem / Temizle</th>
                                     </tr>
                                 </thead>
                                 <tbody id="spendingTableBody" class="divide-y divide-gray-800/80"></tbody>
@@ -663,7 +664,7 @@
             if (filterType === 'Aktif') {
                 filtered = apps.filter(a => a.status === 'Beklemede' || a.status === 'Onaylandı');
             } else if (filterType === 'Gecmis') {
-                filtered = apps.filter(a => a.status === 'Tamamlandı' || a.status === 'İptal');
+                filtered = apps.filter(a => a.status === 'Tamamlandı' || a.status === 'İptal' || a.status === 'Müşteri İptali');
             }
 
             if (filtered.length === 0) {
@@ -706,6 +707,7 @@
                         <span class="px-2.5 py-1 rounded-full text-[10px] font-bold ${
                             a.status === 'Onaylandı' ? 'bg-emerald-950/60 text-emerald-400 border border-emerald-800' :
                             a.status === 'Tamamlandı' ? 'bg-blue-950/60 text-blue-400 border border-blue-800' :
+                            a.status === 'Müşteri İptali' ? 'bg-red-950/90 text-red-300 border border-red-600 font-extrabold' :
                             a.status === 'İptal' ? 'bg-red-950/60 text-red-400 border border-red-800' :
                             'bg-amber-950/60 text-amber-400 border border-amber-800'
                         }">${a.status}</span>
@@ -1086,7 +1088,7 @@
             try { spendingMap = JSON.parse(localStorage.getItem('nes_spending_records')) || {}; } catch(e){}
 
             if (!users || users.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="5" class="text-center py-6 text-gray-500">Veri yok.</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="6" class="text-center py-6 text-gray-500">Veri yok.</td></tr>';
                 return;
             }
 
@@ -1114,10 +1116,30 @@
                     <td class="p-4 text-gray-400 text-[11px]">${Object.entries(byYear).map(([k,v])=>`${k}: ${v}₺`).join(', ') || 'Yok'}</td>
                     <td class="p-4 text-gray-400 text-[11px]">${Object.entries(byMonth).map(([k,v])=>`${k}: ${v}₺`).join(', ') || 'Yok'}</td>
                     <td class="p-4 text-gray-400 text-[11px]">${Object.entries(byDay).map(([k,v])=>`${k}: ${v}₺`).join(', ') || 'Yok'}</td>
+                    <td class="p-4 text-center">
+                        <button onclick="window.resetUserSpending('${userKey}', '${u.name.replace(/'/g, "\\'")}')" class="px-3 py-1.5 bg-red-950/50 border border-red-800 text-red-300 hover:bg-red-900 hover:text-white rounded-xl text-xs font-semibold transition flex items-center gap-1 mx-auto" title="Harcama Geçmişini Sıfırla">
+                            <i class="fa-solid fa-trash"></i> Sıfırla
+                        </button>
+                    </td>
                 `;
                 tbody.appendChild(tr);
             });
         }
+
+        window.resetUserSpending = function(userKey, userName) {
+            let spendingMap = {};
+            try { spendingMap = JSON.parse(localStorage.getItem('nes_spending_records')) || {}; } catch(e){}
+
+            if (spendingMap[userKey]) {
+                delete spendingMap[userKey];
+                localStorage.setItem('nes_spending_records', JSON.stringify(spendingMap));
+                addAuditLog('Harcama Kaydı Silindi', `"${userName}" adlı müşterinin harcama geçmişi ve ciro katkısı sıfırlandı.`);
+                window.syncAllData();
+                showToast(`"${userName}" harcama geçmişi silindi.`, 'info');
+            } else {
+                showToast('Silinecek harcama kaydı bulunamadı.', 'warning');
+            }
+        };
 
         function addAuditLog(action, details) {
             let logs = [];
