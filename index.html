@@ -104,6 +104,7 @@
         </div>
     </nav>
 
+    <!-- Hero Section -->
     <section id="anasayfa" class="relative min-h-[85vh] flex items-center justify-center px-4 overflow-hidden border-b border-gray-800">
         <div class="absolute inset-0 bg-cover bg-center opacity-25 scale-105" style="background-image: url('https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=1920&q=80');"></div>
         <div class="absolute inset-0 bg-gradient-to-t from-[#0A0A0A] via-[#0A0A0A]/70 to-transparent"></div>
@@ -132,6 +133,7 @@
         </div>
     </section>
 
+    <!-- Hizmetler Section -->
     <section id="hizmetler" class="py-24 px-4 max-w-7xl mx-auto border-b border-gray-800">
         <div class="text-center mb-16">
             <span class="gold-text text-sm tracking-widest uppercase font-semibold">Şeffaf Fiyatlandırma</span>
@@ -149,11 +151,13 @@
                 <span class="gold-text text-sm tracking-widest uppercase">Portfolyo</span>
                 <h2 class="text-3xl md:text-4xl font-bold font-serif-title gold-text mt-2">Seçkin Tasarımlarımız</h2>
                 <div class="w-24 h-0.5 bg-[#C5A059] mx-auto mt-4"></div>
+                <p class="text-gray-400 text-xs mt-3">Detaylı incelemek için fotoğrafların üzerine tıklayabilirsiniz.</p>
             </div>
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-4" id="portfolioGridContainer"></div>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6" id="portfolioGridContainer"></div>
         </div>
     </section>
 
+    <!-- Randevu Section -->
     <section id="randevu" class="py-24 px-4 max-w-4xl mx-auto border-b border-gray-800">
         <div class="bg-[#121212] p-8 md:p-12 rounded-3xl shadow-2xl border border-[#C5A059]/30">
             <div class="text-center mb-10">
@@ -165,12 +169,12 @@
             <form onsubmit="window.handleBooking(event)" class="space-y-6">
                 <div class="grid md:grid-cols-2 gap-6">
                     <div>
-                        <label class="block text-xs font-semibold text-gray-300 uppercase tracking-wider mb-2">Adınız Soyadınız</label>
-                        <input type="text" id="bName" required placeholder="Örn: Elif Demir" class="w-full bg-[#0A0A0A] border border-gray-800 focus:border-[#C5A059] text-white px-4 py-3 rounded-xl focus:outline-none">
+                        <label class="block text-xs font-semibold text-gray-300 uppercase tracking-wider mb-2">Adınız Soyadınız *</label>
+                        <input type="text" id="bName" required placeholder="Örn: Elif Demir" class="w-full bg-[#0A0A0A] border border-gray-800 focus:border-[#C5A059] text-white px-4 py-3 rounded-xl focus:outline-none transition text-xs">
                     </div>
                     <div>
-                        <label class="block text-xs font-semibold text-gray-300 uppercase tracking-wider mb-2">Telefon Numaranız</label>
-                        <input type="tel" id="bPhone" required placeholder="Örn: 0532 123 45 67" class="w-full bg-[#0A0A0A] border border-gray-800 focus:border-[#C5A059] text-white px-4 py-3 rounded-xl focus:outline-none">
+                        <label class="block text-xs font-semibold text-gray-300 uppercase tracking-wider mb-2">Telefon Numaranız *</label>
+                        <input type="tel" id="bPhone" required placeholder="Örn: 0532 123 45 67" class="w-full bg-[#0A0A0A] border border-gray-800 focus:border-[#C5A059] text-white px-4 py-3 rounded-xl focus:outline-none transition text-xs">
                     </div>
                 </div>
 
@@ -207,17 +211,17 @@
 
                 <div class="grid md:grid-cols-2 gap-6">
                     <div>
-                        <label class="block text-xs font-semibold text-gray-300 uppercase tracking-wider mb-2">Tarih</label>
-                        <input type="date" id="bDate" required onclick="this.showPicker && this.showPicker()" onchange="window.updateTimeSlotAvailability()" class="w-full bg-[#0A0A0A] border border-gray-800 focus:border-[#C5A059] text-white px-4 py-3 rounded-xl focus:outline-none cursor-pointer">
+                        <label class="block text-xs font-semibold text-gray-300 uppercase tracking-wider mb-2">Tarih *</label>
+                        <input type="date" id="bDate" required onclick="this.showPicker && this.showPicker()" onchange="window.updateTimeSlotAvailability()" class="w-full bg-[#0A0A0A] border border-gray-800 focus:border-[#C5A059] text-white px-4 py-3 rounded-xl focus:outline-none cursor-pointer text-xs">
                     </div>
                     <div>
                         <div class="flex justify-between items-center mb-2">
-                            <label class="block text-xs font-semibold text-gray-300 uppercase tracking-wider">Saat</label>
+                            <label class="block text-xs font-semibold text-gray-300 uppercase tracking-wider">Saat *</label>
                             <button type="button" onclick="window.updateTimeSlotAvailability()" class="text-[10px] text-[#C5A059] hover:underline flex items-center gap-1 font-semibold transition">
                                 <i class="fa-solid fa-rotate"></i> Saatleri Yenile
                             </button>
                         </div>
-                        <select id="bTime" required class="w-full bg-[#0A0A0A] border border-gray-800 focus:border-[#C5A059] text-white px-4 py-3 rounded-xl focus:outline-none">
+                        <select id="bTime" required class="w-full bg-[#0A0A0A] border border-gray-800 focus:border-[#C5A059] text-white px-4 py-3 rounded-xl focus:outline-none text-xs">
                             <option value="">Saat Seçiniz</option>
                             <option value="10:00">10:00</option>
                             <option value="12:00">12:00</option>
@@ -230,25 +234,27 @@
                 </div>
 
                 <div>
-                    <label class="block text-xs font-semibold text-gray-300 uppercase tracking-wider mb-2">Notunuz / Görsel</label>
-                    <textarea id="bNote" rows="3" placeholder="Örn: Bu modelden istiyorum..." class="w-full bg-[#0A0A0A] border border-gray-800 focus:border-[#C5A059] text-white px-4 py-3 rounded-xl focus:outline-none mb-3"></textarea>
-                    <input type="file" id="bFile" accept="image/*" class="w-full text-sm text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-[#C5A059] file:text-black cursor-pointer">
+                    <label class="block text-xs font-semibold text-gray-300 uppercase tracking-wider mb-2">Notunuz / Görsel (İsteğe Bağlı)</label>
+                    <textarea id="bNote" rows="3" placeholder="Örn: Bu modelden istiyorum, hassas kafa derisine sahibim..." class="w-full bg-[#0A0A0A] border border-gray-800 focus:border-[#C5A059] text-white px-4 py-3 rounded-xl focus:outline-none text-xs mb-3"></textarea>
+                    <input type="file" id="bFile" accept="image/*" class="w-full text-xs text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-[#C5A059] file:text-black cursor-pointer">
                 </div>
 
-                <button type="submit" class="w-full gold-gradient text-black font-semibold py-4 rounded-xl shadow-lg text-lg hover:opacity-90 transition">
+                <div id="bookingWarning" class="hidden text-amber-400 text-xs bg-amber-950/40 p-3 rounded-xl border border-amber-900 text-center font-medium">
+                    <i class="fa-solid fa-triangle-exclamation mr-1"></i> Randevu alabilmek için lütfen giriş yapınız!
+                </div>
+                <div id="bookingSuccess" class="hidden text-emerald-400 text-xs bg-emerald-950/40 p-3 rounded-xl border border-emerald-900 text-center font-medium">
+                    <i class="fa-solid fa-circle-check mr-1"></i> Randevu talebiniz başarıyla alındı!
+                </div>
+
+                <button type="submit" class="w-full gold-gradient text-black font-bold py-4 rounded-xl shadow-xl hover:opacity-90 transition text-xs uppercase tracking-wider">
                     Randevu Talebini Gönder
                 </button>
             </form>
-            <div id="bookingSuccess" class="hidden mt-6 bg-[#C5A059]/10 border border-[#C5A059] text-[#C5A059] p-4 rounded-xl text-center font-medium">
-                Randevu talebiniz alındı!
-            </div>
-            <div id="bookingWarning" class="hidden mt-6 bg-red-900/40 border border-red-800 text-red-300 p-4 rounded-xl text-center font-medium">
-                Önce Giriş Yapmalısınız!
-            </div>
         </div>
     </section>
 
-    <section id="randevularim" class="py-24 px-4 max-w-4xl mx-auto">
+    <!-- Müşteri Paneli Section -->
+    <section id="randevularim" class="py-24 px-4 max-w-4xl mx-auto border-b border-gray-800">
         <div class="bg-[#121212] p-8 md:p-12 rounded-3xl shadow-2xl border border-[#C5A059]/30 space-y-6">
             <div class="flex flex-col sm:flex-row justify-between items-center gap-4 border-b border-gray-800 pb-6">
                 <div>
@@ -319,6 +325,32 @@
         <p>&copy; 2026 NES KUAFÖR SALONU. Tüm hakları saklıdır.</p>
     </footer>
 
+    <!-- Lightbox Modal -->
+    <div id="portfolioLightboxModal" class="fixed inset-0 bg-black/90 backdrop-blur-md z-50 hidden flex flex-col justify-between p-4 md:p-8 select-none">
+        <div class="flex justify-between items-center z-10">
+            <h3 id="lightboxTitle" class="text-lg md:text-xl font-bold font-serif-title gold-text"></h3>
+            <button onclick="window.closePortfolioLightbox()" class="w-10 h-10 rounded-full bg-gray-800/80 hover:bg-red-900 text-gray-300 hover:text-white flex items-center justify-center text-xl transition">
+                &times;
+            </button>
+        </div>
+
+        <div class="flex-1 flex items-center justify-center overflow-hidden relative my-4">
+            <img id="lightboxImg" src="" alt="Portfolyo Görseli" class="max-h-[80vh] max-w-full object-contain transition-transform duration-200 origin-center rounded-2xl shadow-2xl">
+        </div>
+
+        <div class="flex justify-center items-center gap-3 z-10 pb-2">
+            <button onclick="window.zoomLightbox(-0.2)" class="bg-[#121212] border border-[#C5A059]/40 text-[#C5A059] hover:bg-[#C5A059] hover:text-black w-10 h-10 rounded-xl font-bold flex items-center justify-center transition shadow" title="Küçült">
+                <i class="fa-solid fa-minus"></i>
+            </button>
+            <button onclick="window.zoomLightbox('reset')" class="bg-[#121212] border border-gray-800 text-gray-300 hover:text-white px-4 py-2 rounded-xl text-xs font-semibold transition">
+                Sıfırla (%100)
+            </button>
+            <button onclick="window.zoomLightbox(0.2)" class="bg-[#121212] border border-[#C5A059]/40 text-[#C5A059] hover:bg-[#C5A059] hover:text-black w-10 h-10 rounded-xl font-bold flex items-center justify-center transition shadow" title="Büyüt">
+                <i class="fa-solid fa-plus"></i>
+            </button>
+        </div>
+    </div>
+
     <div id="loginModal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
         <div class="bg-[#121212] border border-[#C5A059]/40 rounded-3xl max-w-md w-full p-6 md:p-8 shadow-2xl relative">
             <button onclick="window.closeLoginModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white text-2xl">&times;</button>
@@ -327,32 +359,32 @@
             <div id="loginFormView" class="space-y-4">
                 <div>
                     <label class="block text-xs text-gray-400 uppercase mb-1">Ad Soyad</label>
-                    <input type="text" id="loginName" placeholder="Adınız Soyadınız" class="w-full bg-[#0A0A0A] border border-gray-800 text-white px-4 py-2.5 rounded-xl focus:border-[#C5A059] focus:outline-none">
+                    <input type="text" id="loginName" placeholder="Adınız Soyadınız" class="w-full bg-[#0A0A0A] border border-gray-800 text-white px-4 py-2.5 rounded-xl focus:border-[#C5A059] focus:outline-none text-xs">
                 </div>
                 <div>
                     <label class="block text-xs text-gray-400 uppercase mb-1">Şifre</label>
-                    <input type="password" id="loginPass" placeholder="Şifreniz" class="w-full bg-[#0A0A0A] border border-gray-800 text-white px-4 py-2.5 rounded-xl focus:border-[#C5A059] focus:outline-none">
+                    <input type="password" id="loginPass" placeholder="Şifreniz" class="w-full bg-[#0A0A0A] border border-gray-800 text-white px-4 py-2.5 rounded-xl focus:border-[#C5A059] focus:outline-none text-xs">
                 </div>
                 <div class="flex justify-end">
                     <button type="button" onclick="window.switchToForgotPass()" class="text-xs gold-text hover:underline">Şifremi Unuttum?</button>
                 </div>
-                <button onclick="window.handleLoginSubmit()" class="w-full gold-gradient text-black font-semibold py-3 rounded-xl">Giriş Yap</button>
+                <button onclick="window.handleLoginSubmit()" class="w-full gold-gradient text-black font-semibold py-3 rounded-xl text-xs uppercase tracking-wider">Giriş Yap</button>
                 <p id="loginErrorMsg" class="text-red-400 text-xs text-center hidden"></p>
             </div>
 
             <div id="forgotStepView" class="space-y-4 hidden">
                 <div>
                     <label class="block text-xs text-gray-400 uppercase mb-1">Kayıtlı Ad Soyad</label>
-                    <input type="text" id="forgotName" placeholder="Adınız Soyadınız" class="w-full bg-[#0A0A0A] border border-gray-800 text-white px-4 py-2.5 rounded-xl focus:border-[#C5A059] focus:outline-none">
+                    <input type="text" id="forgotName" placeholder="Adınız Soyadınız" class="w-full bg-[#0A0A0A] border border-gray-800 text-white px-4 py-2.5 rounded-xl focus:border-[#C5A059] focus:outline-none text-xs">
                 </div>
                 <div>
                     <label class="block text-xs text-gray-400 uppercase mb-1">Yeni Şifre</label>
-                    <input type="password" id="forgotNewPass" placeholder="Yeni Şifre" class="w-full bg-[#0A0A0A] border border-gray-800 text-white px-4 py-2.5 rounded-xl focus:border-[#C5A059] focus:outline-none">
+                    <input type="password" id="forgotNewPass" placeholder="Yeni Şifre" class="w-full bg-[#0A0A0A] border border-gray-800 text-white px-4 py-2.5 rounded-xl focus:border-[#C5A059] focus:outline-none text-xs">
                 </div>
                 <div class="flex justify-between items-center text-xs">
                     <button type="button" onclick="window.switchToLoginForm()" class="text-gray-400 hover:text-white"><i class="fa-solid fa-arrow-left mr-1"></i> Geri Dön</button>
                 </div>
-                <button onclick="window.handleDirectPasswordReset()" class="w-full gold-gradient text-black font-semibold py-3 rounded-xl">Şifreyi Yenile</button>
+                <button onclick="window.handleDirectPasswordReset()" class="w-full gold-gradient text-black font-semibold py-3 rounded-xl text-xs uppercase tracking-wider">Şifreyi Yenile</button>
                 <p id="forgotErrorMsg" class="text-xs text-center hidden"></p>
             </div>
         </div>
@@ -365,13 +397,13 @@
             <div class="space-y-4">
                 <div>
                     <label class="block text-xs text-gray-400 uppercase mb-1">Ad Soyad</label>
-                    <input type="text" id="regName" placeholder="Adınız Soyadınız" class="w-full bg-[#0A0A0A] border border-gray-800 text-white px-4 py-2.5 rounded-xl focus:border-[#C5A059] focus:outline-none">
+                    <input type="text" id="regName" placeholder="Adınız Soyadınız" class="w-full bg-[#0A0A0A] border border-gray-800 text-white px-4 py-2.5 rounded-xl focus:border-[#C5A059] focus:outline-none text-xs">
                 </div>
                 <div>
-                    <label class="block text-xs text-gray-400 uppercase mb-1">Şifre (En az 6 karakter & 1 Büyük Harf)</label>
-                    <input type="password" id="regPass" placeholder="Şifreniz" class="w-full bg-[#0A0A0A] border border-gray-800 text-white px-4 py-2.5 rounded-xl focus:border-[#C5A059] focus:outline-none">
+                    <label class="block text-xs text-gray-400 uppercase mb-1">Şifre (En az 6 karakter)</label>
+                    <input type="password" id="regPass" placeholder="Şifreniz" class="w-full bg-[#0A0A0A] border border-gray-800 text-white px-4 py-2.5 rounded-xl focus:border-[#C5A059] focus:outline-none text-xs">
                 </div>
-                <button onclick="window.handleRegisterSubmit()" class="w-full gold-gradient text-black font-semibold py-3 rounded-xl">Kayıt Ol</button>
+                <button onclick="window.handleRegisterSubmit()" class="w-full gold-gradient text-black font-semibold py-3 rounded-xl text-xs uppercase tracking-wider">Kayıt Ol</button>
                 <p id="regErrorMsg" class="text-red-400 text-xs text-center hidden"></p>
             </div>
         </div>
@@ -384,6 +416,7 @@
         const ALL_TIME_SLOTS = ['10:00', '12:00', '14:00', '16:00', '18:00'];
         let selectedServiceIds = [];
         let clientActiveAppTab = 'aktif';
+        let lightboxZoomScale = 1;
 
         const DEFAULT_SERVICES_DATA = [
             { id: 'ombre', name: 'Ombre Tasarımı', price: 3500, durationMin: 180 },
@@ -415,11 +448,7 @@
         }
 
         function getServicesData() {
-            try {
-                return JSON.parse(localStorage.getItem('nes_services_catalog')) || DEFAULT_SERVICES_DATA;
-            } catch (e) {
-                return DEFAULT_SERVICES_DATA;
-            }
+            try { return JSON.parse(localStorage.getItem('nes_services_catalog')) || DEFAULT_SERVICES_DATA; } catch (e) { return DEFAULT_SERVICES_DATA; }
         }
 
         function getApps() {
@@ -439,11 +468,7 @@
         }
 
         function getPortfolioData() {
-            try {
-                return JSON.parse(localStorage.getItem('nes_portfolio_gallery')) || DEFAULT_PORTFOLIO_DATA;
-            } catch (e) {
-                return DEFAULT_PORTFOLIO_DATA;
-            }
+            try { return JSON.parse(localStorage.getItem('nes_portfolio_gallery')) || DEFAULT_PORTFOLIO_DATA; } catch (e) { return DEFAULT_PORTFOLIO_DATA; }
         }
 
         document.addEventListener('DOMContentLoaded', () => {
@@ -474,15 +499,50 @@
 
             items.forEach(item => {
                 const card = document.createElement('div');
-                card.className = "overflow-hidden rounded-2xl h-44 md:h-52 border border-gray-800 relative group";
+                card.className = "aspect-[3/4] overflow-hidden rounded-2xl border border-gray-800 relative group cursor-pointer shadow-xl bg-[#121212]";
+                card.onclick = () => window.openPortfolioLightbox(item.image, item.title);
                 card.innerHTML = `
-                    <img src="${item.image}" alt="${item.title || 'Portfolyo'}" class="w-full h-full object-cover group-hover:scale-110 transition duration-500" onerror="this.src='https://placehold.co/600x400/121212/C5A059?text=Gorsel+Yok'">
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition duration-300 flex items-end p-4">
-                        <span class="text-xs font-bold text-[#C5A059] font-serif-title">${item.title || ''}</span>
+                    <img src="${item.image}" alt="${item.title || 'Portfolyo'}" class="w-full h-full object-cover group-hover:scale-110 transition duration-500" onerror="this.src='https://placehold.co/600x800/121212/C5A059?text=Gorsel+Yok'">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition duration-300 flex items-end p-4">
+                        <span class="text-xs font-bold text-[#C5A059] font-serif-title flex items-center gap-1.5">
+                            <i class="fa-solid fa-magnifying-glass-plus text-xs"></i>
+                            ${item.title || 'İncele'}
+                        </span>
                     </div>
                 `;
                 container.appendChild(card);
             });
+        };
+
+        window.openPortfolioLightbox = function(imgSrc, title) {
+            const modal = document.getElementById('portfolioLightboxModal');
+            const img = document.getElementById('lightboxImg');
+            const titleEl = document.getElementById('lightboxTitle');
+
+            if (modal && img) {
+                img.src = imgSrc;
+                if (titleEl) titleEl.innerText = title || 'Saç Tasarımı İnceleme';
+                lightboxZoomScale = 1;
+                img.style.transform = `scale(1)`;
+                modal.classList.remove('hidden');
+            }
+        };
+
+        window.closePortfolioLightbox = function() {
+            const modal = document.getElementById('portfolioLightboxModal');
+            if (modal) modal.classList.add('hidden');
+        };
+
+        window.zoomLightbox = function(action) {
+            const img = document.getElementById('lightboxImg');
+            if (!img) return;
+
+            if (action === 'reset') {
+                lightboxZoomScale = 1;
+            } else {
+                lightboxZoomScale = Math.min(Math.max(0.6, lightboxZoomScale + action), 2.8);
+            }
+            img.style.transform = `scale(${lightboxZoomScale})`;
         };
 
         window.renderMainServicesCatalog = function() {
@@ -681,6 +741,7 @@
             const userProfile = document.getElementById('userProfileContainer');
             const navUserName = document.getElementById('navUserName');
             const userWelcomeSub = document.getElementById('userWelcomeSub');
+            const bNameInput = document.getElementById('bName');
 
             if (currentUser) {
                 if (authButtons) authButtons.classList.add('hidden');
@@ -690,6 +751,7 @@
                 }
                 if (navUserName) navUserName.innerText = currentUser;
                 if (userWelcomeSub) userWelcomeSub.innerText = `${currentUser} hesap randevuları.`;
+                if (bNameInput && !bNameInput.value) bNameInput.value = currentUser;
                 window.renderUserAppointments();
                 window.renderClientHairCardWidget();
             } else {
@@ -762,11 +824,13 @@
                 return;
             }
 
+            const inputName = document.getElementById('bName').value.trim() || currentUser;
+            const inputPhone = document.getElementById('bPhone').value.trim();
             const selectedDate = document.getElementById('bDate').value;
             const selectedTime = document.getElementById('bTime').value;
 
-            if (!selectedDate || !selectedTime) {
-                showToast('Tarih ve saat seçiniz.', 'warning');
+            if (!inputPhone || !selectedDate || !selectedTime) {
+                showToast('Lütfen tüm zorunlu (*) alanları doldurunuz.', 'warning');
                 return;
             }
 
@@ -792,8 +856,8 @@
                 const apps = getApps();
                 const newRecord = {
                     id: Date.now(),
-                    name: currentUser,
-                    phone: document.getElementById('bPhone').value,
+                    name: inputName,
+                    phone: inputPhone,
                     service: fullServiceSummary,
                     serviceList: selectedObjects,
                     totalPrice: totalPrice,
@@ -1002,7 +1066,7 @@
                 showToast(`Hoş geldiniz, ${foundUser.name}!`, 'success');
             } else {
                 err.innerText = "Hatalı Ad Soyad veya Şifre!";
-                err.classList.add('hidden');
+                err.classList.remove('hidden');
             }
         };
 
