@@ -152,6 +152,7 @@
                 <span class="gold-text text-sm tracking-widest uppercase">Portfolyo</span>
                 <h2 class="text-3xl md:text-4xl font-bold font-serif-title gold-text mt-2">Seçkin Tasarımlarımız</h2>
                 <div class="w-24 h-0.5 bg-[#C5A059] mx-auto mt-4"></div>
+                <p class="text-gray-400 text-sm mt-3">Fotoğraflara tıklayarak orijinal yüksek çözünürlüklü halini inceleyebilirsiniz.</p>
             </div>
             <div class="grid grid-cols-2 md:grid-cols-4 gap-4" id="portfolioGridContainer"></div>
         </div>
@@ -347,6 +348,15 @@
         </div>
     </section>
 
+    <!-- Orijinal Yüksek Çözünürlüklü Portfolyo Lightbox Modalı -->
+    <div id="portfolioLightboxModal" class="fixed inset-0 bg-black/95 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
+        <button onclick="window.closePortfolioLightbox()" class="absolute top-6 right-6 w-12 h-12 rounded-full bg-[#121212] border border-[#C5A059]/40 text-[#C5A059] flex items-center justify-center text-2xl hover:bg-[#C5A059] hover:text-black transition shadow-2xl z-50">&times;</button>
+        <div class="max-w-5xl max-h-[90vh] flex flex-col items-center justify-center relative">
+            <img id="lightboxImg" src="" class="max-w-full max-h-[80vh] object-contain rounded-2xl shadow-2xl border border-gray-800">
+            <h3 id="lightboxTitle" class="text-lg font-bold font-serif-title gold-text mt-4 text-center"></h3>
+        </div>
+    </div>
+
     <footer class="py-12 px-4 text-center border-t border-gray-900 text-gray-500 text-sm mt-auto">
         <p>&copy; 2026 NES KUAFÖR SALONU. Tüm hakları saklıdır.</p>
     </footer>
@@ -416,7 +426,7 @@
         const ALL_TIME_SLOTS = ['10:00', '12:00', '14:00', '16:00', '18:00'];
         let selectedServiceIds = [];
         let clientActiveAppTab = 'aktif';
-        let appliedCouponDiscount = 0; // İndirim yüzdesi (örn: 10, 20, 30)
+        let appliedCouponDiscount = 0;
         let appliedCouponName = '';
 
         const DEFAULT_SERVICES_DATA = [
@@ -430,10 +440,10 @@
         ];
 
         const DEFAULT_PORTFOLIO_DATA = [
-            { id: 'p1', title: 'Sarı Balyaj', image: 'https://images.unsplash.com/photo-1560869713-7d0a29430803?auto=format&fit=crop&w=600&q=80' },
-            { id: 'p2', title: 'Kahve Tonları', image: 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=600&q=80' },
-            { id: 'p3', title: 'Zarif Topuz', image: 'https://images.unsplash.com/photo-1527799820374-dcf8d9d4a388?auto=format&fit=crop&w=600&q=80' },
-            { id: 'p4', title: 'At Kuyruğu', image: 'https://images.unsplash.com/photo-1519699047748-de8e457a634e?auto=format&fit=crop&w=600&q=80' }
+            { id: 'p1', title: 'Sarı Balyaj', image: 'https://images.unsplash.com/photo-1560869713-7d0a29430803?auto=format&fit=crop&w=1200&q=80' },
+            { id: 'p2', title: 'Kahve Tonları', image: 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=1200&q=80' },
+            { id: 'p3', title: 'Zarif Topuz', image: 'https://images.unsplash.com/photo-1527799820374-dcf8d9d4a388?auto=format&fit=crop&w=1200&q=80' },
+            { id: 'p4', title: 'At Kuyruğu', image: 'https://images.unsplash.com/photo-1519699047748-de8e457a634e?auto=format&fit=crop&w=1200&q=80' }
         ];
 
         function formatDuration(mins) {
@@ -482,7 +492,6 @@
             window.renderPortfolioGallery();
             window.updateNavAuthUI();
 
-            // Her saniye kupon sayaçlarını güncelle
             setInterval(updateCouponCountdowns, 1000);
 
             document.addEventListener('click', (e) => {
@@ -501,15 +510,32 @@
             const items = getPortfolioData();
             items.forEach(item => {
                 const card = document.createElement('div');
-                card.className = "overflow-hidden rounded-2xl h-44 md:h-52 border border-gray-800 relative group";
+                card.className = "overflow-hidden rounded-2xl h-44 md:h-52 border border-gray-800 relative group cursor-pointer";
+                card.onclick = () => window.openPortfolioLightbox(item.image, item.title);
                 card.innerHTML = `
                     <img src="${item.image}" alt="${item.title || 'Portfolyo'}" class="w-full h-full object-cover group-hover:scale-110 transition duration-500" onerror="this.src='https://placehold.co/600x400/121212/C5A059?text=Gorsel+Yok'">
                     <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition duration-300 flex items-end p-4">
-                        <span class="text-xs font-bold text-[#C5A059] font-serif-title">${item.title || ''}</span>
+                        <span class="text-xs font-bold text-[#C5A059] font-serif-title">${item.title || ''} (Büyütmek için tıkla)</span>
                     </div>
                 `;
                 container.appendChild(card);
             });
+        };
+
+        window.openPortfolioLightbox = function(imgSrc, title) {
+            const modal = document.getElementById('portfolioLightboxModal');
+            const img = document.getElementById('lightboxImg');
+            const titleEl = document.getElementById('lightboxTitle');
+            if (modal && img) {
+                img.src = imgSrc;
+                if (titleEl) titleEl.innerText = title || 'Seçkin Tasarım';
+                modal.classList.remove('hidden');
+            }
+        };
+
+        window.closePortfolioLightbox = function() {
+            const modal = document.getElementById('portfolioLightboxModal');
+            if (modal) modal.classList.add('hidden');
         };
 
         window.renderMainServicesCatalog = function() {
@@ -960,6 +986,16 @@
                 };
                 apps.push(newRecord);
                 saveApps(apps);
+
+                // Kullanılan kuponu kalıcı olarak sil (tek kullanımlık hale getir)
+                if (appliedCouponName) {
+                    let coupons = [];
+                    try { coupons = JSON.parse(localStorage.getItem('nes_customer_coupons')) || []; } catch(e){}
+                    const userKey = currentUser.trim().toLowerCase();
+                    coupons = coupons.filter(c => !(c.code.toUpperCase() === appliedCouponName.toUpperCase() && c.customerName.trim().toLowerCase() === userKey));
+                    localStorage.setItem('nes_customer_coupons', JSON.stringify(coupons));
+                }
+
                 e.target.reset();
                 selectedServiceIds = [];
                 appliedCouponDiscount = 0;
@@ -967,6 +1003,7 @@
                 document.getElementById('couponFeedback').innerText = '';
                 window.renderServiceSelectionGrid();
                 window.updateTimeSlotAvailability();
+                window.renderCustomerCoupons();
                 
                 if (successEl) {
                     successEl.classList.remove('hidden');
