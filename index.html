@@ -802,7 +802,7 @@
             });
 
             if (infoEl) {
-                infoEl.innerText = availableCount === 0 ? '⚠️️ Bu tarih tamamen doludur.' : `✓ ${availableCount} boş saat var.`;
+                infoEl.innerText = availableCount === 0 ? '⚠️ Bu tarih tamamen doludur.' : `✓ ${availableCount} boş saat var.`;
                 infoEl.className = `text-xs mt-1.5 block font-medium ${availableCount === 0 ? 'text-red-400' : 'text-emerald-400'}`;
             }
         };
@@ -1032,20 +1032,15 @@
                 apps.push(newRecord);
                 saveApps(apps);
 
-                // Kullanılan kuponu kalıcı olarak sil (tek kullanımlık)
                 if (appliedCouponName) {
                     let coupons = [];
                     try { coupons = JSON.parse(localStorage.getItem('nes_customer_coupons')) || []; } catch(e){}
                     const userKey = currentUser.trim().toLowerCase();
-                    // Sadece tam eşleşen kuponu sil
                     const idx = coupons.findIndex(c => c.code.toUpperCase() === appliedCouponName.toUpperCase() && c.customerName.trim().toLowerCase() === userKey);
                     if (idx !== -1) {
-                        // Randevu iptal edildiğinde geri yükleyebilmek için kupon nesnesini geçici olarak randevu kaydında saklayabiliriz veya sildiğimiz kuponu saklarız.
-                        // Randevu objesine usedCouponObject de kaydedelim:
                         newRecord.usedCouponObject = coupons[idx];
                         coupons.splice(idx, 1);
                         localStorage.setItem('nes_customer_coupons', JSON.stringify(coupons));
-                        // apps dizisini güncelleyelim
                         saveApps(apps);
                     }
                 }
@@ -1130,11 +1125,9 @@
             if (target) {
                 target.status = 'Müşteri İptali';
 
-                // Eğer bu randevuda kupon kullanılmışsa, kuponu süresini bozmadan (expiresAt aynı kalarak) geri iade et
                 if (target.usedCouponObject) {
                     let coupons = [];
                     try { coupons = JSON.parse(localStorage.getItem('nes_customer_coupons')) || []; } catch(e){}
-                    // Eğer kuponun süresi henüz dolmadıysa listeye geri ekle
                     if (new Date().getTime() < target.usedCouponObject.expiresAt) {
                         coupons.push(target.usedCouponObject);
                         localStorage.setItem('nes_customer_coupons', JSON.stringify(coupons));
