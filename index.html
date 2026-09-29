@@ -66,6 +66,9 @@
                             <a href="#randevularim" onclick="window.toggleDropdownMenu()" class="flex items-center gap-3 px-4 py-2.5 text-xs font-semibold text-gray-300 hover:text-[#C5A059] hover:bg-gray-900/60 transition">
                                 <i class="fa-solid fa-calendar-check w-4 text-[#C5A059]"></i> Randevularım & Saç Kartım
                             </a>
+                            <a href="#kuponlarim" onclick="window.toggleDropdownMenu()" class="flex items-center gap-3 px-4 py-2.5 text-xs font-semibold text-gray-300 hover:text-[#C5A059] hover:bg-gray-900/60 transition">
+                                <i class="fa-solid fa-ticket w-4 text-[#C5A059]"></i> Kupon Bilgilerim
+                            </a>
                             <a href="#konum" onclick="window.toggleDropdownMenu()" class="flex items-center gap-3 px-4 py-2.5 text-xs font-semibold text-gray-300 hover:text-[#C5A059] hover:bg-gray-900/60 transition">
                                 <i class="fa-solid fa-map-location-dot w-4 text-[#C5A059]"></i> Konum & İletişim
                             </a>
@@ -104,7 +107,6 @@
         </div>
     </nav>
 
-    <!-- Hero Section -->
     <section id="anasayfa" class="relative min-h-[85vh] flex items-center justify-center px-4 overflow-hidden border-b border-gray-800">
         <div class="absolute inset-0 bg-cover bg-center opacity-25 scale-105" style="background-image: url('https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=1920&q=80');"></div>
         <div class="absolute inset-0 bg-gradient-to-t from-[#0A0A0A] via-[#0A0A0A]/70 to-transparent"></div>
@@ -133,7 +135,6 @@
         </div>
     </section>
 
-    <!-- Hizmetler Section -->
     <section id="hizmetler" class="py-24 px-4 max-w-7xl mx-auto border-b border-gray-800">
         <div class="text-center mb-16">
             <span class="gold-text text-sm tracking-widest uppercase font-semibold">Şeffaf Fiyatlandırma</span>
@@ -151,13 +152,11 @@
                 <span class="gold-text text-sm tracking-widest uppercase">Portfolyo</span>
                 <h2 class="text-3xl md:text-4xl font-bold font-serif-title gold-text mt-2">Seçkin Tasarımlarımız</h2>
                 <div class="w-24 h-0.5 bg-[#C5A059] mx-auto mt-4"></div>
-                <p class="text-gray-400 text-xs mt-3">Detaylı incelemek için fotoğrafların üzerine tıklayabilirsiniz.</p>
             </div>
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6" id="portfolioGridContainer"></div>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4" id="portfolioGridContainer"></div>
         </div>
     </section>
 
-    <!-- Randevu Section -->
     <section id="randevu" class="py-24 px-4 max-w-4xl mx-auto border-b border-gray-800">
         <div class="bg-[#121212] p-8 md:p-12 rounded-3xl shadow-2xl border border-[#C5A059]/30">
             <div class="text-center mb-10">
@@ -170,11 +169,11 @@
                 <div class="grid md:grid-cols-2 gap-6">
                     <div>
                         <label class="block text-xs font-semibold text-gray-300 uppercase tracking-wider mb-2">Adınız Soyadınız *</label>
-                        <input type="text" id="bName" required placeholder="Örn: Elif Demir" class="w-full bg-[#0A0A0A] border border-gray-800 focus:border-[#C5A059] text-white px-4 py-3 rounded-xl focus:outline-none transition text-xs">
+                        <input type="text" id="bName" required placeholder="Örn: Elif Demir" class="w-full bg-[#0A0A0A] border border-gray-800 focus:border-[#C5A059] text-white px-4 py-3 rounded-xl focus:outline-none">
                     </div>
                     <div>
                         <label class="block text-xs font-semibold text-gray-300 uppercase tracking-wider mb-2">Telefon Numaranız *</label>
-                        <input type="tel" id="bPhone" required placeholder="Örn: 0532 123 45 67" class="w-full bg-[#0A0A0A] border border-gray-800 focus:border-[#C5A059] text-white px-4 py-3 rounded-xl focus:outline-none transition text-xs">
+                        <input type="tel" id="bPhone" required placeholder="Örn: 0532 123 45 67" class="w-full bg-[#0A0A0A] border border-gray-800 focus:border-[#C5A059] text-white px-4 py-3 rounded-xl focus:outline-none">
                     </div>
                 </div>
 
@@ -184,6 +183,16 @@
                     </div>
 
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 mb-4" id="serviceSelectionGrid"></div>
+
+                    <!-- Kupon Kodu Alanı -->
+                    <div class="bg-[#0A0A0A] border border-gray-800 p-4 rounded-2xl mb-4 space-y-2">
+                        <label class="block text-xs font-semibold text-gray-300 uppercase tracking-wider">İndirim Kuponu Kodu (Opsiyonel)</label>
+                        <div class="flex gap-2">
+                            <input type="text" id="bCouponCode" placeholder="Örn: NES10, NES20, NES30" class="flex-1 bg-[#121212] border border-gray-800 text-white px-3 py-2.5 rounded-xl text-xs uppercase tracking-wider focus:border-[#C5A059] focus:outline-none">
+                            <button type="button" onclick="window.applyCouponCode()" class="bg-[#C5A059]/20 border border-[#C5A059] text-[#C5A059] px-4 py-2.5 rounded-xl text-xs font-semibold hover:bg-[#C5A059] hover:text-black transition">Uygula</button>
+                        </div>
+                        <span id="couponFeedback" class="text-xs block font-medium"></span>
+                    </div>
 
                     <div id="serviceBasketSummary" class="bg-[#0A0A0A] border border-[#C5A059]/30 p-4 rounded-2xl space-y-3">
                         <div class="flex justify-between items-center border-b border-gray-800 pb-2">
@@ -212,7 +221,7 @@
                 <div class="grid md:grid-cols-2 gap-6">
                     <div>
                         <label class="block text-xs font-semibold text-gray-300 uppercase tracking-wider mb-2">Tarih *</label>
-                        <input type="date" id="bDate" required onclick="this.showPicker && this.showPicker()" onchange="window.updateTimeSlotAvailability()" class="w-full bg-[#0A0A0A] border border-gray-800 focus:border-[#C5A059] text-white px-4 py-3 rounded-xl focus:outline-none cursor-pointer text-xs">
+                        <input type="date" id="bDate" required onclick="this.showPicker && this.showPicker()" onchange="window.updateTimeSlotAvailability()" class="w-full bg-[#0A0A0A] border border-gray-800 focus:border-[#C5A059] text-white px-4 py-3 rounded-xl focus:outline-none cursor-pointer">
                     </div>
                     <div>
                         <div class="flex justify-between items-center mb-2">
@@ -221,7 +230,7 @@
                                 <i class="fa-solid fa-rotate"></i> Saatleri Yenile
                             </button>
                         </div>
-                        <select id="bTime" required class="w-full bg-[#0A0A0A] border border-gray-800 focus:border-[#C5A059] text-white px-4 py-3 rounded-xl focus:outline-none text-xs">
+                        <select id="bTime" required class="w-full bg-[#0A0A0A] border border-gray-800 focus:border-[#C5A059] text-white px-4 py-3 rounded-xl focus:outline-none">
                             <option value="">Saat Seçiniz</option>
                             <option value="10:00">10:00</option>
                             <option value="12:00">12:00</option>
@@ -234,26 +243,24 @@
                 </div>
 
                 <div>
-                    <label class="block text-xs font-semibold text-gray-300 uppercase tracking-wider mb-2">Notunuz / Görsel (İsteğe Bağlı)</label>
-                    <textarea id="bNote" rows="3" placeholder="Örn: Bu modelden istiyorum, hassas kafa derisine sahibim..." class="w-full bg-[#0A0A0A] border border-gray-800 focus:border-[#C5A059] text-white px-4 py-3 rounded-xl focus:outline-none text-xs mb-3"></textarea>
-                    <input type="file" id="bFile" accept="image/*" class="w-full text-xs text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-[#C5A059] file:text-black cursor-pointer">
+                    <label class="block text-xs font-semibold text-gray-300 uppercase tracking-wider mb-2">Notunuz / Görsel</label>
+                    <textarea id="bNote" rows="3" placeholder="Örn: Bu modelden istiyorum..." class="w-full bg-[#0A0A0A] border border-gray-800 focus:border-[#C5A059] text-white px-4 py-3 rounded-xl focus:outline-none mb-3"></textarea>
+                    <input type="file" id="bFile" accept="image/*" class="w-full text-sm text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-[#C5A059] file:text-black cursor-pointer">
                 </div>
 
-                <div id="bookingWarning" class="hidden text-amber-400 text-xs bg-amber-950/40 p-3 rounded-xl border border-amber-900 text-center font-medium">
-                    <i class="fa-solid fa-triangle-exclamation mr-1"></i> Randevu alabilmek için lütfen giriş yapınız!
-                </div>
-                <div id="bookingSuccess" class="hidden text-emerald-400 text-xs bg-emerald-950/40 p-3 rounded-xl border border-emerald-900 text-center font-medium">
-                    <i class="fa-solid fa-circle-check mr-1"></i> Randevu talebiniz başarıyla alındı!
-                </div>
-
-                <button type="submit" class="w-full gold-gradient text-black font-bold py-4 rounded-xl shadow-xl hover:opacity-90 transition text-xs uppercase tracking-wider">
+                <button type="submit" class="w-full gold-gradient text-black font-semibold py-4 rounded-xl shadow-lg text-lg hover:opacity-90 transition uppercase tracking-wider text-xs font-bold">
                     Randevu Talebini Gönder
                 </button>
             </form>
+            <div id="bookingSuccess" class="hidden mt-6 bg-[#C5A059]/10 border border-[#C5A059] text-[#C5A059] p-4 rounded-xl text-center font-medium">
+                Randevu talebiniz alındı!
+            </div>
+            <div id="bookingWarning" class="hidden mt-6 bg-red-900/40 border border-red-800 text-red-300 p-4 rounded-xl text-center font-medium">
+                Önce Giriş Yapmalısınız!
+            </div>
         </div>
     </section>
 
-    <!-- Müşteri Paneli Section -->
     <section id="randevularim" class="py-24 px-4 max-w-4xl mx-auto border-b border-gray-800">
         <div class="bg-[#121212] p-8 md:p-12 rounded-3xl shadow-2xl border border-[#C5A059]/30 space-y-6">
             <div class="flex flex-col sm:flex-row justify-between items-center gap-4 border-b border-gray-800 pb-6">
@@ -295,6 +302,25 @@
         </div>
     </section>
 
+    <section id="kuponlarim" class="py-24 px-4 max-w-4xl mx-auto border-b border-gray-800">
+        <div class="bg-[#121212] p-8 md:p-12 rounded-3xl shadow-2xl border border-[#C5A059]/30 space-y-6">
+            <div class="flex justify-between items-center border-b border-gray-800 pb-6">
+                <div>
+                    <span class="gold-text text-sm tracking-widest uppercase">VIP Ayrıcalıklar</span>
+                    <h2 class="text-3xl font-bold font-serif-title gold-text mt-2">Kupon Bilgilerim</h2>
+                    <p class="text-gray-400 text-sm mt-1">Salonumuz tarafından size tanımlanan aktif indirim kuponları ve süre sayaçları.</p>
+                </div>
+                <button onclick="window.renderCustomerCoupons()" class="text-xs bg-[#C5A059]/20 border border-[#C5A059] text-[#C5A059] px-4 py-2.5 rounded-xl hover:bg-[#C5A059] hover:text-black transition font-semibold flex items-center gap-2">
+                    <i class="fa-solid fa-rotate"></i> Yenile
+                </button>
+            </div>
+
+            <div id="customerCouponsContainer" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <p class="text-gray-500 italic col-span-full text-center py-6">Kuponları görebilmek için lütfen giriş yapınız.</p>
+            </div>
+        </div>
+    </section>
+
     <section id="konum" class="py-24 px-4 bg-[#0F0F0F] border-t border-gray-800">
         <div class="max-w-7xl mx-auto">
             <div class="text-center mb-16">
@@ -325,32 +351,6 @@
         <p>&copy; 2026 NES KUAFÖR SALONU. Tüm hakları saklıdır.</p>
     </footer>
 
-    <!-- Lightbox Modal -->
-    <div id="portfolioLightboxModal" class="fixed inset-0 bg-black/90 backdrop-blur-md z-50 hidden flex flex-col justify-between p-4 md:p-8 select-none">
-        <div class="flex justify-between items-center z-10">
-            <h3 id="lightboxTitle" class="text-lg md:text-xl font-bold font-serif-title gold-text"></h3>
-            <button onclick="window.closePortfolioLightbox()" class="w-10 h-10 rounded-full bg-gray-800/80 hover:bg-red-900 text-gray-300 hover:text-white flex items-center justify-center text-xl transition">
-                &times;
-            </button>
-        </div>
-
-        <div class="flex-1 flex items-center justify-center overflow-hidden relative my-4">
-            <img id="lightboxImg" src="" alt="Portfolyo Görseli" class="max-h-[80vh] max-w-full object-contain transition-transform duration-200 origin-center rounded-2xl shadow-2xl">
-        </div>
-
-        <div class="flex justify-center items-center gap-3 z-10 pb-2">
-            <button onclick="window.zoomLightbox(-0.2)" class="bg-[#121212] border border-[#C5A059]/40 text-[#C5A059] hover:bg-[#C5A059] hover:text-black w-10 h-10 rounded-xl font-bold flex items-center justify-center transition shadow" title="Küçült">
-                <i class="fa-solid fa-minus"></i>
-            </button>
-            <button onclick="window.zoomLightbox('reset')" class="bg-[#121212] border border-gray-800 text-gray-300 hover:text-white px-4 py-2 rounded-xl text-xs font-semibold transition">
-                Sıfırla (%100)
-            </button>
-            <button onclick="window.zoomLightbox(0.2)" class="bg-[#121212] border border-[#C5A059]/40 text-[#C5A059] hover:bg-[#C5A059] hover:text-black w-10 h-10 rounded-xl font-bold flex items-center justify-center transition shadow" title="Büyüt">
-                <i class="fa-solid fa-plus"></i>
-            </button>
-        </div>
-    </div>
-
     <div id="loginModal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
         <div class="bg-[#121212] border border-[#C5A059]/40 rounded-3xl max-w-md w-full p-6 md:p-8 shadow-2xl relative">
             <button onclick="window.closeLoginModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white text-2xl">&times;</button>
@@ -359,32 +359,32 @@
             <div id="loginFormView" class="space-y-4">
                 <div>
                     <label class="block text-xs text-gray-400 uppercase mb-1">Ad Soyad</label>
-                    <input type="text" id="loginName" placeholder="Adınız Soyadınız" class="w-full bg-[#0A0A0A] border border-gray-800 text-white px-4 py-2.5 rounded-xl focus:border-[#C5A059] focus:outline-none text-xs">
+                    <input type="text" id="loginName" placeholder="Adınız Soyadınız" class="w-full bg-[#0A0A0A] border border-gray-800 text-white px-4 py-2.5 rounded-xl focus:border-[#C5A059] focus:outline-none">
                 </div>
                 <div>
                     <label class="block text-xs text-gray-400 uppercase mb-1">Şifre</label>
-                    <input type="password" id="loginPass" placeholder="Şifreniz" class="w-full bg-[#0A0A0A] border border-gray-800 text-white px-4 py-2.5 rounded-xl focus:border-[#C5A059] focus:outline-none text-xs">
+                    <input type="password" id="loginPass" placeholder="Şifreniz" class="w-full bg-[#0A0A0A] border border-gray-800 text-white px-4 py-2.5 rounded-xl focus:border-[#C5A059] focus:outline-none">
                 </div>
                 <div class="flex justify-end">
                     <button type="button" onclick="window.switchToForgotPass()" class="text-xs gold-text hover:underline">Şifremi Unuttum?</button>
                 </div>
-                <button onclick="window.handleLoginSubmit()" class="w-full gold-gradient text-black font-semibold py-3 rounded-xl text-xs uppercase tracking-wider">Giriş Yap</button>
+                <button onclick="window.handleLoginSubmit()" class="w-full gold-gradient text-black font-semibold py-3 rounded-xl">Giriş Yap</button>
                 <p id="loginErrorMsg" class="text-red-400 text-xs text-center hidden"></p>
             </div>
 
             <div id="forgotStepView" class="space-y-4 hidden">
                 <div>
                     <label class="block text-xs text-gray-400 uppercase mb-1">Kayıtlı Ad Soyad</label>
-                    <input type="text" id="forgotName" placeholder="Adınız Soyadınız" class="w-full bg-[#0A0A0A] border border-gray-800 text-white px-4 py-2.5 rounded-xl focus:border-[#C5A059] focus:outline-none text-xs">
+                    <input type="text" id="forgotName" placeholder="Adınız Soyadınız" class="w-full bg-[#0A0A0A] border border-gray-800 text-white px-4 py-2.5 rounded-xl focus:border-[#C5A059] focus:outline-none">
                 </div>
                 <div>
                     <label class="block text-xs text-gray-400 uppercase mb-1">Yeni Şifre</label>
-                    <input type="password" id="forgotNewPass" placeholder="Yeni Şifre" class="w-full bg-[#0A0A0A] border border-gray-800 text-white px-4 py-2.5 rounded-xl focus:border-[#C5A059] focus:outline-none text-xs">
+                    <input type="password" id="forgotNewPass" placeholder="Yeni Şifre" class="w-full bg-[#0A0A0A] border border-gray-800 text-white px-4 py-2.5 rounded-xl focus:border-[#C5A059] focus:outline-none">
                 </div>
                 <div class="flex justify-between items-center text-xs">
                     <button type="button" onclick="window.switchToLoginForm()" class="text-gray-400 hover:text-white"><i class="fa-solid fa-arrow-left mr-1"></i> Geri Dön</button>
                 </div>
-                <button onclick="window.handleDirectPasswordReset()" class="w-full gold-gradient text-black font-semibold py-3 rounded-xl text-xs uppercase tracking-wider">Şifreyi Yenile</button>
+                <button onclick="window.handleDirectPasswordReset()" class="w-full gold-gradient text-black font-semibold py-3 rounded-xl">Şifreyi Yenile</button>
                 <p id="forgotErrorMsg" class="text-xs text-center hidden"></p>
             </div>
         </div>
@@ -397,13 +397,13 @@
             <div class="space-y-4">
                 <div>
                     <label class="block text-xs text-gray-400 uppercase mb-1">Ad Soyad</label>
-                    <input type="text" id="regName" placeholder="Adınız Soyadınız" class="w-full bg-[#0A0A0A] border border-gray-800 text-white px-4 py-2.5 rounded-xl focus:border-[#C5A059] focus:outline-none text-xs">
+                    <input type="text" id="regName" placeholder="Adınız Soyadınız" class="w-full bg-[#0A0A0A] border border-gray-800 text-white px-4 py-2.5 rounded-xl focus:border-[#C5A059] focus:outline-none">
                 </div>
                 <div>
                     <label class="block text-xs text-gray-400 uppercase mb-1">Şifre (En az 6 karakter)</label>
-                    <input type="password" id="regPass" placeholder="Şifreniz" class="w-full bg-[#0A0A0A] border border-gray-800 text-white px-4 py-2.5 rounded-xl focus:border-[#C5A059] focus:outline-none text-xs">
+                    <input type="password" id="regPass" placeholder="Şifreniz" class="w-full bg-[#0A0A0A] border border-gray-800 text-white px-4 py-2.5 rounded-xl focus:border-[#C5A059] focus:outline-none">
                 </div>
-                <button onclick="window.handleRegisterSubmit()" class="w-full gold-gradient text-black font-semibold py-3 rounded-xl text-xs uppercase tracking-wider">Kayıt Ol</button>
+                <button onclick="window.handleRegisterSubmit()" class="w-full gold-gradient text-black font-semibold py-3 rounded-xl">Kayıt Ol</button>
                 <p id="regErrorMsg" class="text-red-400 text-xs text-center hidden"></p>
             </div>
         </div>
@@ -416,7 +416,8 @@
         const ALL_TIME_SLOTS = ['10:00', '12:00', '14:00', '16:00', '18:00'];
         let selectedServiceIds = [];
         let clientActiveAppTab = 'aktif';
-        let lightboxZoomScale = 1;
+        let appliedCouponDiscount = 0; // İndirim yüzdesi (örn: 10, 20, 30)
+        let appliedCouponName = '';
 
         const DEFAULT_SERVICES_DATA = [
             { id: 'ombre', name: 'Ombre Tasarımı', price: 3500, durationMin: 180 },
@@ -481,6 +482,9 @@
             window.renderPortfolioGallery();
             window.updateNavAuthUI();
 
+            // Her saniye kupon sayaçlarını güncelle
+            setInterval(updateCouponCountdowns, 1000);
+
             document.addEventListener('click', (e) => {
                 const dropdown = document.getElementById('dropdownMenu');
                 const menuBtn = e.target.closest('button');
@@ -494,64 +498,25 @@
             const container = document.getElementById('portfolioGridContainer');
             if (!container) return;
             container.innerHTML = '';
-
             const items = getPortfolioData();
-
             items.forEach(item => {
                 const card = document.createElement('div');
-                card.className = "aspect-[3/4] overflow-hidden rounded-2xl border border-gray-800 relative group cursor-pointer shadow-xl bg-[#121212]";
-                card.onclick = () => window.openPortfolioLightbox(item.image, item.title);
+                card.className = "overflow-hidden rounded-2xl h-44 md:h-52 border border-gray-800 relative group";
                 card.innerHTML = `
-                    <img src="${item.image}" alt="${item.title || 'Portfolyo'}" class="w-full h-full object-cover group-hover:scale-110 transition duration-500" onerror="this.src='https://placehold.co/600x800/121212/C5A059?text=Gorsel+Yok'">
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition duration-300 flex items-end p-4">
-                        <span class="text-xs font-bold text-[#C5A059] font-serif-title flex items-center gap-1.5">
-                            <i class="fa-solid fa-magnifying-glass-plus text-xs"></i>
-                            ${item.title || 'İncele'}
-                        </span>
+                    <img src="${item.image}" alt="${item.title || 'Portfolyo'}" class="w-full h-full object-cover group-hover:scale-110 transition duration-500" onerror="this.src='https://placehold.co/600x400/121212/C5A059?text=Gorsel+Yok'">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition duration-300 flex items-end p-4">
+                        <span class="text-xs font-bold text-[#C5A059] font-serif-title">${item.title || ''}</span>
                     </div>
                 `;
                 container.appendChild(card);
             });
         };
 
-        window.openPortfolioLightbox = function(imgSrc, title) {
-            const modal = document.getElementById('portfolioLightboxModal');
-            const img = document.getElementById('lightboxImg');
-            const titleEl = document.getElementById('lightboxTitle');
-
-            if (modal && img) {
-                img.src = imgSrc;
-                if (titleEl) titleEl.innerText = title || 'Saç Tasarımı İnceleme';
-                lightboxZoomScale = 1;
-                img.style.transform = `scale(1)`;
-                modal.classList.remove('hidden');
-            }
-        };
-
-        window.closePortfolioLightbox = function() {
-            const modal = document.getElementById('portfolioLightboxModal');
-            if (modal) modal.classList.add('hidden');
-        };
-
-        window.zoomLightbox = function(action) {
-            const img = document.getElementById('lightboxImg');
-            if (!img) return;
-
-            if (action === 'reset') {
-                lightboxZoomScale = 1;
-            } else {
-                lightboxZoomScale = Math.min(Math.max(0.6, lightboxZoomScale + action), 2.8);
-            }
-            img.style.transform = `scale(${lightboxZoomScale})`;
-        };
-
         window.renderMainServicesCatalog = function() {
             const container = document.getElementById('mainServicesCatalogGrid');
             if (!container) return;
             container.innerHTML = '';
-
             const services = getServicesData();
-
             services.forEach(srv => {
                 const card = document.createElement('div');
                 card.className = "bg-[#121212] border border-gray-800 hover:border-[#C5A059]/60 p-6 rounded-2xl transition duration-300 flex flex-col justify-between group";
@@ -578,19 +543,14 @@
             const container = document.getElementById('serviceSelectionGrid');
             if (!container) return;
             container.innerHTML = '';
-
             const services = getServicesData();
-
             services.forEach(srv => {
                 const isSelected = selectedServiceIds.includes(srv.id);
                 const card = document.createElement('div');
                 card.onclick = () => window.toggleServiceSelection(srv.id);
                 card.className = `p-3 rounded-xl border cursor-pointer transition flex justify-between items-center ${
-                    isSelected 
-                    ? 'bg-[#C5A059]/15 border-[#C5A059] text-white shadow-md' 
-                    : 'bg-[#0A0A0A] border-gray-800 text-gray-400 hover:border-gray-600'
+                    isSelected ? 'bg-[#C5A059]/15 border-[#C5A059] text-white shadow-md' : 'bg-[#0A0A0A] border-gray-800 text-gray-400 hover:border-gray-600'
                 }`;
-
                 card.innerHTML = `
                     <div class="pr-2">
                         <div class="font-medium text-xs text-gray-200 flex items-center gap-1.5">
@@ -605,7 +565,6 @@
                 `;
                 container.appendChild(card);
             });
-
             updateBasketSummary();
         };
 
@@ -625,6 +584,51 @@
             window.renderServiceSelectionGrid();
             const randevuSec = document.getElementById('randevu');
             if (randevuSec) randevuSec.scrollIntoView({ behavior: 'smooth' });
+        };
+
+        window.applyCouponCode = function() {
+            const input = document.getElementById('bCouponCode');
+            const feedback = document.getElementById('couponFeedback');
+            if (!input || !feedback) return;
+
+            const code = input.value.trim().toUpperCase();
+            if (!currentUser) {
+                feedback.innerText = "⚠️ Kupon kullanmak için giriş yapmalısınız.";
+                feedback.className = "text-xs block font-medium text-amber-400";
+                return;
+            }
+
+            if (!code) {
+                appliedCouponDiscount = 0;
+                appliedCouponName = '';
+                feedback.innerText = "";
+                updateBasketSummary();
+                return;
+            }
+
+            let coupons = [];
+            try { coupons = JSON.parse(localStorage.getItem('nes_customer_coupons')) || []; } catch(e){}
+
+            const userKey = currentUser.trim().toLowerCase();
+            const found = coupons.find(c => 
+                c.code.toUpperCase() === code && 
+                c.customerName.trim().toLowerCase() === userKey && 
+                new Date().getTime() < c.expiresAt
+            );
+
+            if (found) {
+                appliedCouponDiscount = found.discountPercent;
+                appliedCouponName = found.code;
+                feedback.innerText = `✓ ${found.code} kuponu uygulandı (%${found.discountPercent} İndirim)`;
+                feedback.className = "text-xs block font-medium text-emerald-400";
+                updateBasketSummary();
+            } else {
+                appliedCouponDiscount = 0;
+                appliedCouponName = '';
+                feedback.innerText = "⚠️ Geçersiz, süresi dolmuş veya bu hesaba tanımlı olmayan kupon.";
+                feedback.className = "text-xs block font-medium text-red-400";
+                updateBasketSummary();
+            }
         };
 
         function updateBasketSummary() {
@@ -663,11 +667,23 @@
                 }
             });
 
+            let finalPrice = rawTotalPrice;
+            if (appliedCouponDiscount > 0) {
+                const discountAmount = (rawTotalPrice * appliedCouponDiscount) / 100;
+                finalPrice = rawTotalPrice - discountAmount;
+                htmlList += `
+                    <li class="flex justify-between items-center text-xs text-emerald-400 pt-1 border-t border-gray-800">
+                        <span><i class="fa-solid fa-ticket mr-1"></i>Kupon İndirimi (${appliedCouponName} - %${appliedCouponDiscount})</span>
+                        <span>-${discountAmount.toLocaleString('tr-TR')} ₺</span>
+                    </li>
+                `;
+            }
+
             htmlList += '</ul>';
             listEl.innerHTML = htmlList;
             badgeEl.innerText = `${selectedServiceIds.length} Hizmet`;
             totalDurEl.innerText = formatDuration(totalMin);
-            totalPriceEl.innerText = `${rawTotalPrice.toLocaleString('tr-TR')} ₺`;
+            totalPriceEl.innerText = `${finalPrice.toLocaleString('tr-TR')} ₺`;
         }
 
         window.updateTimeSlotAvailability = function() {
@@ -691,7 +707,6 @@
                 return;
             }
 
-            // Sadece Aktif (Beklemede / Onaylandı) randevular saatleri doldursun
             const bookedTimes = apps
                 .filter(a => a.date === dateVal && (a.status === 'Beklemede' || a.status === 'Onaylandı'))
                 .map(a => a.time);
@@ -741,7 +756,6 @@
             const userProfile = document.getElementById('userProfileContainer');
             const navUserName = document.getElementById('navUserName');
             const userWelcomeSub = document.getElementById('userWelcomeSub');
-            const bNameInput = document.getElementById('bName');
 
             if (currentUser) {
                 if (authButtons) authButtons.classList.add('hidden');
@@ -751,9 +765,9 @@
                 }
                 if (navUserName) navUserName.innerText = currentUser;
                 if (userWelcomeSub) userWelcomeSub.innerText = `${currentUser} hesap randevuları.`;
-                if (bNameInput && !bNameInput.value) bNameInput.value = currentUser;
                 window.renderUserAppointments();
                 window.renderClientHairCardWidget();
+                window.renderCustomerCoupons();
             } else {
                 if (authButtons) authButtons.classList.remove('hidden');
                 if (userProfile) {
@@ -762,8 +776,76 @@
                 }
                 const hairWidget = document.getElementById('clientHairCardWidget');
                 if (hairWidget) hairWidget.classList.add('hidden');
+                const couponsContainer = document.getElementById('customerCouponsContainer');
+                if (couponsContainer) couponsContainer.innerHTML = '<p class="text-gray-500 italic col-span-full text-center py-6">Kuponları görebilmek için lütfen giriş yapınız.</p>';
             }
         };
+
+        window.renderCustomerCoupons = function() {
+            const container = document.getElementById('customerCouponsContainer');
+            if (!container) return;
+            if (!currentUser) {
+                container.innerHTML = '<p class="text-gray-500 italic col-span-full text-center py-6">Kuponları görebilmek için lütfen giriş yapınız.</p>';
+                return;
+            }
+
+            let coupons = [];
+            try { coupons = JSON.parse(localStorage.getItem('nes_customer_coupons')) || []; } catch(e){}
+
+            const userKey = currentUser.trim().toLowerCase();
+            const myCoupons = coupons.filter(c => c.customerName.trim().toLowerCase() === userKey);
+
+            container.innerHTML = '';
+            if (myCoupons.length === 0) {
+                container.innerHTML = '<p class="text-gray-500 italic col-span-full text-center py-6">Tanımlı aktif indirim kuponunuz bulunmuyor.</p>';
+                return;
+            }
+
+            myCoupons.forEach(c => {
+                const now = new Date().getTime();
+                const timeLeft = c.expiresAt - now;
+                const isExpired = timeLeft <= 0;
+
+                const card = document.createElement('div');
+                card.className = `bg-[#0A0A0A] border p-5 rounded-2xl flex flex-col justify-between space-y-3 ${isExpired ? 'border-red-900/60 opacity-60' : 'border-[#C5A059]/40'}`;
+                
+                card.innerHTML = `
+                    <div class="flex justify-between items-start">
+                        <div>
+                            <span class="text-[10px] text-gray-500 uppercase tracking-wider block font-semibold">VIP İndirim Kuponu</span>
+                            <h3 class="text-xl font-bold font-serif-title gold-text mt-0.5">${c.code}</h3>
+                        </div>
+                        <span class="text-sm font-bold bg-[#C5A059]/20 text-[#C5A059] px-3 py-1 rounded-full">%${c.discountPercent} İndirim</span>
+                    </div>
+                    <div class="text-xs space-y-1 text-gray-300">
+                        <p><strong>Durum:</strong> ${isExpired ? '<span class="text-red-400 font-semibold">Süresi Doldu</span>' : '<span class="text-emerald-400 font-semibold">Aktif (7 Gün Geçerli)</span>'}</p>
+                        <p class="font-mono text-amber-400 countdown-timer" data-expires="${c.expiresAt}">Kalan Süre: Hesaplanıyor...</p>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+            updateCouponCountdowns();
+        };
+
+        function updateCouponCountdowns() {
+            const timers = document.querySelectorAll('.countdown-timer');
+            timers.forEach(timer => {
+                const expires = parseInt(timer.getAttribute('data-expires'), 10);
+                const now = new Date().getTime();
+                const diff = expires - now;
+
+                if (diff <= 0) {
+                    timer.innerText = "Süresi Doldu (0g 0s 0d 0s)";
+                    timer.className = "font-mono text-red-400 countdown-timer";
+                } else {
+                    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                    const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    const mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                    const secs = Math.floor((diff % (1000 * 60)) / 1000);
+                    timer.innerText = `Kalan Süre: ${days}g ${hours}s ${mins}d ${secs}s`;
+                }
+            });
+        }
 
         window.renderClientHairCardWidget = function() {
             const widget = document.getElementById('clientHairCardWidget');
@@ -824,43 +906,50 @@
                 return;
             }
 
-            const inputName = document.getElementById('bName').value.trim() || currentUser;
-            const inputPhone = document.getElementById('bPhone').value.trim();
             const selectedDate = document.getElementById('bDate').value;
             const selectedTime = document.getElementById('bTime').value;
 
-            if (!inputPhone || !selectedDate || !selectedTime) {
-                showToast('Lütfen tüm zorunlu (*) alanları doldurunuz.', 'warning');
+            if (!selectedDate || !selectedTime) {
+                showToast('Tarih ve saat seçiniz.', 'warning');
                 return;
             }
 
             const services = getServicesData();
             let totalMin = 0;
-            let totalPrice = 0;
+            let rawTotalPrice = 0;
             let selectedObjects = [];
 
             selectedServiceIds.forEach(id => {
                 const srv = services.find(s => s.id === id);
                 if (srv) {
                     totalMin += srv.durationMin;
-                    totalPrice += srv.price;
+                    rawTotalPrice += srv.price;
                     selectedObjects.push(srv);
                 }
             });
 
+            let finalPrice = rawTotalPrice;
+            if (appliedCouponDiscount > 0) {
+                finalPrice = rawTotalPrice - ((rawTotalPrice * appliedCouponDiscount) / 100);
+            }
+
             const serviceNames = selectedObjects.map(s => s.name).join(' + ');
-            const fullServiceSummary = `${serviceNames} (${formatDuration(totalMin)} - ${totalPrice.toLocaleString('tr-TR')} ₺)`;
+            let fullServiceSummary = `${serviceNames} (${formatDuration(totalMin)} - ${finalPrice.toLocaleString('tr-TR')} ₺)`;
+            if (appliedCouponDiscount > 0) {
+                fullServiceSummary += ` [Kupon: ${appliedCouponName} -%${appliedCouponDiscount}]`;
+            }
+
             const fileInput = document.getElementById('bFile');
 
             const saveRecord = (img64) => {
                 const apps = getApps();
                 const newRecord = {
                     id: Date.now(),
-                    name: inputName,
-                    phone: inputPhone,
+                    name: currentUser,
+                    phone: document.getElementById('bPhone').value,
                     service: fullServiceSummary,
                     serviceList: selectedObjects,
-                    totalPrice: totalPrice,
+                    totalPrice: finalPrice,
                     totalDurationMin: totalMin,
                     date: selectedDate,
                     time: selectedTime,
@@ -873,6 +962,9 @@
                 saveApps(apps);
                 e.target.reset();
                 selectedServiceIds = [];
+                appliedCouponDiscount = 0;
+                appliedCouponName = '';
+                document.getElementById('couponFeedback').innerText = '';
                 window.renderServiceSelectionGrid();
                 window.updateTimeSlotAvailability();
                 
