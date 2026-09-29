@@ -119,6 +119,9 @@
                 <button onclick="window.switchTab('financials')" id="nav_financials" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-xs font-semibold text-gray-400 hover:text-white hover:bg-gray-900 transition">
                     <i class="fa-solid fa-wallet w-4 text-center text-[#C5A059]"></i> Finans & Harcama Raporu
                 </button>
+                <button onclick="window.switchTab('portfolio')" id="nav_portfolio" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-xs font-semibold text-gray-400 hover:text-white hover:bg-gray-900 transition">
+                    <i class="fa-solid fa-images w-4 text-center text-[#C5A059]"></i> Portfolyo & Galeri
+                </button>
                 <button onclick="window.switchTab('audit')" id="nav_audit" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-xs font-semibold text-gray-400 hover:text-white hover:bg-gray-900 transition">
                     <i class="fa-solid fa-clock-rotate-left w-4 text-center text-[#C5A059]"></i> Denetim İzleri (Audit Logs)
                 </button>
@@ -328,6 +331,20 @@
                     </div>
                 </div>
 
+                <div id="view_portfolio" class="space-y-6 hidden">
+                    <div class="flex justify-between items-center border-b border-gray-800 pb-4">
+                        <div>
+                            <h1 class="text-2xl font-bold font-serif-title text-white">Portfolyo & Galeri Yönetimi</h1>
+                            <p class="text-xs text-gray-400 mt-1">Buradan eklediğiniz veya sildiğiniz fotoğraflar ana sayfadaki Portfolyo alanına anında yansır.</p>
+                        </div>
+                        <button onclick="window.openAddPortfolioModal()" class="gold-gradient text-black text-xs font-bold px-4 py-2.5 rounded-xl shadow hover:opacity-90 transition">
+                            <i class="fa-solid fa-plus mr-1"></i> Yeni Fotoğraf Ekle
+                        </button>
+                    </div>
+
+                    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4" id="portfolioGridContainer"></div>
+                </div>
+
                 <div id="view_audit" class="space-y-6 hidden">
                     <div class="border-b border-gray-800 pb-4 flex justify-between items-center">
                         <div>
@@ -400,6 +417,31 @@
         </div>
     </div>
 
+    <div id="portfolioModal" class="fixed inset-0 bg-black/80 backdrop-blur z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-[#121212] border border-[#C5A059]/40 rounded-3xl max-w-md w-full p-6 space-y-4 shadow-2xl relative">
+            <button onclick="window.closePortfolioModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white text-2xl">&times;</button>
+            <h3 class="text-xl font-bold font-serif-title text-white">Galeriye Fotoğraf Ekle</h3>
+            
+            <div>
+                <label class="block text-xs font-semibold text-gray-400 mb-1">Tasarım / Çalışma Başlığı</label>
+                <input type="text" id="modalPortTitle" placeholder="Örn: Sarı Balyaj & Ombre" class="w-full bg-[#0A0A0A] border border-gray-800 text-white p-3 rounded-xl text-xs focus:border-[#C5A059] focus:outline-none">
+            </div>
+            <div>
+                <label class="block text-xs font-semibold text-gray-400 mb-1">Görsel URL Adresi</label>
+                <input type="url" id="modalPortUrl" placeholder="https://..." class="w-full bg-[#0A0A0A] border border-gray-800 text-white p-3 rounded-xl text-xs focus:border-[#C5A059] focus:outline-none">
+            </div>
+            <div class="text-center text-xs text-gray-500 font-semibold uppercase tracking-wider">veya</div>
+            <div>
+                <label class="block text-xs font-semibold text-gray-400 mb-1">Cihazdan Fotoğraf Yükle</label>
+                <input type="file" id="modalPortFile" accept="image/*" class="w-full text-xs text-gray-400 file:mr-3 file:py-2 file:px-3 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-[#C5A059] file:text-black cursor-pointer">
+            </div>
+
+            <button onclick="window.savePortfolioForm()" class="w-full gold-gradient text-black font-bold py-3 rounded-xl text-xs uppercase tracking-wider shadow">
+                Galeriye Kaydet & Yayınla
+            </button>
+        </div>
+    </div>
+
     <div id="replyModal" class="fixed inset-0 bg-black/80 backdrop-blur z-50 hidden flex items-center justify-center p-4">
         <div class="bg-[#121212] border border-[#C5A059]/40 rounded-3xl max-w-2xl w-full p-6 space-y-4 shadow-2xl relative">
             <button onclick="window.closeReplyModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white text-2xl">&times;</button>
@@ -441,6 +483,13 @@
             { id: 'manikur', name: 'Spa Manikür & Pedikür', price: 900, durationMin: 60 }
         ];
 
+        const DEFAULT_PORTFOLIO = [
+            { id: 'p1', title: 'Sarı Balyaj', image: 'https://images.unsplash.com/photo-1560869713-7d0a29430803?auto=format&fit=crop&w=600&q=80' },
+            { id: 'p2', title: 'Kahve Tonları', image: 'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?auto=format&fit=crop&w=600&q=80' },
+            { id: 'p3', title: 'Zarif Topuz', image: 'https://images.unsplash.com/photo-1527799820374-dcf8d9d4a388?auto=format&fit=crop&w=600&q=80' },
+            { id: 'p4', title: 'At Kuyruğu', image: 'https://images.unsplash.com/photo-1519699047748-de8e457a634e?auto=format&fit=crop&w=600&q=80' }
+        ];
+
         let activeTab = 'dashboard';
         let revenueChartInstance = null;
         let activeReplyAppId = null;
@@ -452,6 +501,9 @@
 
             if (!localStorage.getItem('nes_services_catalog')) {
                 localStorage.setItem('nes_services_catalog', JSON.stringify(DEFAULT_SERVICES));
+            }
+            if (!localStorage.getItem('nes_portfolio_gallery')) {
+                localStorage.setItem('nes_portfolio_gallery', JSON.stringify(DEFAULT_PORTFOLIO));
             }
         });
 
@@ -490,7 +542,7 @@
 
         window.switchTab = function(tabName) {
             activeTab = tabName;
-            ['dashboard', 'appointments', 'services', 'notepad', 'customers', 'financials', 'audit'].forEach(t => {
+            ['dashboard', 'appointments', 'services', 'notepad', 'customers', 'financials', 'portfolio', 'audit'].forEach(t => {
                 const view = document.getElementById(`view_${t}`);
                 const nav = document.getElementById(`nav_${t}`);
                 if (view) view.classList.add('hidden');
@@ -514,6 +566,7 @@
             const users = getStoredUsers();
             const services = getStoredServices();
             const notepad = getStoredNotepad();
+            const portfolio = getStoredPortfolio();
 
             const pending = apps.filter(a => a.status === 'Beklemede').length;
             const badge = document.getElementById('badgePendingCount');
@@ -525,6 +578,7 @@
             renderNotepadGrid(notepad);
             renderCustomersTable(users);
             renderSpendingTable(users);
+            renderPortfolioGrid(portfolio);
             renderAuditLogs();
 
             showToast('Veriler başarıyla yenilendi.', 'success');
@@ -549,6 +603,11 @@
             try { return JSON.parse(localStorage.getItem('nes_customer_notepad')) || []; } catch(e) { return []; }
         }
         function saveStoredNotepad(notes) { localStorage.setItem('nes_customer_notepad', JSON.stringify(notes)); }
+
+        function getStoredPortfolio() {
+            try { return JSON.parse(localStorage.getItem('nes_portfolio_gallery')) || DEFAULT_PORTFOLIO; } catch(e) { return DEFAULT_PORTFOLIO; }
+        }
+        function saveStoredPortfolio(items) { localStorage.setItem('nes_portfolio_gallery', JSON.stringify(items)); }
 
         function renderDashboard(apps, users) {
             let totalRevenue = 0;
@@ -1039,6 +1098,91 @@
             addAuditLog('Not Defteri Silindi', `ID #${id} olan not defteri kaydı silindi.`);
             window.syncAllData();
             showToast('Müşteri notu silindi.', 'info');
+        };
+
+        function renderPortfolioGrid(items) {
+            const container = document.getElementById('portfolioGridContainer');
+            if (!container) return;
+            container.innerHTML = '';
+
+            if (!items || items.length === 0) {
+                container.innerHTML = '<p class="text-gray-500 italic text-center py-8 col-span-full">Galeride henüz fotoğraf bulunmuyor.</p>';
+                return;
+            }
+
+            items.forEach(item => {
+                const card = document.createElement('div');
+                card.className = "bg-[#121212] border border-gray-800 hover:border-[#C5A059]/60 rounded-2xl overflow-hidden flex flex-col justify-between transition group";
+                card.innerHTML = `
+                    <div class="h-44 overflow-hidden relative">
+                        <img src="${item.image}" alt="${item.title || 'Portfolyo'}" class="w-full h-full object-cover group-hover:scale-105 transition duration-300" onerror="this.src='https://placehold.co/600x400/121212/C5A059?text=Gorsel+Yok'">
+                    </div>
+                    <div class="p-3 flex items-center justify-between gap-2 border-t border-gray-800">
+                        <span class="text-xs font-semibold text-white truncate">${item.title || 'Fotoğraf'}</span>
+                        <button onclick="window.deletePortfolioItem('${item.id}')" class="p-1.5 bg-red-950/40 border border-red-900 text-red-400 hover:bg-red-900 hover:text-white rounded-lg text-xs transition" title="Fotoğrafı Sil">
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        window.openAddPortfolioModal = function() {
+            document.getElementById('modalPortTitle').value = "";
+            document.getElementById('modalPortUrl').value = "";
+            document.getElementById('modalPortFile').value = "";
+            document.getElementById('portfolioModal').classList.remove('hidden');
+        };
+
+        window.closePortfolioModal = function() {
+            document.getElementById('portfolioModal').classList.add('hidden');
+        };
+
+        window.savePortfolioForm = function() {
+            const title = document.getElementById('modalPortTitle').value.trim() || 'Özel Tasarım';
+            const urlInput = document.getElementById('modalPortUrl').value.trim();
+            const fileInput = document.getElementById('modalPortFile');
+
+            const commitSave = (imgSrc) => {
+                if (!imgSrc) {
+                    return showToast('Lütfen bir görsel URL adresi girin veya dosya seçin.', 'warning');
+                }
+                let portfolio = getStoredPortfolio();
+                const newItem = {
+                    id: 'port_' + Date.now(),
+                    title: title,
+                    image: imgSrc
+                };
+                portfolio.unshift(newItem);
+                saveStoredPortfolio(portfolio);
+                addAuditLog('Portfolyo Eklendi', `"${title}" görseli galeriye eklendi.`);
+                window.closePortfolioModal();
+                window.syncAllData();
+                showToast('Fotoğraf galeriye eklendi.', 'success');
+            };
+
+            if (fileInput.files && fileInput.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    commitSave(e.target.result);
+                };
+                reader.readAsDataURL(fileInput.files[0]);
+            } else {
+                commitSave(urlInput);
+            }
+        };
+
+        window.deletePortfolioItem = function(id) {
+            let portfolio = getStoredPortfolio();
+            const target = portfolio.find(p => String(p.id) === String(id));
+            portfolio = portfolio.filter(p => String(p.id) !== String(id));
+            saveStoredPortfolio(portfolio);
+            if (target) {
+                addAuditLog('Portfolyo Silindi', `"${target.title}" fotoğrafı galeriden kaldırıldı.`);
+            }
+            window.syncAllData();
+            showToast('Fotoğraf galeriden silindi.', 'info');
         };
 
         function renderCustomersTable(users) {
