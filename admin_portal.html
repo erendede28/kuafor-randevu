@@ -15,7 +15,6 @@
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-    <!-- Firebase SDK Imports (v11.6.1 Stable ESM) -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
@@ -97,6 +96,7 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
+        .gold-text { color: #C5A059; }
         ::-webkit-scrollbar { width: 6px; height: 6px; }
         ::-webkit-scrollbar-track { background: #0A0A0A; }
         ::-webkit-scrollbar-thumb { background: #262626; border-radius: 3px; }
@@ -118,7 +118,7 @@
             
             <div class="space-y-4 pt-2">
                 <div>
-                    <input type="password" id="portalPassInput" placeholder="Yönetici Şifresi (Varsayılan: 1234)" class="w-full bg-[#0A0A0A] border border-gray-800 focus:border-[#C5A059] text-white text-center py-3.5 rounded-xl text-sm focus:outline-none transition">
+                    <input type="password" id="portalPassInput" onkeydown="if(event.key==='Enter') window.loginToPortal()" placeholder="Yönetici Şifresi (Varsayılan: 1234)" class="w-full bg-[#0A0A0A] border border-gray-800 focus:border-[#C5A059] text-white text-center py-3.5 rounded-xl text-sm focus:outline-none transition">
                 </div>
                 <button onclick="window.loginToPortal()" class="w-full gold-gradient text-black font-bold py-3.5 rounded-xl hover:opacity-90 transition text-sm uppercase tracking-wider shadow-lg">
                     Sisteme Giriş Yap
@@ -135,7 +135,7 @@
             <div class="p-6 border-b border-gray-800 flex items-center justify-between relative">
                 <div class="flex items-center gap-3">
                     <div class="relative">
-                        <button onclick="window.toggleAdminMenuDropdown(event)" class="w-10 h-10 rounded-xl bg-[#0A0A0A] border border-gray-800 text-[#C5A059] hover:border-[#C5A059] flex flex-col items-center justify-center gap-1 transition shadow group" title="Yönetim Menüsü">
+                        <button id="adminMenuDropdownBtn" onclick="window.toggleAdminMenuDropdown(event)" class="w-10 h-10 rounded-xl bg-[#0A0A0A] border border-gray-800 text-[#C5A059] hover:border-[#C5A059] flex flex-col items-center justify-center gap-1 transition shadow group" title="Yönetim Menüsü">
                             <span class="w-1.5 h-1.5 rounded-full bg-[#C5A059] group-hover:scale-125 transition"></span>
                             <span class="w-1.5 h-1.5 rounded-full bg-[#C5A059] group-hover:scale-125 transition"></span>
                             <span class="w-1.5 h-1.5 rounded-full bg-[#C5A059] group-hover:scale-125 transition"></span>
@@ -217,7 +217,6 @@
             </div>
         </aside>
 
-        <!-- Main Workspace -->
         <main class="flex-1 flex flex-col min-w-0 overflow-y-auto">
             
             <header class="h-16 bg-[#121212]/80 backdrop-blur border-b border-gray-800 px-6 flex items-center justify-between sticky top-0 z-30">
@@ -312,7 +311,6 @@
                     </div>
                 </div>
 
-                <!-- Appointments View -->
                 <div id="view_appointments" class="space-y-6 hidden">
                     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-gray-800 pb-4">
                         <div>
@@ -370,43 +368,40 @@
                     </div>
                 </div>
 
-                <!-- Services View -->
                 <div id="view_services" class="space-y-6 hidden">
                     <div class="flex justify-between items-center border-b border-gray-800 pb-4">
                         <div>
                             <h1 class="text-2xl font-bold font-serif-title text-white">Hizmet & Fiyat Kataloğu Yönetimi</h1>
                             <p class="text-xs text-gray-400 mt-1">Burada yapılan değişiklikler anında müşterinin rezervasyon ekranına yansır.</p>
                         </div>
-                        <button onclick="window.openAddServiceModal()" class="gold-gradient text-black text-xs font-bold px-4 py-2.5 rounded-xl shadow hover:opacity-90 transition">
-                            <i class="fa-solid fa-plus mr-1"></i> Yeni Hizmet Ekle
+                        <button onclick="window.openAddServiceModal()" class="gold-gradient text-black text-xs font-bold px-4 py-2.5 rounded-xl shadow hover:opacity-90 transition flex items-center gap-2">
+                            <i class="fa-solid fa-plus"></i> Yeni Hizmet Ekle
                         </button>
                     </div>
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="servicesGridContainer"></div>
                 </div>
 
-                <!-- Notepad View -->
                 <div id="view_notepad" class="space-y-6 hidden">
                     <div class="flex justify-between items-center border-b border-gray-800 pb-4">
                         <div>
                             <h1 class="text-2xl font-bold font-serif-title text-white">Müşteri Saç & Boya Not Defteri</h1>
                             <p class="text-xs text-gray-400 mt-1">Müşterilerinizin saç özellikleri ve boya reçeteleri.</p>
                         </div>
-                        <button onclick="window.openAddNotepadModal()" class="gold-gradient text-black text-xs font-bold px-4 py-2.5 rounded-xl shadow hover:opacity-90 transition">
-                            <i class="fa-solid fa-plus mr-1"></i> Yeni Not / Reçete Ekle
+                        <button onclick="window.openAddNotepadModal()" class="gold-gradient text-black text-xs font-bold px-4 py-2.5 rounded-xl shadow hover:opacity-90 transition flex items-center gap-2">
+                            <i class="fa-solid fa-plus"></i> Yeni Not / Reçete Ekle
                         </button>
                     </div>
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="notepadGridContainer"></div>
                 </div>
 
-                <!-- Coupons View -->
                 <div id="view_coupons" class="space-y-6 hidden">
                     <div class="flex justify-between items-center border-b border-gray-800 pb-4">
                         <div>
                             <h1 class="text-2xl font-bold font-serif-title text-white">Müşteri İndirim Kuponları Yönetimi</h1>
                             <p class="text-xs text-gray-400 mt-1">Müşterilere NES10, NES20, NES30 kuponları tanımlayın.</p>
                         </div>
-                        <button onclick="window.openAddCouponModal()" class="gold-gradient text-black text-xs font-bold px-4 py-2.5 rounded-xl shadow hover:opacity-90 transition">
-                            <i class="fa-solid fa-ticket mr-1"></i> Yeni Kupon Tanımla
+                        <button onclick="window.openAddCouponModal()" class="gold-gradient text-black text-xs font-bold px-4 py-2.5 rounded-xl shadow hover:opacity-90 transition flex items-center gap-2">
+                            <i class="fa-solid fa-ticket"></i> Yeni Kupon Tanımla
                         </button>
                     </div>
                     <div class="bg-[#121212] border border-gray-800 rounded-2xl overflow-hidden shadow-xl">
@@ -427,7 +422,6 @@
                     </div>
                 </div>
 
-                <!-- Customers CRM View -->
                 <div id="view_customers" class="space-y-6 hidden">
                     <div class="border-b border-gray-800 pb-4">
                         <h1 class="text-2xl font-bold font-serif-title text-white">Müşteri CRM Yönetimi</h1>
@@ -450,7 +444,6 @@
                     </div>
                 </div>
 
-                <!-- Financials View -->
                 <div id="view_financials" class="space-y-6 hidden">
                     <div class="border-b border-gray-800 pb-4">
                         <h1 class="text-2xl font-bold font-serif-title text-white">Finansal Harcama & Raporlama</h1>
@@ -473,21 +466,19 @@
                     </div>
                 </div>
 
-                <!-- Portfolio View -->
                 <div id="view_portfolio" class="space-y-6 hidden">
                     <div class="flex justify-between items-center border-b border-gray-800 pb-4">
                         <div>
                             <h1 class="text-2xl font-bold font-serif-title text-white">Portfolyo & Galeri Yönetimi</h1>
                             <p class="text-xs text-gray-400 mt-1">Galeriye eklenen görseller ana sayfaya yansır.</p>
                         </div>
-                        <button onclick="window.openAddPortfolioModal()" class="gold-gradient text-black text-xs font-bold px-4 py-2.5 rounded-xl shadow hover:opacity-90 transition">
-                            <i class="fa-solid fa-plus mr-1"></i> Yeni Fotoğraf Ekle
+                        <button onclick="window.openAddPortfolioModal()" class="gold-gradient text-black text-xs font-bold px-4 py-2.5 rounded-xl shadow hover:opacity-90 transition flex items-center gap-2">
+                            <i class="fa-solid fa-plus"></i> Yeni Fotoğraf Ekle
                         </button>
                     </div>
                     <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4" id="portfolioGridContainer"></div>
                 </div>
 
-                <!-- Audit Logs View -->
                 <div id="view_audit" class="space-y-6 hidden">
                     <div class="border-b border-gray-800 pb-4 flex justify-between items-center">
                         <div>
@@ -507,7 +498,7 @@
         </main>
     </div>
 
-    <!-- Modals -->
+    <!-- Daily Revenue Modal -->
     <div id="dailyRevenueModal" class="fixed inset-0 bg-black/80 backdrop-blur z-50 hidden flex items-center justify-center p-4">
         <div class="bg-[#121212] border border-[#C5A059]/40 rounded-3xl max-w-md w-full p-6 space-y-4 shadow-2xl relative">
             <button onclick="window.closeDailyRevenueModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white text-2xl">&times;</button>
@@ -528,29 +519,31 @@
         </div>
     </div>
 
+    <!-- Service Edit/Add Modal -->
     <div id="serviceEditModal" class="fixed inset-0 bg-black/80 backdrop-blur z-50 hidden flex items-center justify-center p-4">
         <div class="bg-[#121212] border border-[#C5A059]/40 rounded-3xl max-w-md w-full p-6 space-y-4 shadow-2xl relative">
             <button onclick="window.closeServiceModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white text-2xl">&times;</button>
-            <h3 class="text-xl font-bold font-serif-title text-white" id="serviceModalTitle">Hizmet Düzenle</h3>
+            <h3 class="text-xl font-bold font-serif-title text-white" id="serviceModalTitle">Hizmet Ekle / Düzenle</h3>
             <input type="hidden" id="modalSrvId">
             <div>
                 <label class="block text-xs font-semibold text-gray-400 mb-1">Hizmet Adı</label>
-                <input type="text" id="modalSrvName" class="w-full bg-[#0A0A0A] border border-gray-800 text-white p-3 rounded-xl text-xs focus:border-[#C5A059] focus:outline-none">
+                <input type="text" id="modalSrvName" placeholder="Örn: Saç Kesimi" class="w-full bg-[#0A0A0A] border border-gray-800 text-white p-3 rounded-xl text-xs focus:border-[#C5A059] focus:outline-none">
             </div>
             <div class="grid grid-cols-2 gap-4">
                 <div>
                     <label class="block text-xs font-semibold text-gray-400 mb-1">Fiyat (₺)</label>
-                    <input type="number" id="modalSrvPrice" class="w-full bg-[#0A0A0A] border border-gray-800 text-white p-3 rounded-xl text-xs focus:border-[#C5A059] focus:outline-none">
+                    <input type="number" id="modalSrvPrice" placeholder="750" class="w-full bg-[#0A0A0A] border border-gray-800 text-white p-3 rounded-xl text-xs focus:border-[#C5A059] focus:outline-none">
                 </div>
                 <div>
                     <label class="block text-xs font-semibold text-gray-400 mb-1">Süre (Dk)</label>
-                    <input type="number" id="modalSrvDuration" class="w-full bg-[#0A0A0A] border border-gray-800 text-white p-3 rounded-xl text-xs focus:border-[#C5A059] focus:outline-none">
+                    <input type="number" id="modalSrvDuration" placeholder="45" class="w-full bg-[#0A0A0A] border border-gray-800 text-white p-3 rounded-xl text-xs focus:border-[#C5A059] focus:outline-none">
                 </div>
             </div>
             <button onclick="window.saveServiceForm()" class="w-full gold-gradient text-black font-bold py-3 rounded-xl text-xs uppercase tracking-wider shadow">Kaydet</button>
         </div>
     </div>
 
+    <!-- Notepad Modal -->
     <div id="notepadModal" class="fixed inset-0 bg-black/80 backdrop-blur z-50 hidden flex items-center justify-center p-4">
         <div class="bg-[#121212] border border-[#C5A059]/40 rounded-3xl max-w-md w-full p-6 space-y-4 shadow-2xl relative">
             <button onclick="window.closeNotepadModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white text-2xl">&times;</button>
@@ -562,33 +555,35 @@
             </div>
             <div>
                 <label class="block text-xs font-semibold text-gray-400 mb-1">Saç Tipi</label>
-                <input type="text" id="modalNotepadHairType" placeholder="Kalın telli" class="w-full bg-[#0A0A0A] border border-gray-800 text-white p-3 rounded-xl text-xs focus:border-[#C5A059] focus:outline-none">
+                <input type="text" id="modalNotepadHairType" placeholder="Kalın telli, kuru" class="w-full bg-[#0A0A0A] border border-gray-800 text-white p-3 rounded-xl text-xs focus:border-[#C5A059] focus:outline-none">
             </div>
             <div>
                 <label class="block text-xs font-semibold text-gray-400 mb-1">Boya Reçetesi</label>
-                <textarea id="modalNotepadFormula" rows="3" placeholder="Formül..." class="w-full bg-[#0A0A0A] border border-gray-800 text-white p-3 rounded-xl text-xs focus:border-[#C5A059] focus:outline-none"></textarea>
+                <textarea id="modalNotepadFormula" rows="3" placeholder="Örn: 7.1 + 8.0 (%6 Oksidan)" class="w-full bg-[#0A0A0A] border border-gray-800 text-white p-3 rounded-xl text-xs focus:border-[#C5A059] focus:outline-none"></textarea>
             </div>
             <button onclick="window.saveNotepadForm()" class="w-full gold-gradient text-black font-bold py-3 rounded-xl text-xs uppercase tracking-wider shadow">Kaydet</button>
         </div>
     </div>
 
+    <!-- Portfolio Upload Modal -->
     <div id="portfolioModal" class="fixed inset-0 bg-black/80 backdrop-blur z-50 hidden flex items-center justify-center p-4">
         <div class="bg-[#121212] border border-[#C5A059]/40 rounded-3xl max-w-md w-full p-6 space-y-4 shadow-2xl relative">
             <button onclick="window.closePortfolioModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white text-2xl">&times;</button>
             <h3 class="text-xl font-bold font-serif-title text-white">Portfolyo Görseli Ekle</h3>
             <div>
                 <label class="block text-xs font-semibold text-gray-400 mb-1">Görsel Başlığı</label>
-                <input type="text" id="modalPortfolioTitle" placeholder="Özel Sombre" class="w-full bg-[#0A0A0A] border border-gray-800 text-white p-3 rounded-xl text-xs focus:border-[#C5A059] focus:outline-none">
+                <input type="text" id="modalPortfolioTitle" placeholder="Özel Sombre Tasarımı" class="w-full bg-[#0A0A0A] border border-gray-800 text-white p-3 rounded-xl text-xs focus:border-[#C5A059] focus:outline-none">
             </div>
             <div>
-                <label class="block text-xs font-semibold text-gray-400 mb-1">Görsel Dosyası veya URL</label>
+                <label class="block text-xs font-semibold text-gray-400 mb-1">Görsel Yükle veya Bağlantı Girin</label>
                 <input type="file" id="modalPortfolioFile" accept="image/*" class="w-full text-xs text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-[#C5A059] file:text-black cursor-pointer mb-2">
-                <input type="text" id="modalPortfolioUrl" placeholder="Veya Resim URL'si" class="w-full bg-[#0A0A0A] border border-gray-800 text-white p-3 rounded-xl text-xs focus:border-[#C5A059] focus:outline-none">
+                <input type="text" id="modalPortfolioUrl" placeholder="Veya Görsel URL'si" class="w-full bg-[#0A0A0A] border border-gray-800 text-white p-3 rounded-xl text-xs focus:border-[#C5A059] focus:outline-none">
             </div>
             <button onclick="window.savePortfolioForm()" class="w-full gold-gradient text-black font-bold py-3 rounded-xl text-xs uppercase tracking-wider shadow">Yayınla</button>
         </div>
     </div>
 
+    <!-- Coupon Modal -->
     <div id="couponModal" class="fixed inset-0 bg-black/80 backdrop-blur z-50 hidden flex items-center justify-center p-4">
         <div class="bg-[#121212] border border-[#C5A059]/40 rounded-3xl max-w-md w-full p-6 space-y-4 shadow-2xl relative">
             <button onclick="window.closeCouponModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white text-2xl">&times;</button>
@@ -611,6 +606,7 @@
         </div>
     </div>
 
+    <!-- Customer Detail Modal -->
     <div id="customerDetailModal" class="fixed inset-0 bg-black/80 backdrop-blur z-50 hidden flex items-center justify-center p-4">
         <div class="bg-[#121212] border border-[#C5A059]/40 rounded-3xl max-w-md w-full p-6 space-y-5 shadow-2xl relative">
             <button onclick="window.closeCustomerDetailModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-gray-800 hover:bg-red-950 hover:text-red-400 text-gray-300 flex items-center justify-center text-lg transition">&times;</button>
@@ -639,6 +635,7 @@
         </div>
     </div>
 
+    <!-- Forgot Password Reset Modal -->
     <div id="forgotResetModal" class="fixed inset-0 bg-black/80 backdrop-blur z-50 hidden flex items-center justify-center p-4">
         <div class="bg-[#121212] border border-[#C5A059]/40 rounded-3xl max-w-md w-full p-6 space-y-4 shadow-2xl relative">
             <button onclick="window.closeForgotResetModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white text-2xl">&times;</button>
@@ -656,6 +653,7 @@
         </div>
     </div>
 
+    <!-- Appointment Reply Modal -->
     <div id="replyModal" class="fixed inset-0 bg-black/80 backdrop-blur z-50 hidden flex items-center justify-center p-4">
         <div class="bg-[#121212] border border-[#C5A059]/40 rounded-3xl max-w-2xl w-full p-6 space-y-4 shadow-2xl relative">
             <button onclick="window.closeReplyModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white text-2xl">&times;</button>
@@ -719,37 +717,32 @@
         let activeReplyAppId = null;
         let currentAppointmentFilter = 'Aktif';
 
-        // Firebase Realtime Listeners (Crucial for live sync with phones)
+        // Realtime Firebase Cloud Listeners
         window.startRealtimeListeners = function() {
             if (!window.db || !window.appId) return;
 
             import("https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js").then(({ collection, onSnapshot }) => {
-                
-                // 1. Appointments Listener
                 onSnapshot(collection(window.db, 'artifacts', window.appId, 'public', 'data', 'nes_apps'), (snapshot) => {
                     let apps = [];
                     snapshot.forEach(doc => { apps.push({ id: doc.id, ...doc.data() }); });
                     localStorage.setItem('nes_apps', JSON.stringify(apps));
                     window.syncAllData();
-                }, (err) => console.error("Apps listener error:", err));
+                });
 
-                // 2. Users / CRM Listener
                 onSnapshot(collection(window.db, 'artifacts', window.appId, 'public', 'data', 'nes_users_list'), (snapshot) => {
                     let users = [];
                     snapshot.forEach(doc => { users.push({ id: doc.id, ...doc.data() }); });
                     localStorage.setItem('nes_users_list', JSON.stringify(users));
                     window.syncAllData();
-                }, (err) => console.error("Users listener error:", err));
+                });
 
-                // 3. Forgot Password Requests Listener
                 onSnapshot(collection(window.db, 'artifacts', window.appId, 'public', 'data', 'nes_forgot_password_requests'), (snapshot) => {
                     let reqs = [];
                     snapshot.forEach(doc => { reqs.push({ id: doc.id, ...doc.data() }); });
                     localStorage.setItem('nes_forgot_password_requests', JSON.stringify(reqs));
                     window.syncAllData();
-                }, (err) => console.error("Forgot reqs listener error:", err));
+                });
 
-                // 4. Services Catalog Listener
                 onSnapshot(collection(window.db, 'artifacts', window.appId, 'public', 'data', 'nes_services_catalog'), (snapshot) => {
                     let srvs = [];
                     snapshot.forEach(doc => { srvs.push({ id: doc.id, ...doc.data() }); });
@@ -757,33 +750,29 @@
                         localStorage.setItem('nes_services_catalog', JSON.stringify(srvs));
                         window.syncAllData();
                     }
-                }, (err) => console.error("Services listener error:", err));
+                });
 
-                // 5. Customer Notepad Listener
                 onSnapshot(collection(window.db, 'artifacts', window.appId, 'public', 'data', 'nes_customer_notepad'), (snapshot) => {
                     let notes = [];
                     snapshot.forEach(doc => { notes.push({ id: doc.id, ...doc.data() }); });
                     localStorage.setItem('nes_customer_notepad', JSON.stringify(notes));
                     window.syncAllData();
-                }, (err) => console.error("Notepad listener error:", err));
+                });
 
-                // 6. Coupons Listener
                 onSnapshot(collection(window.db, 'artifacts', window.appId, 'public', 'data', 'nes_customer_coupons'), (snapshot) => {
                     let coupons = [];
                     snapshot.forEach(doc => { coupons.push({ id: doc.id, ...doc.data() }); });
                     localStorage.setItem('nes_customer_coupons', JSON.stringify(coupons));
                     window.syncAllData();
-                }, (err) => console.error("Coupons listener error:", err));
+                });
 
-                // 7. Revenue Ledger Listener
                 onSnapshot(collection(window.db, 'artifacts', window.appId, 'public', 'data', 'nes_revenue_ledger'), (snapshot) => {
                     let ledger = [];
                     snapshot.forEach(doc => { ledger.push({ id: doc.id, ...doc.data() }); });
                     localStorage.setItem('nes_revenue_ledger', JSON.stringify(ledger));
                     window.syncAllData();
-                }, (err) => console.error("Revenue ledger listener error:", err));
+                });
 
-                // 8. Portfolio Listener
                 onSnapshot(collection(window.db, 'artifacts', window.appId, 'public', 'data', 'nes_portfolio_gallery'), (snapshot) => {
                     let items = [];
                     snapshot.forEach(doc => { items.push({ id: doc.id, ...doc.data() }); });
@@ -791,8 +780,7 @@
                         localStorage.setItem('nes_portfolio_gallery', JSON.stringify(items));
                         window.syncAllData();
                     }
-                }, (err) => console.error("Portfolio listener error:", err));
-
+                });
             });
         };
 
@@ -805,8 +793,8 @@
 
             document.addEventListener('click', (e) => {
                 const dropdown = document.getElementById('adminMenuDropdown');
-                const menuBtn = e.target.closest('button');
-                if (dropdown && !dropdown.contains(e.target) && !menuBtn) {
+                const btn = document.getElementById('adminMenuDropdownBtn');
+                if (dropdown && !dropdown.contains(e.target) && btn && !btn.contains(e.target)) {
                     dropdown.classList.add('hidden');
                 }
             });
@@ -899,9 +887,7 @@
             renderAuditLogs();
         };
 
-        function getStoredApps() {
-            try { return JSON.parse(localStorage.getItem('nes_apps')) || []; } catch(e) { return []; }
-        }
+        function getStoredApps() { try { return JSON.parse(localStorage.getItem('nes_apps')) || []; } catch(e) { return []; } }
         function saveStoredApps(apps) { 
             localStorage.setItem('nes_apps', JSON.stringify(apps));
             if (window.db && window.appId) {
@@ -913,9 +899,7 @@
             }
         }
 
-        function getStoredUsers() {
-            try { return JSON.parse(localStorage.getItem('nes_users_list')) || []; } catch(e) { return []; }
-        }
+        function getStoredUsers() { try { return JSON.parse(localStorage.getItem('nes_users_list')) || []; } catch(e) { return []; } }
         function saveStoredUsers(users) { 
             localStorage.setItem('nes_users_list', JSON.stringify(users));
             if (window.db && window.appId) {
@@ -928,9 +912,7 @@
             }
         }
 
-        function getStoredForgotRequests() {
-            try { return JSON.parse(localStorage.getItem('nes_forgot_password_requests')) || []; } catch(e) { return []; }
-        }
+        function getStoredForgotRequests() { try { return JSON.parse(localStorage.getItem('nes_forgot_password_requests')) || []; } catch(e) { return []; } }
         function saveStoredForgotRequests(reqs) { 
             localStorage.setItem('nes_forgot_password_requests', JSON.stringify(reqs));
             if (window.db && window.appId) {
@@ -942,34 +924,67 @@
             }
         }
 
-        function getStoredServices() {
-            try { return JSON.parse(localStorage.getItem('nes_services_catalog')) || DEFAULT_SERVICES; } catch(e) { return DEFAULT_SERVICES; }
+        function getStoredServices() { try { return JSON.parse(localStorage.getItem('nes_services_catalog')) || DEFAULT_SERVICES; } catch(e) { return DEFAULT_SERVICES; } }
+        function saveStoredServices(srvs) { 
+            localStorage.setItem('nes_services_catalog', JSON.stringify(srvs));
+            if (window.db && window.appId) {
+                import("https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js").then(({ doc, setDoc }) => {
+                    srvs.forEach(s => {
+                        setDoc(doc(window.db, 'artifacts', window.appId, 'public', 'data', 'nes_services_catalog', String(s.id)), s).catch(e => console.error(e));
+                    });
+                });
+            }
         }
-        function saveStoredServices(srvs) { localStorage.setItem('nes_services_catalog', JSON.stringify(srvs)); }
 
-        function getStoredNotepad() {
-            try { return JSON.parse(localStorage.getItem('nes_customer_notepad')) || []; } catch(e) { return []; }
+        function getStoredNotepad() { try { return JSON.parse(localStorage.getItem('nes_customer_notepad')) || []; } catch(e) { return []; } }
+        function saveStoredNotepad(notes) { 
+            localStorage.setItem('nes_customer_notepad', JSON.stringify(notes));
+            if (window.db && window.appId) {
+                import("https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js").then(({ doc, setDoc }) => {
+                    notes.forEach(n => {
+                        setDoc(doc(window.db, 'artifacts', window.appId, 'public', 'data', 'nes_customer_notepad', String(n.id)), n).catch(e => console.error(e));
+                    });
+                });
+            }
         }
-        function saveStoredNotepad(notes) { localStorage.setItem('nes_customer_notepad', JSON.stringify(notes)); }
 
-        function getStoredCoupons() {
-            try { return JSON.parse(localStorage.getItem('nes_customer_coupons')) || []; } catch(e) { return []; }
+        function getStoredCoupons() { try { return JSON.parse(localStorage.getItem('nes_customer_coupons')) || []; } catch(e) { return []; } }
+        function saveStoredCoupons(coupons) { 
+            localStorage.setItem('nes_customer_coupons', JSON.stringify(coupons));
+            if (window.db && window.appId) {
+                import("https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js").then(({ doc, setDoc }) => {
+                    coupons.forEach(c => {
+                        setDoc(doc(window.db, 'artifacts', window.appId, 'public', 'data', 'nes_customer_coupons', String(c.id)), c).catch(e => console.error(e));
+                    });
+                });
+            }
         }
-        function saveStoredCoupons(coupons) { localStorage.setItem('nes_customer_coupons', JSON.stringify(coupons)); }
 
-        function getStoredPortfolio() {
-            try { return JSON.parse(localStorage.getItem('nes_portfolio_gallery')) || DEFAULT_PORTFOLIO; } catch(e) { return DEFAULT_PORTFOLIO; }
+        function getStoredPortfolio() { try { return JSON.parse(localStorage.getItem('nes_portfolio_gallery')) || DEFAULT_PORTFOLIO; } catch(e) { return DEFAULT_PORTFOLIO; } }
+        function saveStoredPortfolio(items) { 
+            localStorage.setItem('nes_portfolio_gallery', JSON.stringify(items));
+            if (window.db && window.appId) {
+                import("https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js").then(({ doc, setDoc }) => {
+                    items.forEach(i => {
+                        setDoc(doc(window.db, 'artifacts', window.appId, 'public', 'data', 'nes_portfolio_gallery', String(i.id)), i).catch(e => console.error(e));
+                    });
+                });
+            }
         }
-        function saveStoredPortfolio(items) { localStorage.setItem('nes_portfolio_gallery', JSON.stringify(items)); }
 
-        function getRevenueLedger() {
-            try { return JSON.parse(localStorage.getItem('nes_revenue_ledger')) || []; } catch(e) { return []; }
+        function getRevenueLedger() { try { return JSON.parse(localStorage.getItem('nes_revenue_ledger')) || []; } catch(e) { return []; } }
+        function saveRevenueLedger(ledger) { 
+            localStorage.setItem('nes_revenue_ledger', JSON.stringify(ledger));
+            if (window.db && window.appId) {
+                import("https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js").then(({ doc, setDoc }) => {
+                    ledger.forEach(r => {
+                        setDoc(doc(window.db, 'artifacts', window.appId, 'public', 'data', 'nes_revenue_ledger', String(r.id)), r).catch(e => console.error(e));
+                    });
+                });
+            }
         }
-        function saveRevenueLedger(ledger) { localStorage.setItem('nes_revenue_ledger', JSON.stringify(ledger)); }
 
-        function getLifetimeStats() {
-            try { return JSON.parse(localStorage.getItem('nes_lifetime_appointment_stats')) || { totalApps: 0, completedApps: 0 }; } catch(e) { return { totalApps: 0, completedApps: 0 }; }
-        }
+        function getLifetimeStats() { try { return JSON.parse(localStorage.getItem('nes_lifetime_appointment_stats')) || { totalApps: 0, completedApps: 0 }; } catch(e) { return { totalApps: 0, completedApps: 0 }; } }
         function saveLifetimeStats(stats) { localStorage.setItem('nes_lifetime_appointment_stats', JSON.stringify(stats)); }
 
         function addRevenueRecord(note, amount, dateStr) {
@@ -980,14 +995,32 @@
             stats.totalApps = (stats.totalApps || 0) + 1;
             stats.completedApps = (stats.completedApps || 0) + 1;
             saveLifetimeStats(stats);
+            addAuditLog('Ciro Eklendi', `${amount} ₺ - ${note}`);
         }
 
-        window.deleteRevenueRecord = function(id) {
-            let ledger = getRevenueLedger();
-            ledger = ledger.filter(r => r.id !== id);
-            saveRevenueLedger(ledger);
-            window.syncAllData();
-            showToast('Kayıt silindi.', 'info');
+        window.clearAllRevenueLedger = function() {
+            if (confirm('Tüm ciro ve harcama kayıtlarını sıfırlamak istediğinize emin misiniz?')) {
+                saveRevenueLedger([]);
+                if (window.db && window.appId) {
+                    import("https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js").then(({ collection, getDocs, deleteDoc, doc }) => {
+                        getDocs(collection(window.db, 'artifacts', window.appId, 'public', 'data', 'nes_revenue_ledger')).then(snap => {
+                            snap.forEach(d => deleteDoc(doc(window.db, 'artifacts', window.appId, 'public', 'data', 'nes_revenue_ledger', d.id)));
+                        });
+                    });
+                }
+                window.syncAllData();
+                addAuditLog('Ciro Sıfırlandı', 'Tüm kasa kayıtları temizlendi.');
+                showToast('Tüm ciro kayıtları sıfırlandı.', 'info');
+            }
+        };
+
+        window.clearLifetimeAppointmentsStats = function() {
+            if (confirm('Tüm randevu sayaçlarını sıfırlamak istediğinize emin misiniz?')) {
+                saveLifetimeStats({ totalApps: 0, completedApps: 0 });
+                window.syncAllData();
+                addAuditLog('Randevular Sıfırlandı', 'Randevu sayaçları resetlendi.');
+                showToast('Randevu verileri ve sayaçları sıfırlandı.', 'info');
+            }
         };
 
         function renderDashboard(apps, users) {
@@ -1104,8 +1137,6 @@
             filtered.forEach(a => {
                 const tr = document.createElement('tr');
                 tr.className = "hover:bg-gray-900/40 transition";
-                const cleanPhone = (a.phone || '').replace(/\s+/g, '');
-                const waPhone = cleanPhone.startsWith('0') ? '9' + cleanPhone : cleanPhone;
                 const uObj = users.find(u => u.name.toLowerCase() === (a.name || '').toLowerCase());
                 const avatar = uObj && uObj.avatar ? uObj.avatar : '';
                 const avatarHtml = avatar ? `<img src="${avatar}" class="w-8 h-8 rounded-full object-cover border border-[#C5A059] shrink-0">` : `<div class="w-8 h-8 rounded-full gold-gradient text-black font-bold text-xs flex items-center justify-center shrink-0">${(a.name || 'M').charAt(0).toUpperCase()}</div>`;
@@ -1115,7 +1146,7 @@
                         <div class="flex items-center gap-3">
                             ${avatarHtml}
                             <div>
-                                <strong class="text-white block text-sm">${a.name}</strong>
+                                <strong class="text-white block text-sm cursor-pointer hover:text-[#C5A059]" onclick="window.openCustomerDetailModal('${a.name}')">${a.name}</strong>
                                 <span class="text-[11px] font-mono text-gray-400">${a.phone || ''}</span>
                             </div>
                         </div>
@@ -1137,7 +1168,7 @@
                     <td class="p-4 text-center space-x-1">
                         <button onclick="window.updateAppStatus(${a.id}, 'Onaylandı')" class="p-2 bg-emerald-950/50 border border-emerald-800 text-emerald-400 rounded-lg hover:bg-emerald-900 transition" title="Onayla"><i class="fa-solid fa-check"></i></button>
                         <button onclick="window.updateAppStatus(${a.id}, 'Tamamlandı')" class="p-2 bg-blue-950/50 border border-blue-800 text-blue-400 rounded-lg hover:bg-blue-900 transition" title="Tamamlandı"><i class="fa-solid fa-flag-checkered"></i></button>
-                        <button onclick="window.openReplyModalForApp(${a.id})" class="p-2 bg-amber-950/50 border border-amber-800 text-amber-400 rounded-lg hover:bg-amber-900 transition" title="Not"><i class="fa-solid fa-comment"></i></button>
+                        <button onclick="window.openReplyModalForApp(${a.id})" class="p-2 bg-amber-950/50 border border-amber-800 text-amber-400 rounded-lg hover:bg-amber-900 transition" title="Incele / Yanıtla"><i class="fa-solid fa-comment"></i></button>
                         <button onclick="window.updateAppStatus(${a.id}, 'İptal')" class="p-2 bg-red-950/50 border border-red-800 text-red-300 rounded-lg hover:bg-red-900 transition" title="İptal"><i class="fa-solid fa-xmark"></i></button>
                     </td>
                 `;
@@ -1150,9 +1181,52 @@
             const target = apps.find(a => a.id === id);
             if (target) {
                 target.status = newStatus;
+                if (newStatus === 'Tamamlandı') {
+                    addRevenueRecord(`${target.name} - ${target.service}`, target.totalPrice || 0, target.date || new Date().toISOString().split('T')[0]);
+                }
                 saveStoredApps(apps);
                 window.syncAllData();
+                addAuditLog('Randevu Durumu', `#${id} randevusu ${newStatus} olarak güncellendi.`);
                 showToast(`Randevu durumu "${newStatus}" yapıldı.`, 'success');
+            }
+        };
+
+        window.openReplyModalForApp = function(id) {
+            activeReplyAppId = id;
+            const apps = getStoredApps();
+            const app = apps.find(a => a.id === id);
+            if (!app) return;
+
+            document.getElementById('replyModalPhone').innerText = `${app.name} (${app.phone || 'Telefon yok'})`;
+            document.getElementById('replyModalNote').innerText = app.note || 'Özel not eklenmemiş.';
+            document.getElementById('replyModalInput').value = app.reply || '';
+
+            const mediaContainer = document.getElementById('replyModalMedia');
+            if (app.image) {
+                mediaContainer.innerHTML = `<img src="${app.image}" class="max-h-48 rounded-xl object-contain">`;
+            } else {
+                mediaContainer.innerHTML = '<span class="text-xs text-gray-500 italic">Müşteri görsel eklememiş.</span>';
+            }
+
+            document.getElementById('replyModal').classList.remove('hidden');
+        };
+
+        window.closeReplyModal = function() {
+            document.getElementById('replyModal').classList.add('hidden');
+            activeReplyAppId = null;
+        };
+
+        window.submitAdminReply = function() {
+            if (!activeReplyAppId) return;
+            const replyText = document.getElementById('replyModalInput').value.trim();
+            let apps = getStoredApps();
+            const app = apps.find(a => a.id === activeReplyAppId);
+            if (app) {
+                app.reply = replyText;
+                saveStoredApps(apps);
+                window.closeReplyModal();
+                window.syncAllData();
+                showToast('Salon yanıtı kaydedildi.', 'success');
             }
         };
 
@@ -1171,7 +1245,7 @@
                     <td class="p-4 font-mono text-[#C5A059]">${req.phone}</td>
                     <td class="p-4 text-gray-300">${req.timestamp}</td>
                     <td class="p-4 text-center">
-                        <button onclick="window.openForgotResetModal(${req.id}, '${req.name}')" class="px-3 py-1.5 bg-[#C5A059]/20 border border-[#C5A059] text-[#C5A059] rounded-lg text-xs font-semibold">Şifre Ata</button>
+                        <button onclick="window.openForgotResetModal(${req.id}, '${req.name}')" class="px-3 py-1.5 bg-[#C5A059]/20 border border-[#C5A059] text-[#C5A059] hover:bg-[#C5A059] hover:text-black transition rounded-lg text-xs font-semibold">Şifre Ata</button>
                     </td>
                 `;
                 tbody.appendChild(tr);
@@ -1181,6 +1255,7 @@
         window.openForgotResetModal = function(reqId, custName) {
             document.getElementById('modalForgotReqId').value = reqId;
             document.getElementById('modalForgotCustName').value = custName;
+            document.getElementById('modalNewPasswordInput').value = '';
             document.getElementById('forgotResetModal').classList.remove('hidden');
         };
         window.closeForgotResetModal = function() { document.getElementById('forgotResetModal').classList.add('hidden'); };
@@ -1200,8 +1275,15 @@
             reqs = reqs.filter(r => r.id !== reqId);
             saveStoredForgotRequests(reqs);
 
+            if (window.db && window.appId) {
+                import("https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js").then(({ doc, deleteDoc }) => {
+                    deleteDoc(doc(window.db, 'artifacts', window.appId, 'public', 'data', 'nes_forgot_password_requests', String(reqId))).catch(e => console.error(e));
+                });
+            }
+
             window.closeForgotResetModal();
             window.syncAllData();
+            addAuditLog('Şifre Atandı', `${custName} için yeni şifre atandı.`);
             showToast('Şifre güncellendi.', 'success');
         };
 
@@ -1211,7 +1293,7 @@
             container.innerHTML = '';
             services.forEach(srv => {
                 const card = document.createElement('div');
-                card.className = "bg-[#121212] border border-gray-800 p-5 rounded-2xl flex flex-col justify-between space-y-4";
+                card.className = "bg-[#121212] border border-gray-800 p-5 rounded-2xl flex flex-col justify-between space-y-4 hover:border-[#C5A059]/50 transition";
                 card.innerHTML = `
                     <div>
                         <div class="flex justify-between items-start">
@@ -1220,48 +1302,203 @@
                         </div>
                         <p class="text-xs text-gray-400 mt-1">Süre: ${srv.durationMin} Dk</p>
                     </div>
+                    <div class="flex gap-2 justify-end pt-2 border-t border-gray-800/60">
+                        <button onclick="window.openEditServiceModal('${srv.id}')" class="px-3 py-1.5 bg-gray-800 hover:bg-[#C5A059] hover:text-black text-xs font-semibold rounded-lg transition"><i class="fa-solid fa-pen-to-square mr-1"></i> Düzenle</button>
+                        <button onclick="window.deleteService('${srv.id}')" class="px-3 py-1.5 bg-red-950/50 border border-red-900 text-red-400 hover:bg-red-900 hover:text-white text-xs font-semibold rounded-lg transition"><i class="fa-solid fa-trash"></i></button>
+                    </div>
                 `;
                 container.appendChild(card);
             });
         }
+
+        window.openAddServiceModal = function() {
+            document.getElementById('serviceModalTitle').innerText = 'Yeni Hizmet Ekle';
+            document.getElementById('modalSrvId').value = '';
+            document.getElementById('modalSrvName').value = '';
+            document.getElementById('modalSrvPrice').value = '';
+            document.getElementById('modalSrvDuration').value = '';
+            document.getElementById('serviceEditModal').classList.remove('hidden');
+        };
+
+        window.openEditServiceModal = function(id) {
+            const srvs = getStoredServices();
+            const srv = srvs.find(s => s.id === id);
+            if (!srv) return;
+            document.getElementById('serviceModalTitle').innerText = 'Hizmet Düzenle';
+            document.getElementById('modalSrvId').value = srv.id;
+            document.getElementById('modalSrvName').value = srv.name;
+            document.getElementById('modalSrvPrice').value = srv.price;
+            document.getElementById('modalSrvDuration').value = srv.durationMin;
+            document.getElementById('serviceEditModal').classList.remove('hidden');
+        };
+
+        window.closeServiceModal = function() { document.getElementById('serviceEditModal').classList.add('hidden'); };
+
+        window.saveServiceForm = function() {
+            const id = document.getElementById('modalSrvId').value;
+            const name = document.getElementById('modalSrvName').value.trim();
+            const price = parseFloat(document.getElementById('modalSrvPrice').value) || 0;
+            const durationMin = parseInt(document.getElementById('modalSrvDuration').value, 10) || 30;
+
+            if (!name) return showToast('Hizmet adı giriniz.', 'warning');
+
+            let srvs = getStoredServices();
+            if (id) {
+                const target = srvs.find(s => s.id === id);
+                if (target) { target.name = name; target.price = price; target.durationMin = durationMin; }
+            } else {
+                srvs.push({ id: 'srv_' + Date.now(), name, price, durationMin });
+            }
+
+            saveStoredServices(srvs);
+            window.closeServiceModal();
+            window.syncAllData();
+            addAuditLog('Hizmet Güncellendi', `${name} (${price} ₺)`);
+            showToast('Hizmet kataloğu güncellendi.', 'success');
+        };
+
+        window.deleteService = function(id) {
+            let srvs = getStoredServices().filter(s => s.id !== id);
+            saveStoredServices(srvs);
+            if (window.db && window.appId) {
+                import("https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js").then(({ doc, deleteDoc }) => {
+                    deleteDoc(doc(window.db, 'artifacts', window.appId, 'public', 'data', 'nes_services_catalog', String(id))).catch(e => console.error(e));
+                });
+            }
+            window.syncAllData();
+            showToast('Hizmet silindi.', 'info');
+        };
 
         function renderNotepadGrid(notepad) {
             const container = document.getElementById('notepadGridContainer');
             if (!container) return;
             container.innerHTML = '';
+            if (notepad.length === 0) {
+                container.innerHTML = '<p class="text-gray-500 italic col-span-full text-center py-6">Kayıtlı not yok.</p>';
+                return;
+            }
             notepad.forEach(note => {
                 const card = document.createElement('div');
-                card.className = "bg-[#121212] border border-gray-800 p-5 rounded-2xl space-y-2";
+                card.className = "bg-[#121212] border border-gray-800 p-5 rounded-2xl space-y-3 flex flex-col justify-between";
                 card.innerHTML = `
-                    <strong class="text-white text-sm">${note.customerName}</strong>
-                    <p class="text-xs text-gray-300">Saç: ${note.hairType || '-'}</p>
-                    <p class="text-xs text-[#C5A059] font-mono bg-[#0A0A0A] p-2 rounded-xl">Reçete: ${note.formula || '-'}</p>
+                    <div>
+                        <strong class="text-white text-sm block font-bold">${note.customerName}</strong>
+                        <p class="text-xs text-gray-300 mt-1"><b>Saç:</b> ${note.hairType || '-'}</p>
+                        <p class="text-xs text-[#C5A059] font-mono bg-[#0A0A0A] p-2.5 rounded-xl border border-gray-800 mt-2"><b>Reçete:</b> ${note.formula || '-'}</p>
+                    </div>
+                    <div class="flex justify-end pt-2 border-t border-gray-800/60">
+                        <button onclick="window.deleteNotepadNote('${note.id}')" class="text-xs text-red-400 hover:text-red-300 transition"><i class="fa-solid fa-trash mr-1"></i> Sil</button>
+                    </div>
                 `;
                 container.appendChild(card);
             });
         }
 
+        window.openAddNotepadModal = function() {
+            document.getElementById('modalNotepadId').value = '';
+            document.getElementById('modalNotepadCustomer').value = '';
+            document.getElementById('modalNotepadHairType').value = '';
+            document.getElementById('modalNotepadFormula').value = '';
+            document.getElementById('notepadModal').classList.remove('hidden');
+        };
+
+        window.closeNotepadModal = function() { document.getElementById('notepadModal').classList.add('hidden'); };
+
+        window.saveNotepadForm = function() {
+            const cust = document.getElementById('modalNotepadCustomer').value.trim();
+            const hair = document.getElementById('modalNotepadHairType').value.trim();
+            const formula = document.getElementById('modalNotepadFormula').value.trim();
+
+            if (!cust) return showToast('Müşteri adı giriniz.', 'warning');
+
+            let notes = getStoredNotepad();
+            notes.unshift({ id: 'note_' + Date.now(), customerName: cust, hairType: hair, formula });
+            saveStoredNotepad(notes);
+
+            window.closeNotepadModal();
+            window.syncAllData();
+            showToast('Müşteri notu kaydedildi.', 'success');
+        };
+
+        window.deleteNotepadNote = function(id) {
+            let notes = getStoredNotepad().filter(n => n.id !== id);
+            saveStoredNotepad(notes);
+            if (window.db && window.appId) {
+                import("https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js").then(({ doc, deleteDoc }) => {
+                    deleteDoc(doc(window.db, 'artifacts', window.appId, 'public', 'data', 'nes_customer_notepad', String(id))).catch(e => console.error(e));
+                });
+            }
+            window.syncAllData();
+            showToast('Not silindi.', 'info');
+        };
+
         function renderCouponsTable(coupons) {
             const tbody = document.getElementById('couponTableBody');
             if (!tbody) return;
             tbody.innerHTML = '';
+            if (coupons.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="5" class="text-center py-6 text-gray-500">Aktif kupon bulunmuyor.</td></tr>';
+                return;
+            }
             coupons.forEach(c => {
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
                     <td class="p-4 font-bold text-white">${c.customerName}</td>
-                    <td class="p-4 font-mono text-[#C5A059]">${c.code}</td>
+                    <td class="p-4 font-mono text-[#C5A059] font-bold">${c.code}</td>
                     <td class="p-4">%${c.discountPercent}</td>
                     <td class="p-4 text-gray-300">${new Date(c.expiresAt).toLocaleString('tr-TR')}</td>
-                    <td class="p-4 text-center"><button onclick="window.deleteCoupon(${c.id})" class="text-red-400"><i class="fa-solid fa-trash"></i></button></td>
+                    <td class="p-4 text-center"><button onclick="window.deleteCoupon('${c.id}')" class="text-red-400 hover:text-red-300"><i class="fa-solid fa-trash"></i></button></td>
                 `;
                 tbody.appendChild(tr);
             });
         }
 
-        window.deleteCoupon = function(id) {
-            let coupons = getStoredCoupons().filter(c => c.id !== id);
+        window.openAddCouponModal = function() {
+            const users = getStoredUsers();
+            const select = document.getElementById('modalCouponCustomer');
+            if (select) {
+                select.innerHTML = '<option value="">Müşteri Seçiniz</option>';
+                users.forEach(u => {
+                    const opt = document.createElement('option');
+                    opt.value = u.name;
+                    opt.textContent = u.name;
+                    select.appendChild(opt);
+                });
+            }
+            document.getElementById('couponModal').classList.remove('hidden');
+        };
+
+        window.closeCouponModal = function() { document.getElementById('couponModal').classList.add('hidden'); };
+
+        window.saveCouponForm = function() {
+            const cust = document.getElementById('modalCouponCustomer').value;
+            const code = document.getElementById('modalCouponCode').value;
+            if (!cust) return showToast('Lütfen bir müşteri seçin.', 'warning');
+
+            const percent = code === 'NES30' ? 30 : code === 'NES20' ? 20 : 10;
+            const expiresAt = Date.now() + (7 * 24 * 60 * 60 * 1000);
+
+            let coupons = getStoredCoupons();
+            const newCoupon = { id: 'c_' + Date.now(), customerName: cust, code, discountPercent: percent, expiresAt };
+            coupons.unshift(newCoupon);
             saveStoredCoupons(coupons);
+
+            window.closeCouponModal();
             window.syncAllData();
+            addAuditLog('Kupon Tanımlandı', `${cust} müşterisine ${code}`);
+            showToast(`${code} kuponu tanımlandı.`, 'success');
+        };
+
+        window.deleteCoupon = function(id) {
+            let coupons = getStoredCoupons().filter(c => String(c.id) !== String(id));
+            saveStoredCoupons(coupons);
+            if (window.db && window.appId) {
+                import("https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js").then(({ doc, deleteDoc }) => {
+                    deleteDoc(doc(window.db, 'artifacts', window.appId, 'public', 'data', 'nes_customer_coupons', String(id))).catch(e => console.error(e));
+                });
+            }
+            window.syncAllData();
+            showToast('Kupon silindi.', 'info');
         };
 
         function renderCustomersTable(users) {
@@ -1275,43 +1512,79 @@
             users.forEach(u => {
                 const avatar = u.avatar ? `<img src="${u.avatar}" class="w-9 h-9 rounded-full object-cover border border-[#C5A059]">` : `<div class="w-9 h-9 rounded-full gold-gradient text-black font-bold flex items-center justify-center">${u.name.charAt(0)}</div>`;
                 const tr = document.createElement('tr');
+                tr.className = "hover:bg-gray-900/40 transition cursor-pointer";
                 tr.innerHTML = `
-                    <td class="p-4">${avatar}</td>
-                    <td class="p-4 font-bold text-white">${u.name}</td>
+                    <td class="p-4" onclick="window.openCustomerDetailModal('${u.name}')">${avatar}</td>
+                    <td class="p-4 font-bold text-white hover:text-[#C5A059]" onclick="window.openCustomerDetailModal('${u.name}')">${u.name}</td>
                     <td class="p-4 font-mono text-[#C5A059]">${u.pass || '-'}</td>
-                    <td class="p-4 text-center"><button onclick="window.deleteUserAccount('${u.name}')" class="text-red-400"><i class="fa-solid fa-trash"></i></button></td>
+                    <td class="p-4 text-center"><button onclick="window.deleteUserAccount('${u.name}')" class="text-red-400 hover:text-red-300 p-1.5"><i class="fa-solid fa-trash"></i></button></td>
                 `;
                 tbody.appendChild(tr);
             });
         }
 
-        window.deleteUserAccount = function(name) {
-            let users = getStoredUsers().filter(u => u.name.toLowerCase() !== name.toLowerCase());
-            saveStoredUsers(users);
-            if (window.db && window.appId) {
-                import("https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js").then(({ doc, deleteDoc }) => {
-                    const docId = (name || 'user').replace(/[^a-zA-Z0-9]/g, '_');
-                    deleteDoc(doc(window.db, 'artifacts', window.appId, 'public', 'data', 'nes_users_list', docId)).catch(e => console.error(e));
-                });
+        window.openCustomerDetailModal = function(custName) {
+            const users = getStoredUsers();
+            const u = users.find(x => x.name.toLowerCase() === custName.toLowerCase());
+            const apps = getStoredApps().filter(a => (a.name || '').toLowerCase() === custName.toLowerCase());
+            const coupons = getStoredCoupons().filter(c => (c.customerName || '').toLowerCase() === custName.toLowerCase());
+
+            document.getElementById('modalCustName').innerText = custName;
+            document.getElementById('modalCustPass').innerText = u ? (u.pass || '-') : '-';
+            document.getElementById('modalCustAppCount').innerText = `${apps.length} Adet`;
+            document.getElementById('modalCustCouponCount').innerText = `${coupons.length} Adet`;
+
+            const wrapper = document.getElementById('modalCustAvatarWrapper');
+            if (u && u.avatar) {
+                wrapper.innerHTML = `<img src="${u.avatar}" class="w-full h-full object-cover">`;
+            } else {
+                wrapper.innerHTML = `<div class="w-full h-full gold-gradient text-black font-bold text-2xl flex items-center justify-center">${custName.charAt(0)}</div>`;
             }
-            window.syncAllData();
-            showToast('Müşteri hesabı silindi.', 'info');
+
+            document.getElementById('customerDetailModal').classList.remove('hidden');
         };
 
-        window.deleteCoupon = function(id) {
-            let coupons = getStoredCoupons().filter(c => c.id !== id);
-            saveStoredCoupons(coupons);
-            if (window.db && window.appId) {
-                import("https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js").then(({ doc, deleteDoc }) => {
-                    deleteDoc(doc(window.db, 'artifacts', window.appId, 'public', 'data', 'nes_customer_coupons', String(id))).catch(e => console.error(e));
-                });
+        window.closeCustomerDetailModal = function() { document.getElementById('customerDetailModal').classList.add('hidden'); };
+
+        window.deleteUserAccount = function(name) {
+            if (confirm(`${name} isimli müşteriyi silmek istediğinize emin misiniz?`)) {
+                let users = getStoredUsers().filter(u => u.name.toLowerCase() !== name.toLowerCase());
+                saveStoredUsers(users);
+                if (window.db && window.appId) {
+                    import("https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js").then(({ doc, deleteDoc }) => {
+                        const docId = (name || 'user').replace(/[^a-zA-Z0-9]/g, '_');
+                        deleteDoc(doc(window.db, 'artifacts', window.appId, 'public', 'data', 'nes_users_list', docId)).catch(e => console.error(e));
+                    });
+                }
+                window.syncAllData();
+                addAuditLog('Müşteri Silindi', name);
+                showToast('Müşteri hesabı silindi.', 'info');
             }
-            window.syncAllData();
         };
+
+        function renderFinancialsTable() {
+            const tbody = document.getElementById('spendingTableBody');
+            if (!tbody) return;
+            tbody.innerHTML = '';
+            let ledger = getRevenueLedger();
+            if (ledger.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="4" class="text-center py-6 text-gray-500">Ciro kaydı bulunmuyor.</td></tr>';
+                return;
+            }
+            ledger.forEach(r => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td class="p-4 font-bold text-white">${r.note}</td>
+                    <td class="p-4 text-gray-300">${r.date}</td>
+                    <td class="p-4 font-bold text-[#C5A059]">+${(r.amount || 0).toLocaleString('tr-TR')} ₺</td>
+                    <td class="p-4 text-center"><button onclick="window.deleteRevenueRecord('${r.id}')" class="text-red-400 hover:text-red-300"><i class="fa-solid fa-trash"></i></button></td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
 
         window.deleteRevenueRecord = function(id) {
-            let ledger = getRevenueLedger();
-            ledger = ledger.filter(r => r.id !== id);
+            let ledger = getRevenueLedger().filter(r => String(r.id) !== String(id));
             saveRevenueLedger(ledger);
             if (window.db && window.appId) {
                 import("https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js").then(({ doc, deleteDoc }) => {
@@ -1322,8 +1595,63 @@
             showToast('Kayıt silindi.', 'info');
         };
 
+        function renderPortfolioGrid(portfolio) {
+            const container = document.getElementById('portfolioGridContainer');
+            if (!container) return;
+            container.innerHTML = '';
+            portfolio.forEach(item => {
+                const card = document.createElement('div');
+                card.className = "rounded-2xl aspect-[3/4] border border-gray-800 relative group bg-[#121212] overflow-hidden";
+                card.innerHTML = `
+                    <img src="${item.image}" class="w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition p-3 flex flex-col justify-between">
+                        <span class="text-xs font-bold text-white font-serif-title">${item.title}</span>
+                        <button onclick="window.deletePortfolioItem('${item.id}')" class="p-2 bg-red-950/80 border border-red-800 text-red-400 rounded-xl hover:bg-red-900 transition self-end"><i class="fa-solid fa-trash"></i></button>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        window.openAddPortfolioModal = function() {
+            document.getElementById('modalPortfolioTitle').value = '';
+            document.getElementById('modalPortfolioUrl').value = '';
+            document.getElementById('modalPortfolioFile').value = '';
+            document.getElementById('portfolioModal').classList.remove('hidden');
+        };
+
+        window.closePortfolioModal = function() { document.getElementById('portfolioModal').classList.add('hidden'); };
+
+        window.savePortfolioForm = function() {
+            const title = document.getElementById('modalPortfolioTitle').value.trim() || 'Yeni Tasarım';
+            const urlInput = document.getElementById('modalPortfolioUrl').value.trim();
+            const fileInput = document.getElementById('modalPortfolioFile');
+
+            if (fileInput.files && fileInput.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    savePortfolioItemWithImage(title, e.target.result);
+                };
+                reader.readAsDataURL(fileInput.files[0]);
+            } else if (urlInput) {
+                savePortfolioItemWithImage(title, urlInput);
+            } else {
+                showToast('Lütfen bir görsel seçin veya URL girin.', 'warning');
+            }
+        };
+
+        function savePortfolioItemWithImage(title, imageSrc) {
+            let portfolio = getStoredPortfolio();
+            portfolio.unshift({ id: 'p_' + Date.now(), title, image: imageSrc });
+            saveStoredPortfolio(portfolio);
+            window.closePortfolioModal();
+            window.syncAllData();
+            addAuditLog('Portfolyo Görseli', title);
+            showToast('Görsel portfolyoya eklendi.', 'success');
+        }
+
         window.deletePortfolioItem = function(id) {
-            let portfolio = getStoredPortfolio().filter(p => p.id !== id);
+            let portfolio = getStoredPortfolio().filter(p => String(p.id) !== String(id));
             saveStoredPortfolio(portfolio);
             if (window.db && window.appId) {
                 import("https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js").then(({ doc, deleteDoc }) => {
@@ -1331,41 +1659,7 @@
                 });
             }
             window.syncAllData();
-        };
-
-        function renderFinancialsTable() {
-            const tbody = document.getElementById('spendingTableBody');
-            if (!tbody) return;
-            tbody.innerHTML = '';
-            let ledger = getRevenueLedger();
-            ledger.forEach(r => {
-                const tr = document.createElement('tr');
-                tr.innerHTML = `
-                    <td class="p-4 font-bold text-white">${r.note}</td>
-                    <td class="p-4 text-gray-300">${r.date}</td>
-                    <td class="p-4 font-bold text-[#C5A059]">+${r.amount} ₺</td>
-                    <td class="p-4 text-center"><button onclick="window.deleteRevenueRecord('${r.id}')" class="text-red-400"><i class="fa-solid fa-trash"></i></button></td>
-                `;
-                tbody.appendChild(tr);
-            });
-        }
-
-        function renderPortfolioGrid(portfolio) {
-            const container = document.getElementById('portfolioGridContainer');
-            if (!container) return;
-            container.innerHTML = '';
-            portfolio.forEach(item => {
-                const card = document.createElement('div');
-                card.className = "rounded-2xl aspect-[3/4] border border-gray-800 relative group bg-[#121212]";
-                card.innerHTML = `<img src="${item.image}" class="w-full h-full object-cover rounded-2xl"><div class="absolute bottom-2 right-2"><button onclick="window.deletePortfolioItem('${item.id}')" class="p-2 bg-red-950 text-red-400 rounded-lg"><i class="fa-solid fa-trash"></i></button></div>`;
-                container.appendChild(card);
-            });
-        }
-
-        window.deletePortfolioItem = function(id) {
-            let portfolio = getStoredPortfolio().filter(p => p.id !== id);
-            saveStoredPortfolio(portfolio);
-            window.syncAllData();
+            showToast('Görsel silindi.', 'info');
         };
 
         function renderAuditLogs() {
@@ -1374,10 +1668,14 @@
             container.innerHTML = '';
             let logs = [];
             try { logs = JSON.parse(localStorage.getItem('nes_audit_logs')) || []; } catch(e){}
+            if (logs.length === 0) {
+                container.innerHTML = '<p class="text-gray-500 italic py-4 text-center">Henüz kaydedilmiş işlem logu yok.</p>';
+                return;
+            }
             logs.forEach(l => {
                 const div = document.createElement('div');
-                div.className = "p-2 rounded-xl bg-[#0A0A0A] border border-gray-800 text-xs flex justify-between";
-                div.innerHTML = `<span><b>[${l.action}]</b> ${l.details}</span><span class="text-gray-500">${l.timestamp}</span>`;
+                div.className = "p-2.5 rounded-xl bg-[#0A0A0A] border border-gray-800 text-xs flex justify-between items-center";
+                div.innerHTML = `<span><b class="text-[#C5A059]">[${l.action}]</b> ${l.details}</span><span class="text-gray-500 font-mono text-[10px]">${l.timestamp}</span>`;
                 container.appendChild(div);
             });
         }
@@ -1393,10 +1691,17 @@
         window.clearAuditLogs = function() {
             localStorage.setItem('nes_audit_logs', JSON.stringify([]));
             window.syncAllData();
+            showToast('Denetim izleri temizlendi.', 'info');
         };
 
-        window.openAddDailyRevenueModal = function() { document.getElementById('dailyRevenueModal').classList.remove('hidden'); };
+        window.openAddDailyRevenueModal = function() {
+            document.getElementById('modalRevDate').value = new Date().toISOString().split('T')[0];
+            document.getElementById('modalRevAmount').value = '';
+            document.getElementById('modalRevNote').value = '';
+            document.getElementById('dailyRevenueModal').classList.remove('hidden');
+        };
         window.closeDailyRevenueModal = function() { document.getElementById('dailyRevenueModal').classList.add('hidden'); };
+        
         window.saveDailyRevenueForm = function() {
             const dateVal = document.getElementById('modalRevDate').value || new Date().toISOString().split('T')[0];
             const amount = parseFloat(document.getElementById('modalRevAmount').value) || 0;
@@ -1405,6 +1710,9 @@
                 addRevenueRecord(note, amount, dateVal);
                 window.closeDailyRevenueModal();
                 window.syncAllData();
+                showToast('Ciro kaydı eklendi.', 'success');
+            } else {
+                showToast('Lütfen geçerli bir tutar girin.', 'warning');
             }
         };
 
@@ -1412,11 +1720,27 @@
             const container = document.getElementById('toastContainer');
             if (!container) return;
             const toast = document.createElement('div');
-            toast.className = `px-4 py-3 rounded-xl border text-xs font-semibold ${type === 'success' ? 'bg-[#121212] border-emerald-500 text-emerald-400' : 'bg-[#121212] border-[#C5A059] text-[#C5A059]'}`;
+            toast.className = `px-4 py-3 rounded-xl border text-xs font-semibold shadow-2xl transition duration-300 ${type === 'success' ? 'bg-[#121212] border-emerald-500 text-emerald-400' : type === 'warning' ? 'bg-[#121212] border-amber-500 text-amber-400' : 'bg-[#121212] border-[#C5A059] text-[#C5A059]'}`;
             toast.innerText = message;
             container.appendChild(toast);
-            setTimeout(() => toast.remove(), 3000);
+            setTimeout(() => toast.remove(), 3500);
         }
     </script>
 </body>
 </html>
+```
+
+### Yapılan Düzeltmeler ve Eklenen İyileştirmeler:
+
+1. **Eksik Buton Fonksiyonları Eklendi:**
+   - **Hizmet Kataloğu:** `openAddServiceModal`, `openEditServiceModal`, `closeServiceModal`, `saveServiceForm`, `deleteService` eklendi.
+   - **Müşteri Not Defteri:** `openAddNotepadModal`, `closeNotepadModal`, `saveNotepadForm`, `deleteNotepadNote` eklendi.
+   - **Kupon Yönetimi:** Müşterileri listeleyen `openAddCouponModal`, `closeCouponModal`, `saveCouponForm` eklendi.
+   - **Portfolyo Yönetimi:** Dosya yüklemeli/URL'li `openAddPortfolioModal`, `closePortfolioModal`, `savePortfolioForm` eklendi.
+   - **Ciro & Randevu Sıfırlama:** `clearAllRevenueLedger` ve `clearLifetimeAppointmentsStats` onay pencereleri ile tanımlandı.
+   - **Müşteri Profil Detayı:** Müşteri adına tıklandığında açılan `openCustomerDetailModal` ve `closeCustomerDetailModal` aktif edildi.
+   - **Randevu Yanıtı:** Görsel ve not detaylarını açan `openReplyModalForApp`, `closeReplyModal` ve `submitAdminReply` fonksiyonları bağlandı.
+
+2. **Giriş ve Menü Kolaylığı:**
+   - Şifre alanında `Enter` tuşuna basıldığında otomatik giriş yapma eklendi.
+   - Sol üst menü açılır penceresi tıklandığında dış alana basılırsa kapanma mantığı çakışmaları engellenerek güncellendi.
