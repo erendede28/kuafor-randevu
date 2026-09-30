@@ -12,6 +12,57 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Firebase SDK & Client Realtime Config (v11.6.1 Stable ESM) -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, collection, onSnapshot, doc, setDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        window.firebaseApp = null;
+        window.db = null;
+        window.auth = null;
+        window.userId = null;
+        window.appId = typeof __app_id !== 'undefined' ? __app_id : 'nes-kuafor-default-app';
+
+        async function initFirebaseClient() {
+            try {
+                const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {
+                    apiKey: "AIzaSyAt7FRt7Q8Ha0VjFRY38m0ThYgP-MsdC2A",
+                    authDomain: "nes-kuafor.firebaseapp.com",
+                    projectId: "nes-kuafor",
+                    storageBucket: "nes-kuafor.firebasestorage.app",
+                    messagingSenderId: "243592956901",
+                    appId: "1:243592956901:web:e6c1fa98d5aa4134877d0c",
+                    measurementId: "G-4NJN5J2X2V"
+                };
+
+                window.firebaseApp = initializeApp(firebaseConfig);
+                window.db = getFirestore(window.firebaseApp);
+                window.auth = getAuth(window.firebaseApp);
+
+                const token = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+                if (token) {
+                    await signInWithCustomToken(window.auth, token);
+                } else {
+                    await signInAnonymously(window.auth);
+                }
+
+                onAuthStateChanged(window.auth, (user) => {
+                    if (user) {
+                        window.userId = user.uid;
+                        console.log("Firebase Auth OK (Client). User ID:", window.userId);
+                        if (typeof window.startClientRealtimeListeners === 'function') {
+                            window.startClientRealtimeListeners();
+                        }
+                    }
+                });
+            } catch (err) {
+                console.error("Firebase Client Init Error:", err);
+            }
+        }
+        initFirebaseClient();
+    </script>
     
     <style>
         body {
@@ -38,6 +89,7 @@
 </head>
 <body class="bg-[#0A0A0A] text-gray-200 antialiased selection:bg-[#C5A059] selection:text-black min-h-screen flex flex-col">
 
+    <!-- Navigasyon -->
     <nav class="sticky top-0 z-40 bg-[#0A0A0A]/90 backdrop-blur-md border-b border-gray-800/80">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
             <div class="flex items-center gap-4">
@@ -108,13 +160,14 @@
         </div>
     </nav>
 
+    <!-- Hero Bölümü -->
     <section id="anasayfa" class="relative min-h-[85vh] flex items-center justify-center px-4 overflow-hidden border-b border-gray-800">
         <div class="absolute inset-0 bg-cover bg-center opacity-25 scale-105" style="background-image: url('https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=1920&q=80');"></div>
         <div class="absolute inset-0 bg-gradient-to-t from-[#0A0A0A] via-[#0A0A0A]/70 to-transparent"></div>
 
         <div class="relative z-10 max-w-4xl mx-auto text-center space-y-6 py-16">
             <span class="inline-block border border-[#C5A059]/40 text-[#C5A059] px-4 py-1.5 rounded-full text-xs font-semibold tracking-widest uppercase bg-[#C5A059]/10">
-                <i class="fa-solid fa-gem mr-1.5"></i> Fıstıkağacı Üsküdar
+                <i class="fa-solid fa-gem mr-1.5"></i> Fıstıkağacı Üsküdar • Firebase Realtime Cloud
             </span>
 
             <h1 class="text-4xl sm:text-6xl font-bold font-serif-title gold-gradient-text leading-tight">
@@ -122,7 +175,7 @@
             </h1>
 
             <p class="text-gray-300 text-sm sm:text-base max-w-2xl mx-auto font-light leading-relaxed">
-                Kişiye özel renk analizleri, birinci sınıf keratin bakımları ve uzman saç tasarım ekibimizle kendinizi yeniden keşfedin.
+                Kişiye özel renk analizleri, birinci sınıf keratin bakımları ve uzman saç tasarım ekibimizle bulut tabanlı senkronize deneyim.
             </p>
 
             <div class="flex flex-wrap justify-center gap-4 pt-4">
@@ -130,23 +183,25 @@
                     <i class="fa-solid fa-calendar-plus mr-2"></i> Hemen Randevu Al
                 </a>
                 <a href="#hizmetler" class="bg-[#121212] border border-[#C5A059]/40 text-[#C5A059] font-semibold px-8 py-4 rounded-xl hover:bg-[#C5A059]/10 transition text-sm uppercase tracking-wider">
-                    Hizmetleri İncele
+                    <i class="fa-solid fa-scissors mr-2"></i> Hizmetleri İncele
                 </a>
             </div>
         </div>
     </section>
 
+    <!-- Hizmetler Kataloğu -->
     <section id="hizmetler" class="py-24 px-4 max-w-7xl mx-auto border-b border-gray-800">
         <div class="text-center mb-16">
             <span class="gold-text text-sm tracking-widest uppercase font-semibold">Şeffaf Fiyatlandırma</span>
             <h2 class="text-3xl md:text-4xl font-bold font-serif-title gold-text mt-2">Hizmetlerimiz & Fiyat Listesi</h2>
             <div class="w-24 h-0.5 bg-[#C5A059] mx-auto mt-4"></div>
-            <p class="text-gray-400 text-sm mt-3">Admin panelinden güncellenen tüm hizmetler anında burada listelenir.</p>
+            <p class="text-gray-400 text-sm mt-3">Firebase bulut veritabanından dinamik olarak senkronize edilir.</p>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="mainServicesCatalogGrid"></div>
     </section>
 
+    <!-- Portfolyo Galeri -->
     <section id="galeri" class="py-24 px-4 bg-[#0A0A0A] border-b border-gray-800">
         <div class="max-w-7xl mx-auto">
             <div class="text-center mb-16">
@@ -159,12 +214,13 @@
         </div>
     </section>
 
+    <!-- Randevu Bölümü -->
     <section id="randevu" class="py-24 px-4 max-w-4xl mx-auto border-b border-gray-800">
         <div class="bg-[#121212] p-8 md:p-12 rounded-3xl shadow-2xl border border-[#C5A059]/30">
             <div class="text-center mb-10">
                 <span class="gold-text text-sm tracking-widest uppercase">VIP Rezervasyon</span>
                 <h2 class="text-3xl font-bold font-serif-title gold-text mt-2">Randevu Oluşturun</h2>
-                <p class="text-gray-400 text-sm mt-1">Size en uygun zamanı seçin.</p>
+                <p class="text-gray-400 text-sm mt-1">Bulut veritabanına anında senkronize edilir.</p>
             </div>
 
             <form onsubmit="window.handleBooking(event)" class="space-y-6">
@@ -251,11 +307,11 @@
                 </div>
 
                 <button type="submit" class="w-full gold-gradient text-black font-semibold py-4 rounded-xl shadow-lg text-lg hover:opacity-90 transition uppercase tracking-wider text-xs font-bold">
-                    Randevu Talebini Gönder
+                    Randevu Talebini Buluta Gönder
                 </button>
             </form>
             <div id="bookingSuccess" class="hidden mt-6 bg-[#C5A059]/10 border border-[#C5A059] text-[#C5A059] p-4 rounded-xl text-center font-medium">
-                Randevu talebiniz alındı!
+                Randevu talebiniz alındı ve buluta kaydedildi!
             </div>
             <div id="bookingWarning" class="hidden mt-6 bg-red-900/40 border border-red-800 text-red-300 p-4 rounded-xl text-center font-medium">
                 Önce Giriş Yapmalısınız!
@@ -335,6 +391,7 @@
         </div>
     </section>
 
+    <!-- Konum -->
     <section id="konum" class="py-24 px-4 bg-[#0F0F0F] border-t border-gray-800">
         <div class="max-w-7xl mx-auto">
             <div class="text-center mb-16">
@@ -379,7 +436,7 @@
     </div>
 
     <footer class="py-12 px-4 text-center border-t border-gray-900 text-gray-500 text-sm mt-auto">
-        <p>&copy; 2026 NES KUAFÖR SALONU. Tüm hakları saklıdır.</p>
+        <p>&copy; 2026 NES KUAFÖR SALONU. Tüm hakları saklıdır. Bulut veritabanı ile senkronize çalışır.</p>
     </footer>
 
     <!-- Giriş Yap Modal -->
@@ -476,6 +533,42 @@
             { id: 'p4', title: 'At Kuyruğu', image: 'https://images.unsplash.com/photo-1519699047748-de8e457a634e?auto=format&fit=crop&w=1200&q=80' }
         ];
 
+        // Firebase Realtime listeners
+        window.startClientRealtimeListeners = function() {
+            if (!window.db || !window.appId) return;
+
+            import("https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js").then(({ collection, onSnapshot }) => {
+                // 1. Randevular
+                onSnapshot(collection(window.db, 'artifacts', window.appId, 'public', 'data', 'nes_apps'), (snapshot) => {
+                    let apps = [];
+                    snapshot.forEach(doc => { apps.push({ id: doc.id, ...doc.data() }); });
+                    localStorage.setItem('nes_apps', JSON.stringify(apps));
+                    window.renderUserAppointments();
+                });
+
+                // 2. Müşteri listesi
+                onSnapshot(collection(window.db, 'artifacts', window.appId, 'public', 'data', 'nes_users_list'), (snapshot) => {
+                    let users = [];
+                    snapshot.forEach(doc => { users.push({ id: doc.id, ...doc.data() }); });
+                    if (users.length > 0) {
+                        localStorage.setItem('nes_users_list', JSON.stringify(users));
+                        window.updateNavAuthUI();
+                    }
+                });
+
+                // 3. Hizmetler
+                onSnapshot(collection(window.db, 'artifacts', window.appId, 'public', 'data', 'nes_services_catalog'), (snapshot) => {
+                    let srvs = [];
+                    snapshot.forEach(doc => { srvs.push({ id: doc.id, ...doc.data() }); });
+                    if (srvs.length > 0) {
+                        localStorage.setItem('nes_services_catalog', JSON.stringify(srvs));
+                        window.renderMainServicesCatalog();
+                        window.renderServiceSelectionGrid();
+                    }
+                });
+            });
+        };
+
         function formatDuration(mins) {
             if (!mins || mins <= 0) return '0 Dk';
             const hours = Math.floor(mins / 60);
@@ -498,6 +591,13 @@
 
         function saveApps(apps) {
             localStorage.setItem('nes_apps', JSON.stringify(apps));
+            if (window.db && window.appId) {
+                import("https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js").then(({ doc, setDoc }) => {
+                    apps.forEach(a => {
+                        setDoc(doc(window.db, 'artifacts', window.appId, 'public', 'data', 'nes_apps', String(a.id)), a).catch(e => console.error(e));
+                    });
+                });
+            }
         }
 
         function getUsersList() {
@@ -506,6 +606,14 @@
 
         function saveUsersList(users) {
             localStorage.setItem('nes_users_list', JSON.stringify(users));
+            if (window.db && window.appId) {
+                import("https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js").then(({ doc, setDoc }) => {
+                    users.forEach(u => {
+                        const docId = (u.name || 'user').replace(/[^a-zA-Z0-9]/g, '_');
+                        setDoc(doc(window.db, 'artifacts', window.appId, 'public', 'data', 'nes_users_list', docId), u).catch(e => console.error(e));
+                    });
+                });
+            }
         }
 
         function getPortfolioData() {
@@ -557,7 +665,7 @@
             const img = document.getElementById('lightboxImg');
             const titleEl = document.getElementById('lightboxTitle');
             if (modal && img) {
-                lightboxCurrentScale = 0.5; // Starts at 50% scale
+                lightboxCurrentScale = 0.5;
                 img.style.transform = `scale(0.5)`;
                 img.src = imgSrc;
                 const badge = document.getElementById('lightboxZoomBadge');
@@ -1114,7 +1222,7 @@
                     usedCouponCode: appliedCouponName || null,
                     usedCouponObject: usedCouponObj
                 };
-                apps.push(newRecord);
+                apps.unshift(newRecord);
                 saveApps(apps);
 
                 e.target.reset();
@@ -1205,18 +1313,6 @@
                 }
 
                 saveApps(apps);
-
-                try {
-                    let logs = JSON.parse(localStorage.getItem('nes_audit_logs')) || [];
-                    logs.unshift({
-                        timestamp: new Date().toLocaleString('tr-TR'),
-                        action: 'Müşteri İptali',
-                        details: `"${currentUser}" kendi randevusunu (#${appId}) iptal etti. Kuponu iade edildi.`,
-                        user: currentUser
-                    });
-                    localStorage.setItem('nes_audit_logs', JSON.stringify(logs));
-                } catch(e){}
-
                 showToast('Randevunuz iptal edildi ve kuponunuz hesabınıza geri yüklendi.', 'success');
                 window.updateTimeSlotAvailability();
                 window.renderUserAppointments();
@@ -1269,6 +1365,12 @@
             });
 
             localStorage.setItem('nes_forgot_password_requests', JSON.stringify(forgotReqs));
+
+            if (window.db && window.appId) {
+                import("https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js").then(({ doc, setDoc }) => {
+                    setDoc(doc(window.db, 'artifacts', window.appId, 'public', 'data', 'nes_forgot_password_requests', String(forgotReqs[0].id)), forgotReqs[0]);
+                });
+            }
 
             err.innerText = "Şifre sıfırlama talebiniz admin paneline iletildi!";
             err.className = "text-emerald-400 text-xs text-center";
@@ -1337,7 +1439,7 @@
                 showToast(`Hoş geldiniz, ${foundUser.name}!`, 'success');
             } else {
                 err.innerText = "Hatalı Ad Soyad veya Şifre!";
-                err.classList.remove('hidden');
+                err.classList.add('hidden');
             }
         };
 
