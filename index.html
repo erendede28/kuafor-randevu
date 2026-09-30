@@ -483,10 +483,8 @@
                 onSnapshot(collection(window.db, 'artifacts', window.appId, 'public', 'data', 'nes_users_list'), (snapshot) => {
                     let users = [];
                     snapshot.forEach(doc => { users.push({ id: doc.id, ...doc.data() }); });
-                    if (users.length > 0) {
-                        localStorage.setItem('nes_users_list', JSON.stringify(users));
-                        window.updateNavAuthUI();
-                    }
+                    localStorage.setItem('nes_users_list', JSON.stringify(users));
+                    window.updateNavAuthUI();
                 });
 
                 // 3. Services listener
@@ -497,6 +495,32 @@
                         localStorage.setItem('nes_services_catalog', JSON.stringify(srvs));
                         window.renderMainServicesCatalog();
                         window.renderServiceSelectionGrid();
+                    }
+                });
+
+                // 4. Coupons listener
+                onSnapshot(collection(window.db, 'artifacts', window.appId, 'public', 'data', 'nes_customer_coupons'), (snapshot) => {
+                    let coupons = [];
+                    snapshot.forEach(doc => { coupons.push({ id: doc.id, ...doc.data() }); });
+                    localStorage.setItem('nes_customer_coupons', JSON.stringify(coupons));
+                    window.renderCustomerCoupons();
+                });
+
+                // 5. Customer Notepad listener
+                onSnapshot(collection(window.db, 'artifacts', window.appId, 'public', 'data', 'nes_customer_notepad'), (snapshot) => {
+                    let notepad = [];
+                    snapshot.forEach(doc => { notepad.push({ id: doc.id, ...doc.data() }); });
+                    localStorage.setItem('nes_customer_notepad', JSON.stringify(notepad));
+                    window.renderClientHairCardWidget();
+                });
+
+                // 6. Portfolio listener
+                onSnapshot(collection(window.db, 'artifacts', window.appId, 'public', 'data', 'nes_portfolio_gallery'), (snapshot) => {
+                    let portfolio = [];
+                    snapshot.forEach(doc => { portfolio.push({ id: doc.id, ...doc.data() }); });
+                    if (portfolio.length > 0) {
+                        localStorage.setItem('nes_portfolio_gallery', JSON.stringify(portfolio));
+                        window.renderPortfolioGallery();
                     }
                 });
             });
