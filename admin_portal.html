@@ -1771,18 +1771,3 @@
 </body>
 </html>
 ```
-
-### Yapılan Düzeltmeler ve Eklenen İyileştirmeler:
-
-1. **Eksik Buton Fonksiyonları Eklendi:**
-   - **Hizmet Kataloğu:** `openAddServiceModal`, `openEditServiceModal`, `closeServiceModal`, `saveServiceForm`, `deleteService` eklendi.
-   - **Müşteri Not Defteri:** `openAddNotepadModal`, `closeNotepadModal`, `saveNotepadForm`, `deleteNotepadNote` eklendi.
-   - **Kupon Yönetimi:** Müşterileri listeleyen `openAddCouponModal`, `closeCouponModal`, `saveCouponForm` eklendi.
-   - **Portfolyo Yönetimi:** Dosya yüklemeli/URL'li `openAddPortfolioModal`, `closePortfolioModal`, `savePortfolioForm` eklendi.
-   - **Ciro & Randevu Sıfırlama:** `clearAllRevenueLedger` ve `clearLifetimeAppointmentsStats` onay pencereleri ile tanımlandı.
-   - **Müşteri Profil Detayı:** Müşteri adına tıklandığında açılan `openCustomerDetailModal` ve `closeCustomerDetailModal` aktif edildi.
-   - **Randevu Yanıtı:** Görsel ve not detaylarını açan `openReplyModalForApp`, `closeReplyModal` ve `submitAdminReply` fonksiyonları bağlandı.
-
-2. **Giriş ve Menü Kolaylığı:**
-   - Şifre alanında `Enter` tuşuna basıldığında otomatik giriş yapma eklendi.
-   - Sol üst menü açılır penceresi tıklandığında dış alana basılırsa kapanma mantığı çakışmaları engellenerek güncellendi.
