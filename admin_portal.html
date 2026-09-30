@@ -103,6 +103,12 @@
                     </span>
                     <span id="badgePendingCount" class="bg-amber-500/20 text-amber-400 border border-amber-500/40 text-[10px] px-2 py-0.5 rounded-full font-bold">0</span>
                 </button>
+                <button onclick="window.switchTab('forgot_requests')" id="nav_forgot_requests" class="w-full flex items-center justify-between px-4 py-3 rounded-xl text-xs font-semibold text-gray-400 hover:text-white hover:bg-gray-900 transition">
+                    <span class="flex items-center gap-3">
+                        <i class="fa-solid fa-key w-4 text-center text-[#C5A059]"></i> Şifre Talepleri
+                    </span>
+                    <span id="badgeForgotCount" class="bg-red-500/20 text-red-400 border border-red-500/40 text-[10px] px-2 py-0.5 rounded-full font-bold">0</span>
+                </button>
                 <button onclick="window.switchTab('services')" id="nav_services" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-xs font-semibold text-gray-400 hover:text-white hover:bg-gray-900 transition">
                     <i class="fa-solid fa-list-check w-4 text-center text-[#C5A059]"></i> Hizmet & Fiyat Kataloğu
                 </button>
@@ -263,6 +269,31 @@
                                     </tr>
                                 </thead>
                                 <tbody id="appTableBody" class="divide-y divide-gray-800/80"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="view_forgot_requests" class="space-y-6 hidden">
+                    <div class="flex justify-between items-center border-b border-gray-800 pb-4">
+                        <div>
+                            <h1 class="text-2xl font-bold font-serif-title text-white">Müşteri Şifre Sıfırlama Talepleri</h1>
+                            <p class="text-xs text-gray-400 mt-1">Web sitesinden şifresini unutup talep gönderen müşterileri buradan inceleyip yeni şifre tanımlayabilirsiniz.</p>
+                        </div>
+                    </div>
+
+                    <div class="bg-[#121212] border border-gray-800 rounded-2xl overflow-hidden shadow-xl">
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left border-collapse text-xs">
+                                <thead>
+                                    <tr class="bg-[#0A0A0A] border-b border-gray-800 text-[#C5A059] uppercase tracking-wider font-semibold">
+                                        <th class="p-4">Müşteri Adı Soyadı</th>
+                                        <th class="p-4">Telefon Numarası</th>
+                                        <th class="p-4">Talep Zamanı</th>
+                                        <th class="p-4 text-center">İşlem / Şifre Ata & Sil</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="forgotTableBody" class="divide-y divide-gray-800/80"></tbody>
                             </table>
                         </div>
                     </div>
@@ -430,7 +461,7 @@
         </div>
     </div>
 
-    <!-- Modals -->
+    <!-- Hizmet Modalı -->
     <div id="serviceEditModal" class="fixed inset-0 bg-black/80 backdrop-blur z-50 hidden flex items-center justify-center p-4">
         <div class="bg-[#121212] border border-[#C5A059]/40 rounded-3xl max-w-md w-full p-6 space-y-4 shadow-2xl relative">
             <button onclick="window.closeServiceModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white text-2xl">&times;</button>
@@ -458,6 +489,7 @@
         </div>
     </div>
 
+    <!-- Not Defteri Modalı -->
     <div id="notepadModal" class="fixed inset-0 bg-black/80 backdrop-blur z-50 hidden flex items-center justify-center p-4">
         <div class="bg-[#121212] border border-[#C5A059]/40 rounded-3xl max-w-md w-full p-6 space-y-4 shadow-2xl relative">
             <button onclick="window.closeNotepadModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white text-2xl">&times;</button>
@@ -483,6 +515,7 @@
         </div>
     </div>
 
+    <!-- Kupon Modalı -->
     <div id="couponModal" class="fixed inset-0 bg-black/80 backdrop-blur z-50 hidden flex items-center justify-center p-4">
         <div class="bg-[#121212] border border-[#C5A059]/40 rounded-3xl max-w-md w-full p-6 space-y-4 shadow-2xl relative">
             <button onclick="window.closeCouponModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white text-2xl">&times;</button>
@@ -506,6 +539,13 @@
                 <label class="block text-xs font-semibold text-gray-400 mb-1">İndirim Oranı (%)</label>
                 <input type="number" id="modalCouponDiscount" value="10" readonly class="w-full bg-[#0A0A0A] border border-gray-800 text-[#C5A059] font-bold p-3 rounded-xl text-xs focus:outline-none">
             </div>
+
+            <button onclick="window.saveCouponForm()" class="w-full gold-gradient text-black font-bold py-3 rounded-xl text-xs uppercase tracking-wider shadow">
+                Kuponu Tanımla
+            </button>
+        </div>
+    </div>
+
     <!-- Müşteri CRM Detay Modalı -->
     <div id="customerDetailModal" class="fixed inset-0 bg-black/80 backdrop-blur z-50 hidden flex items-center justify-center p-4">
         <div class="bg-[#121212] border border-[#C5A059]/40 rounded-3xl max-w-md w-full p-6 space-y-5 shadow-2xl relative">
@@ -541,6 +581,29 @@
         </div>
     </div>
 
+    <!-- Şifre Sıfırlama Atama Modalı -->
+    <div id="forgotResetModal" class="fixed inset-0 bg-black/80 backdrop-blur z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-[#121212] border border-[#C5A059]/40 rounded-3xl max-w-md w-full p-6 space-y-4 shadow-2xl relative">
+            <button onclick="window.closeForgotResetModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white text-2xl">&times;</button>
+            <h3 class="text-xl font-bold font-serif-title text-white">Müşteriye Yeni Şifre Ata</h3>
+            
+            <input type="hidden" id="modalForgotReqId">
+            <div>
+                <label class="block text-xs font-semibold text-gray-400 mb-1">Müşteri Adı</label>
+                <input type="text" id="modalForgotCustName" readonly class="w-full bg-[#0A0A0A] border border-gray-800 text-[#C5A059] font-bold p-3 rounded-xl text-xs focus:outline-none">
+            </div>
+            <div>
+                <label class="block text-xs font-semibold text-gray-400 mb-1">Yeni Şifre Belirle</label>
+                <input type="text" id="modalNewPasswordInput" placeholder="Örn: yeniSifre123" class="w-full bg-[#0A0A0A] border border-gray-800 text-white p-3 rounded-xl text-xs focus:border-[#C5A059] focus:outline-none">
+            </div>
+
+            <button onclick="window.saveAndAssignNewPassword()" class="w-full gold-gradient text-black font-bold py-3 rounded-xl text-xs uppercase tracking-wider shadow">
+                Şifreyi Güncelle & Talebi Çöz
+            </button>
+        </div>
+    </div>
+
+    <!-- Yanıt Modalı -->
     <div id="replyModal" class="fixed inset-0 bg-black/80 backdrop-blur z-50 hidden flex items-center justify-center p-4">
         <div class="bg-[#121212] border border-[#C5A059]/40 rounded-3xl max-w-2xl w-full p-6 space-y-4 shadow-2xl relative">
             <button onclick="window.closeReplyModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white text-2xl">&times;</button>
@@ -675,61 +738,9 @@
             }
         };
 
-        window.openAddPortfolioModal = function() {
-            document.getElementById('modalPortTitle').value = "";
-            document.getElementById('modalPortFile').value = "";
-            document.getElementById('portPreviewWrapper').classList.add('hidden');
-            document.getElementById('portPreviewImg').src = "";
-            document.getElementById('portfolioModal').classList.remove('hidden');
-        };
-
-        window.closePortfolioModal = function() {
-            document.getElementById('portfolioModal').classList.add('hidden');
-        };
-
-        window.handlePortImageSelect = function() {
-            const fileInput = document.getElementById('modalPortFile');
-            const previewWrapper = document.getElementById('portPreviewWrapper');
-            const previewImg = document.getElementById('portPreviewImg');
-
-            if (fileInput.files && fileInput.files[0]) {
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    previewImg.src = e.target.result;
-                    previewWrapper.classList.remove('hidden');
-                };
-                reader.readAsDataURL(fileInput.files[0]);
-            } else {
-                previewWrapper.classList.add('hidden');
-            }
-        };
-
-        window.savePortfolioForm = function() {
-            const title = document.getElementById('modalPortTitle').value.trim() || 'Özel Tasarım';
-            const previewImg = document.getElementById('portPreviewImg');
-
-            if (!previewImg.src || previewImg.src === window.location.href) {
-                return showToast('Lütfen cihazınızdan bir fotoğraf dosyası seçin.', 'warning');
-            }
-
-            let portfolio = getStoredPortfolio();
-            const newItem = {
-                id: 'port_' + Date.now(),
-                title: title,
-                image: previewImg.src
-            };
-
-            portfolio.unshift(newItem);
-            saveStoredPortfolio(portfolio);
-            addAuditLog('Portfolyo Eklendi', `"${title}" orijinal görseli galeriye eklendi.`);
-            window.closePortfolioModal();
-            window.syncAllData();
-            showToast('Orijinal fotoğraf galeriye başarıyla eklendi.', 'success');
-        };
-
         window.switchTab = function(tabName) {
             activeTab = tabName;
-            ['dashboard', 'appointments', 'services', 'notepad', 'coupons', 'customers', 'financials', 'portfolio', 'audit'].forEach(t => {
+            ['dashboard', 'appointments', 'forgot_requests', 'services', 'notepad', 'coupons', 'customers', 'financials', 'portfolio', 'audit'].forEach(t => {
                 const view = document.getElementById(`view_${t}`);
                 const nav = document.getElementById(`nav_${t}`);
                 if (view) view.classList.add('hidden');
@@ -755,13 +766,18 @@
             const notepad = getStoredNotepad();
             const coupons = getStoredCoupons();
             const portfolio = getStoredPortfolio();
+            const forgotReqs = getStoredForgotRequests();
 
             const pending = apps.filter(a => a.status === 'Beklemede').length;
             const badge = document.getElementById('badgePendingCount');
             if (badge) badge.innerText = pending;
 
+            const badgeForgot = document.getElementById('badgeForgotCount');
+            if (badgeForgot) badgeForgot.innerText = forgotReqs.length;
+
             renderDashboard(apps, users);
             renderAppointmentsTable(apps, currentAppointmentFilter);
+            renderForgotRequestsTable(forgotReqs);
             renderServicesGrid(services);
             renderNotepadGrid(notepad);
             renderCouponsTable(coupons);
@@ -780,6 +796,11 @@
             try { return JSON.parse(localStorage.getItem('nes_users_list')) || []; } catch(e) { return []; }
         }
         function saveStoredUsers(users) { localStorage.setItem('nes_users_list', JSON.stringify(users)); }
+
+        function getStoredForgotRequests() {
+            try { return JSON.parse(localStorage.getItem('nes_forgot_password_requests')) || []; } catch(e) { return []; }
+        }
+        function saveStoredForgotRequests(reqs) { localStorage.setItem('nes_forgot_password_requests', JSON.stringify(reqs)); }
 
         function getStoredServices() {
             try { return JSON.parse(localStorage.getItem('nes_services_catalog')) || DEFAULT_SERVICES; } catch(e) { return DEFAULT_SERVICES; }
@@ -978,11 +999,19 @@
                 return;
             }
 
+            const users = getStoredUsers();
+
             filtered.forEach(a => {
                 const tr = document.createElement('tr');
                 tr.className = "hover:bg-gray-900/40 transition";
                 const cleanPhone = (a.phone || '').replace(/\s+/g, '');
                 const waPhone = cleanPhone.startsWith('0') ? '9' + cleanPhone : cleanPhone;
+
+                const uObj = users.find(u => u.name.toLowerCase() === (a.name || '').toLowerCase());
+                const avatar = uObj && uObj.avatar ? uObj.avatar : '';
+                const avatarHtml = avatar ? 
+                    `<img src="${avatar}" class="w-8 h-8 rounded-full object-cover border border-[#C5A059] shrink-0">` : 
+                    `<div class="w-8 h-8 rounded-full gold-gradient text-black font-bold text-xs flex items-center justify-center shrink-0">${(a.name || 'M').charAt(0).toUpperCase()}</div>`;
 
                 const phoneHtml = a.phone ? `
                     <div class="flex items-center gap-2 mt-1 text-[11px] font-mono text-gray-400">
@@ -999,9 +1028,14 @@
 
                 tr.innerHTML = `
                     <td class="p-4">
-                        <strong class="text-white block text-sm">${a.name}</strong>
-                        ${phoneHtml}
-                        <span class="text-[10px] text-gray-500">ID: #${a.id}</span>
+                        <div class="flex items-center gap-3">
+                            ${avatarHtml}
+                            <div>
+                                <strong class="text-white block text-sm">${a.name}</strong>
+                                ${phoneHtml}
+                                <span class="text-[10px] text-gray-500">ID: #${a.id}</span>
+                            </div>
+                        </div>
                     </td>
                     <td class="p-4 font-semibold text-[#C5A059]">${a.service}</td>
                     <td class="p-4 text-gray-300">${a.date} <br><b class="text-white">${a.time}</b></td>
@@ -1029,6 +1063,83 @@
                 tbody.appendChild(tr);
             });
         }
+
+        function renderForgotRequestsTable(reqs) {
+            const tbody = document.getElementById('forgotTableBody');
+            if (!tbody) return;
+            tbody.innerHTML = '';
+
+            if (reqs.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="4" class="text-center py-6 text-gray-500">Şifre sıfırlama talebi bulunmuyor.</td></tr>';
+                return;
+            }
+
+            reqs.forEach(req => {
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-gray-950 transition";
+                tr.innerHTML = `
+                    <td class="p-4 font-bold text-white">${req.name}</td>
+                    <td class="p-4 font-mono text-[#C5A059]">${req.phone}</td>
+                    <td class="p-4 text-gray-300">${req.timestamp}</td>
+                    <td class="p-4 text-center space-x-2">
+                        <button onclick="window.openForgotResetModal(${req.id}, '${req.name.replace(/'/g, "\\'")}')" class="px-3 py-1.5 bg-[#C5A059]/20 border border-[#C5A059] text-[#C5A059] rounded-lg hover:bg-[#C5A059] hover:text-black transition text-xs font-semibold">Şifre Ata</button>
+                        <button onclick="window.deleteForgotRequest(${req.id})" class="p-2 bg-red-950/60 border border-red-800 text-red-400 rounded-lg hover:bg-red-900 transition" title="Talebi Sil"><i class="fa-solid fa-trash"></i></button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        window.openForgotResetModal = function(reqId, custName) {
+            document.getElementById('modalForgotReqId').value = reqId;
+            document.getElementById('modalForgotCustName').value = custName;
+            document.getElementById('modalNewPasswordInput').value = '';
+            document.getElementById('forgotResetModal').classList.remove('hidden');
+        };
+
+        window.closeForgotResetModal = function() {
+            document.getElementById('forgotResetModal').classList.add('hidden');
+        };
+
+        window.saveAndAssignNewPassword = function() {
+            const reqId = parseInt(document.getElementById('modalForgotReqId').value, 10);
+            const custName = document.getElementById('modalForgotCustName').value.trim();
+            const newPass = document.getElementById('modalNewPasswordInput').value.trim();
+
+            if (!newPass || newPass.length < 4) {
+                return showToast('Lütfen en az 4 karakterli geçerli bir şifre giriniz.', 'warning');
+            }
+
+            // Update user password in users list
+            let users = getStoredUsers();
+            const uObj = users.find(u => u.name.toLowerCase() === custName.toLowerCase());
+            if (uObj) {
+                uObj.pass = newPass;
+                saveStoredUsers(users);
+            } else {
+                // If not found in users list, create/add them
+                users.push({ name: custName, pass: newPass, avatar: '' });
+                saveStoredUsers(users);
+            }
+
+            // Remove request
+            let reqs = getStoredForgotRequests();
+            reqs = reqs.filter(r => r.id !== reqId);
+            saveStoredForgotRequests(reqs);
+
+            addAuditLog('Şifre Sıfırlandı', `"${custName}" müşterisine admin tarafından yeni şifre atandı.`);
+            window.closeForgotResetModal();
+            window.syncAllData();
+            showToast(`"${custName}" müşterisinin şifresi başarıyla güncellendi!`, 'success');
+        };
+
+        window.deleteForgotRequest = function(reqId) {
+            let reqs = getStoredForgotRequests();
+            reqs = reqs.filter(r => r.id !== reqId);
+            saveStoredForgotRequests(reqs);
+            window.syncAllData();
+            showToast('Şifre talebi silindi.', 'info');
+        };
 
         window.deleteAppointment = function(id) {
             let apps = getStoredApps();
@@ -1460,7 +1571,6 @@
                 }
             }
 
-            // Hesaplamalar
             let apps = getStoredApps();
             let myApps = apps.filter(a => a.name && a.name.toLowerCase() === user.name.toLowerCase());
             if (appCountEl) appCountEl.innerText = myApps.length;
