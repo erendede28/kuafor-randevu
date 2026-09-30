@@ -81,11 +81,59 @@
         
         <!-- Sol Kenar Menüsü -->
         <aside class="w-full md:w-64 bg-[#121212] border-r border-gray-800 flex flex-col shrink-0">
-            <div class="p-6 border-b border-gray-800 flex items-center justify-between">
+            <div class="p-6 border-b border-gray-800 flex items-center justify-between relative">
                 <div class="flex items-center gap-3">
-                    <div class="w-9 h-9 rounded-full gold-gradient flex items-center justify-center text-black font-bold text-sm">
-                        <i class="fa-solid fa-scissors"></i>
+                    <!-- Üç Nokta Menü Butonu -->
+                    <div class="relative">
+                        <button onclick="window.toggleAdminMenuDropdown(event)" class="w-10 h-10 rounded-xl bg-[#0A0A0A] border border-gray-800 text-[#C5A059] hover:border-[#C5A059] flex flex-col items-center justify-center gap-1 transition shadow group" title="Yönetim Menüsü">
+                            <span class="w-1.5 h-1.5 rounded-full bg-[#C5A059] group-hover:scale-125 transition"></span>
+                            <span class="w-1.5 h-1.5 rounded-full bg-[#C5A059] group-hover:scale-125 transition"></span>
+                            <span class="w-1.5 h-1.5 rounded-full bg-[#C5A059] group-hover:scale-125 transition"></span>
+                        </button>
+
+                        <!-- Dropdown Menü Kutusu -->
+                        <div id="adminMenuDropdown" class="hidden absolute left-0 mt-2 w-64 bg-[#121212] border border-[#C5A059]/40 rounded-2xl shadow-2xl py-3 z-50 divide-y divide-gray-800/80">
+                            <div class="px-4 py-2 text-[10px] uppercase tracking-widest text-gray-500 font-semibold flex items-center justify-between">
+                                <span>Yönetim Modülleri</span>
+                                <i class="fa-solid fa-compass gold-text"></i>
+                            </div>
+                            <div class="py-1 space-y-0.5">
+                                <button onclick="window.switchTab('dashboard')" id="nav_dashboard" class="w-full flex items-center justify-between px-4 py-2.5 text-xs font-semibold text-gray-300 hover:text-[#C5A059] hover:bg-gray-900/60 transition">
+                                    <span class="flex items-center gap-3"><i class="fa-solid fa-chart-pie w-4 text-[#C5A059]"></i> Gösterge Paneli</span>
+                                </button>
+                                <button onclick="window.switchTab('appointments')" id="nav_appointments" class="w-full flex items-center justify-between px-4 py-2.5 text-xs font-semibold text-gray-300 hover:text-[#C5A059] hover:bg-gray-900/60 transition">
+                                    <span class="flex items-center gap-3"><i class="fa-solid fa-calendar-check w-4 text-[#C5A059]"></i> Randevular</span>
+                                    <span id="badgePendingCount" class="bg-amber-500/20 text-amber-400 border border-amber-500/40 text-[10px] px-2 py-0.5 rounded-full font-bold">0</span>
+                                </button>
+                                <button onclick="window.switchTab('forgot_requests')" id="nav_forgot_requests" class="w-full flex items-center justify-between px-4 py-2.5 text-xs font-semibold text-gray-300 hover:text-[#C5A059] hover:bg-gray-900/60 transition">
+                                    <span class="flex items-center gap-3"><i class="fa-solid fa-key w-4 text-[#C5A059]"></i> Şifre Talepleri</span>
+                                    <span id="badgeForgotCount" class="bg-red-500/20 text-red-400 border border-red-500/40 text-[10px] px-2 py-0.5 rounded-full font-bold">0</span>
+                                </button>
+                                <button onclick="window.switchTab('services')" id="nav_services" class="w-full flex items-center justify-between px-4 py-2.5 text-xs font-semibold text-gray-300 hover:text-[#C5A059] hover:bg-gray-900/60 transition">
+                                    <span class="flex items-center gap-3"><i class="fa-solid fa-list-check w-4 text-[#C5A059]"></i> Hizmet & Fiyat</span>
+                                </button>
+                                <button onclick="window.switchTab('notepad')" id="nav_notepad" class="w-full flex items-center justify-between px-4 py-2.5 text-xs font-semibold text-gray-300 hover:text-[#C5A059] hover:bg-gray-900/60 transition">
+                                    <span class="flex items-center gap-3"><i class="fa-solid fa-book w-4 text-[#C5A059]"></i> Müşteri Not Defteri</span>
+                                </button>
+                                <button onclick="window.switchTab('coupons')" id="nav_coupons" class="w-full flex items-center justify-between px-4 py-2.5 text-xs font-semibold text-gray-300 hover:text-[#C5A059] hover:bg-gray-900/60 transition">
+                                    <span class="flex items-center gap-3"><i class="fa-solid fa-ticket w-4 text-[#C5A059]"></i> İndirim Kuponları</span>
+                                </button>
+                                <button onclick="window.switchTab('customers')" id="nav_customers" class="w-full flex items-center justify-between px-4 py-2.5 text-xs font-semibold text-gray-300 hover:text-[#C5A059] hover:bg-gray-900/60 transition">
+                                    <span class="flex items-center gap-3"><i class="fa-solid fa-users w-4 text-[#C5A059]"></i> Müşteri CRM</span>
+                                </button>
+                                <button onclick="window.switchTab('financials')" id="nav_financials" class="w-full flex items-center justify-between px-4 py-2.5 text-xs font-semibold text-gray-300 hover:text-[#C5A059] hover:bg-gray-900/60 transition">
+                                    <span class="flex items-center gap-3"><i class="fa-solid fa-wallet w-4 text-[#C5A059]"></i> Finans & Rapor</span>
+                                </button>
+                                <button onclick="window.switchTab('portfolio')" id="nav_portfolio" class="w-full flex items-center justify-between px-4 py-2.5 text-xs font-semibold text-gray-300 hover:text-[#C5A059] hover:bg-gray-900/60 transition">
+                                    <span class="flex items-center gap-3"><i class="fa-solid fa-images w-4 text-[#C5A059]"></i> Portfolyo & Galeri</span>
+                                </button>
+                                <button onclick="window.switchTab('audit')" id="nav_audit" class="w-full flex items-center justify-between px-4 py-2.5 text-xs font-semibold text-gray-300 hover:text-[#C5A059] hover:bg-gray-900/60 transition">
+                                    <span class="flex items-center gap-3"><i class="fa-solid fa-clock-rotate-left w-4 text-[#C5A059]"></i> Denetim İzleri</span>
+                                </button>
+                            </div>
+                        </div>
                     </div>
+
                     <div>
                         <h2 class="font-serif-title font-bold gold-gradient-text leading-none text-lg">NES ADMIN</h2>
                         <span class="text-[9px] text-gray-500 uppercase tracking-widest block mt-0.5">Yönetim Portalı</span>
@@ -93,44 +141,17 @@
                 </div>
             </div>
 
-            <nav class="p-4 space-y-1 flex-1">
-                <button onclick="window.switchTab('dashboard')" id="nav_dashboard" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-xs font-semibold bg-[#C5A059] text-black transition">
-                    <i class="fa-solid fa-chart-pie w-4 text-center"></i> Gösterge Paneli
-                </button>
-                <button onclick="window.switchTab('appointments')" id="nav_appointments" class="w-full flex items-center justify-between px-4 py-3 rounded-xl text-xs font-semibold text-gray-400 hover:text-white hover:bg-gray-900 transition">
-                    <span class="flex items-center gap-3">
-                        <i class="fa-solid fa-calendar-check w-4 text-center text-[#C5A059]"></i> Randevular
-                    </span>
-                    <span id="badgePendingCount" class="bg-amber-500/20 text-amber-400 border border-amber-500/40 text-[10px] px-2 py-0.5 rounded-full font-bold">0</span>
-                </button>
-                <button onclick="window.switchTab('forgot_requests')" id="nav_forgot_requests" class="w-full flex items-center justify-between px-4 py-3 rounded-xl text-xs font-semibold text-gray-400 hover:text-white hover:bg-gray-900 transition">
-                    <span class="flex items-center gap-3">
-                        <i class="fa-solid fa-key w-4 text-center text-[#C5A059]"></i> Şifre Talepleri
-                    </span>
-                    <span id="badgeForgotCount" class="bg-red-500/20 text-red-400 border border-red-500/40 text-[10px] px-2 py-0.5 rounded-full font-bold">0</span>
-                </button>
-                <button onclick="window.switchTab('services')" id="nav_services" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-xs font-semibold text-gray-400 hover:text-white hover:bg-gray-900 transition">
-                    <i class="fa-solid fa-list-check w-4 text-center text-[#C5A059]"></i> Hizmet & Fiyat Kataloğu
-                </button>
-                <button onclick="window.switchTab('notepad')" id="nav_notepad" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-xs font-semibold text-gray-400 hover:text-white hover:bg-gray-900 transition">
-                    <i class="fa-solid fa-book w-4 text-center text-[#C5A059]"></i> Müşteri Not Defteri
-                </button>
-                <button onclick="window.switchTab('coupons')" id="nav_coupons" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-xs font-semibold text-gray-400 hover:text-white hover:bg-gray-900 transition">
-                    <i class="fa-solid fa-ticket w-4 text-center text-[#C5A059]"></i> İndirim Kuponları (7 Gün)
-                </button>
-                <button onclick="window.switchTab('customers')" id="nav_customers" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-xs font-semibold text-gray-400 hover:text-white hover:bg-gray-900 transition">
-                    <i class="fa-solid fa-users w-4 text-center text-[#C5A059]"></i> Müşteri CRM Yönetimi
-                </button>
-                <button onclick="window.switchTab('financials')" id="nav_financials" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-xs font-semibold text-gray-400 hover:text-white hover:bg-gray-900 transition">
-                    <i class="fa-solid fa-wallet w-4 text-center text-[#C5A059]"></i> Finans & Harcama Raporu
-                </button>
-                <button onclick="window.switchTab('portfolio')" id="nav_portfolio" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-xs font-semibold text-gray-400 hover:text-white hover:bg-gray-900 transition">
-                    <i class="fa-solid fa-images w-4 text-center text-[#C5A059]"></i> Portfolyo & Galeri
-                </button>
-                <button onclick="window.switchTab('audit')" id="nav_audit" class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-xs font-semibold text-gray-400 hover:text-white hover:bg-gray-900 transition">
-                    <i class="fa-solid fa-clock-rotate-left w-4 text-center text-[#C5A059]"></i> Denetim İzleri (Audit Logs)
-                </button>
-            </nav>
+            <!-- Aktif Modül Göstergesi / Özet Durum -->
+            <div class="p-6 flex-1 flex flex-col justify-center items-center text-center space-y-4">
+                <div class="w-16 h-16 rounded-2xl bg-[#0A0A0A] border border-[#C5A059]/40 flex items-center justify-center text-2xl text-[#C5A059] shadow-inner" id="activeModuleIcon">
+                    <i class="fa-solid fa-chart-pie"></i>
+                </div>
+                <div>
+                    <span class="text-[10px] text-gray-500 uppercase tracking-widest block">Aktif Bölüm</span>
+                    <h3 class="text-sm font-bold text-white font-serif-title mt-0.5" id="activeModuleTitle">Gösterge Paneli</h3>
+                </div>
+                <p class="text-xs text-gray-400 max-w-[200px] leading-relaxed">Sol üstteki <b class="gold-text">üç nokta</b> menüsüne tıklayarak diğer modüllere geçiş yapabilirsiniz.</p>
+            </div>
 
             <div class="p-4 border-t border-gray-800 bg-[#0A0A0A]/50 space-y-3">
                 <div class="flex items-center gap-3">
@@ -515,6 +536,28 @@
         </div>
     </div>
 
+    <!-- Portfolyo Ekleme Modalı -->
+    <div id="portfolioModal" class="fixed inset-0 bg-black/80 backdrop-blur z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-[#121212] border border-[#C5A059]/40 rounded-3xl max-w-md w-full p-6 space-y-4 shadow-2xl relative">
+            <button onclick="window.closePortfolioModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white text-2xl">&times;</button>
+            <h3 class="text-xl font-bold font-serif-title text-white">Portfolyoya Yeni Görsel Ekle</h3>
+            
+            <div>
+                <label class="block text-xs font-semibold text-gray-400 mb-1">Görsel Başlığı</label>
+                <input type="text" id="modalPortfolioTitle" placeholder="Örn: Özel Sombre Tasarımı" class="w-full bg-[#0A0A0A] border border-gray-800 text-white p-3 rounded-xl text-xs focus:border-[#C5A059] focus:outline-none">
+            </div>
+            <div>
+                <label class="block text-xs font-semibold text-gray-400 mb-1">Görsel Dosyası veya URL</label>
+                <input type="file" id="modalPortfolioFile" accept="image/*" class="w-full text-xs text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-[#C5A059] file:text-black cursor-pointer mb-2">
+                <input type="text" id="modalPortfolioUrl" placeholder="Veya doğrudan resim URL'si girin" class="w-full bg-[#0A0A0A] border border-gray-800 text-white p-3 rounded-xl text-xs focus:border-[#C5A059] focus:outline-none">
+            </div>
+
+            <button onclick="window.savePortfolioForm()" class="w-full gold-gradient text-black font-bold py-3 rounded-xl text-xs uppercase tracking-wider shadow">
+                Galeriye Ekle & Yayınla
+            </button>
+        </div>
+    </div>
+
     <!-- Kupon Modalı -->
     <div id="couponModal" class="fixed inset-0 bg-black/80 backdrop-blur z-50 hidden flex items-center justify-center p-4">
         <div class="bg-[#121212] border border-[#C5A059]/40 rounded-3xl max-w-md w-full p-6 space-y-4 shadow-2xl relative">
@@ -652,6 +695,19 @@
             { id: 'p4', title: 'At Kuyruğu', image: 'https://images.unsplash.com/photo-1519699047748-de8e457a634e?auto=format&fit=crop&w=1200&q=80' }
         ];
 
+        const MODULE_TITLES = {
+            'dashboard': { title: 'Gösterge Paneli', icon: 'fa-chart-pie' },
+            'appointments': { title: 'Randevular', icon: 'fa-calendar-check' },
+            'forgot_requests': { title: 'Şifre Talepleri', icon: 'fa-key' },
+            'services': { title: 'Hizmet & Fiyat Kataloğu', icon: 'fa-list-check' },
+            'notepad': { title: 'Müşteri Not Defteri', icon: 'fa-book' },
+            'coupons': { title: 'İndirim Kuponları', icon: 'fa-ticket' },
+            'customers': { title: 'Müşteri CRM Yönetimi', icon: 'fa-users' },
+            'financials': { title: 'Finans & Harcama Raporu', icon: 'fa-wallet' },
+            'portfolio': { title: 'Portfolyo & Galeri', icon: 'fa-images' },
+            'audit': { title: 'Denetim İzleri (Audit Logs)', icon: 'fa-clock-rotate-left' }
+        };
+
         let activeTab = 'dashboard';
         let revenueChartInstance = null;
         let activeReplyAppId = null;
@@ -663,7 +719,24 @@
                 const clockEl = document.getElementById('liveClock');
                 if (clockEl) clockEl.innerText = now.toLocaleTimeString('tr-TR');
             }, 1000);
+
+            // Dışarı tıklandığında menüyü kapatma
+            document.addEventListener('click', (e) => {
+                const dropdown = document.getElementById('adminMenuDropdown');
+                const menuBtn = e.target.closest('button');
+                if (dropdown && !dropdown.contains(e.target) && !menuBtn) {
+                    dropdown.classList.add('hidden');
+                }
+            });
         });
+
+        window.toggleAdminMenuDropdown = function(e) {
+            if (e) e.stopPropagation();
+            const dropdown = document.getElementById('adminMenuDropdown');
+            if (dropdown) {
+                dropdown.classList.toggle('hidden');
+            }
+        };
 
         window.loginToPortal = function() {
             const passInput = document.getElementById('portalPassInput');
@@ -732,20 +805,25 @@
         window.clearLifetimeAppointmentsStats = function() {
             if (confirm('Gösterge panelindeki toplam müşteri randevu sayacını sıfırlamak istediğinize emin misiniz?')) {
                 localStorage.setItem('nes_lifetime_appointment_stats', JSON.stringify({ totalApps: 0, completedApps: 0 }));
-                addAuditLog('Randevu Sayacı Sıfırlandı', 'Toplam müşteri randevuları sayacı sıfırlandı.');
+                addAuditLog('Randevu Sayacı Sıfırllandı', 'Toplam müşteri randevuları sayacı sıfırlandı.');
                 window.syncAllData();
-                showToast('Randevu sayacı sıfırlandı.', 'info');
+                showToast('Randevu sayacı sıfırllandı.', 'info');
             }
         };
 
         window.switchTab = function(tabName) {
             activeTab = tabName;
+            
+            // Dropdown menüyü kapat
+            const dropdown = document.getElementById('adminMenuDropdown');
+            if (dropdown) dropdown.classList.add('hidden');
+
             ['dashboard', 'appointments', 'forgot_requests', 'services', 'notepad', 'coupons', 'customers', 'financials', 'portfolio', 'audit'].forEach(t => {
                 const view = document.getElementById(`view_${t}`);
                 const nav = document.getElementById(`nav_${t}`);
                 if (view) view.classList.add('hidden');
                 if (nav) {
-                    nav.className = "w-full flex items-center justify-between px-4 py-3 rounded-xl text-xs font-semibold text-gray-400 hover:text-white hover:bg-gray-900 transition";
+                    nav.className = "w-full flex items-center justify-between px-4 py-2.5 text-xs font-semibold text-gray-300 hover:text-[#C5A059] hover:bg-gray-900/60 transition";
                 }
             });
 
@@ -753,8 +831,15 @@
             const activeNav = document.getElementById(`nav_${tabName}`);
             if (activeView) activeView.classList.remove('hidden');
             if (activeNav) {
-                activeNav.className = "w-full flex items-center justify-between px-4 py-3 rounded-xl text-xs font-semibold bg-[#C5A059] text-black transition";
+                activeNav.className = "w-full flex items-center justify-between px-4 py-2.5 text-xs font-semibold bg-[#C5A059]/20 text-[#C5A059] border border-[#C5A059]/40 transition";
             }
+
+            // Sol paneldeki aktif modül göstergesini güncelle
+            const modInfo = MODULE_TITLES[tabName] || { title: 'Modül', icon: 'fa-circle' };
+            const titleEl = document.getElementById('activeModuleTitle');
+            const iconEl = document.getElementById('activeModuleIcon');
+            if (titleEl) titleEl.innerText = modInfo.title;
+            if (iconEl) iconEl.innerHTML = `<i class="fa-solid ${modInfo.icon}"></i>`;
 
             window.syncAllData();
         };
@@ -1110,19 +1195,16 @@
                 return showToast('Lütfen en az 4 karakterli geçerli bir şifre giriniz.', 'warning');
             }
 
-            // Update user password in users list
             let users = getStoredUsers();
             const uObj = users.find(u => u.name.toLowerCase() === custName.toLowerCase());
             if (uObj) {
                 uObj.pass = newPass;
                 saveStoredUsers(users);
             } else {
-                // If not found in users list, create/add them
                 users.push({ name: custName, pass: newPass, avatar: '' });
                 saveStoredUsers(users);
             }
 
-            // Remove request
             let reqs = getStoredForgotRequests();
             reqs = reqs.filter(r => r.id !== reqId);
             saveStoredForgotRequests(reqs);
@@ -1648,6 +1730,53 @@
             addAuditLog('Portfolyo Silindi', `ID: ${id} görsel galeriden silindi.`);
             window.syncAllData();
             showToast('Görsel portfolyodan kaldırıldı.', 'info');
+        };
+
+        window.openAddPortfolioModal = function() {
+            document.getElementById('modalPortfolioTitle').value = '';
+            document.getElementById('modalPortfolioUrl').value = '';
+            const fileInput = document.getElementById('modalPortfolioFile');
+            if (fileInput) fileInput.value = '';
+            document.getElementById('portfolioModal').classList.remove('hidden');
+        };
+
+        window.closePortfolioModal = function() {
+            document.getElementById('portfolioModal').classList.add('hidden');
+        };
+
+        window.savePortfolioForm = function() {
+            const title = document.getElementById('modalPortfolioTitle').value.trim() || 'Saç Tasarımı';
+            const urlInput = document.getElementById('modalPortfolioUrl').value.trim();
+            const fileInput = document.getElementById('modalPortfolioFile');
+
+            const saveItem = (imgSrc) => {
+                if (!imgSrc) {
+                    return showToast('Lütfen bir görsel seçin veya URL girin.', 'warning');
+                }
+                let portfolio = getStoredPortfolio();
+                portfolio.unshift({
+                    id: 'p_' + Date.now(),
+                    title: title,
+                    image: imgSrc
+                });
+                saveStoredPortfolio(portfolio);
+                addAuditLog('Portfolyo Eklendi', `"${title}" galeriyə eklendi.`);
+                window.closePortfolioModal();
+                window.syncAllData();
+                showToast('Görsel başarıyla eklendi!', 'success');
+            };
+
+            if (fileInput && fileInput.files && fileInput.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    saveItem(e.target.result);
+                };
+                reader.readAsDataURL(fileInput.files[0]);
+            } else if (urlInput) {
+                saveItem(urlInput);
+            } else {
+                showToast('Lütfen bir görsel seçiniz ya da URL giriniz.', 'warning');
+            }
         };
 
         function addAuditLog(action, details) {
