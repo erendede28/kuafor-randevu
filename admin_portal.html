@@ -737,10 +737,8 @@
                 onSnapshot(collection(window.db, 'artifacts', window.appId, 'public', 'data', 'nes_users_list'), (snapshot) => {
                     let users = [];
                     snapshot.forEach(doc => { users.push({ id: doc.id, ...doc.data() }); });
-                    if (users.length > 0) {
-                        localStorage.setItem('nes_users_list', JSON.stringify(users));
-                        window.syncAllData();
-                    }
+                    localStorage.setItem('nes_users_list', JSON.stringify(users));
+                    window.syncAllData();
                 }, (err) => console.error("Users listener error:", err));
 
                 // 3. Forgot Password Requests Listener
@@ -750,6 +748,50 @@
                     localStorage.setItem('nes_forgot_password_requests', JSON.stringify(reqs));
                     window.syncAllData();
                 }, (err) => console.error("Forgot reqs listener error:", err));
+
+                // 4. Services Catalog Listener
+                onSnapshot(collection(window.db, 'artifacts', window.appId, 'public', 'data', 'nes_services_catalog'), (snapshot) => {
+                    let srvs = [];
+                    snapshot.forEach(doc => { srvs.push({ id: doc.id, ...doc.data() }); });
+                    if (srvs.length > 0) {
+                        localStorage.setItem('nes_services_catalog', JSON.stringify(srvs));
+                        window.syncAllData();
+                    }
+                }, (err) => console.error("Services listener error:", err));
+
+                // 5. Customer Notepad Listener
+                onSnapshot(collection(window.db, 'artifacts', window.appId, 'public', 'data', 'nes_customer_notepad'), (snapshot) => {
+                    let notes = [];
+                    snapshot.forEach(doc => { notes.push({ id: doc.id, ...doc.data() }); });
+                    localStorage.setItem('nes_customer_notepad', JSON.stringify(notes));
+                    window.syncAllData();
+                }, (err) => console.error("Notepad listener error:", err));
+
+                // 6. Coupons Listener
+                onSnapshot(collection(window.db, 'artifacts', window.appId, 'public', 'data', 'nes_customer_coupons'), (snapshot) => {
+                    let coupons = [];
+                    snapshot.forEach(doc => { coupons.push({ id: doc.id, ...doc.data() }); });
+                    localStorage.setItem('nes_customer_coupons', JSON.stringify(coupons));
+                    window.syncAllData();
+                }, (err) => console.error("Coupons listener error:", err));
+
+                // 7. Revenue Ledger Listener
+                onSnapshot(collection(window.db, 'artifacts', window.appId, 'public', 'data', 'nes_revenue_ledger'), (snapshot) => {
+                    let ledger = [];
+                    snapshot.forEach(doc => { ledger.push({ id: doc.id, ...doc.data() }); });
+                    localStorage.setItem('nes_revenue_ledger', JSON.stringify(ledger));
+                    window.syncAllData();
+                }, (err) => console.error("Revenue ledger listener error:", err));
+
+                // 8. Portfolio Listener
+                onSnapshot(collection(window.db, 'artifacts', window.appId, 'public', 'data', 'nes_portfolio_gallery'), (snapshot) => {
+                    let items = [];
+                    snapshot.forEach(doc => { items.push({ id: doc.id, ...doc.data() }); });
+                    if (items.length > 0) {
+                        localStorage.setItem('nes_portfolio_gallery', JSON.stringify(items));
+                        window.syncAllData();
+                    }
+                }, (err) => console.error("Portfolio listener error:", err));
 
             });
         };
@@ -1246,6 +1288,48 @@
         window.deleteUserAccount = function(name) {
             let users = getStoredUsers().filter(u => u.name.toLowerCase() !== name.toLowerCase());
             saveStoredUsers(users);
+            if (window.db && window.appId) {
+                import("https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js").then(({ doc, deleteDoc }) => {
+                    const docId = (name || 'user').replace(/[^a-zA-Z0-9]/g, '_');
+                    deleteDoc(doc(window.db, 'artifacts', window.appId, 'public', 'data', 'nes_users_list', docId)).catch(e => console.error(e));
+                });
+            }
+            window.syncAllData();
+            showToast('Müşteri hesabı silindi.', 'info');
+        };
+
+        window.deleteCoupon = function(id) {
+            let coupons = getStoredCoupons().filter(c => c.id !== id);
+            saveStoredCoupons(coupons);
+            if (window.db && window.appId) {
+                import("https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js").then(({ doc, deleteDoc }) => {
+                    deleteDoc(doc(window.db, 'artifacts', window.appId, 'public', 'data', 'nes_customer_coupons', String(id))).catch(e => console.error(e));
+                });
+            }
+            window.syncAllData();
+        };
+
+        window.deleteRevenueRecord = function(id) {
+            let ledger = getRevenueLedger();
+            ledger = ledger.filter(r => r.id !== id);
+            saveRevenueLedger(ledger);
+            if (window.db && window.appId) {
+                import("https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js").then(({ doc, deleteDoc }) => {
+                    deleteDoc(doc(window.db, 'artifacts', window.appId, 'public', 'data', 'nes_revenue_ledger', String(id))).catch(e => console.error(e));
+                });
+            }
+            window.syncAllData();
+            showToast('Kayıt silindi.', 'info');
+        };
+
+        window.deletePortfolioItem = function(id) {
+            let portfolio = getStoredPortfolio().filter(p => p.id !== id);
+            saveStoredPortfolio(portfolio);
+            if (window.db && window.appId) {
+                import("https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js").then(({ doc, deleteDoc }) => {
+                    deleteDoc(doc(window.db, 'artifacts', window.appId, 'public', 'data', 'nes_portfolio_gallery', String(id))).catch(e => console.error(e));
+                });
+            }
             window.syncAllData();
         };
 
