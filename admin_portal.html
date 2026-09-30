@@ -315,7 +315,7 @@
                 <div id="view_customers" class="space-y-6 hidden">
                     <div class="border-b border-gray-800 pb-4">
                         <h1 class="text-2xl font-bold font-serif-title text-white">Müşteri CRM Yönetimi</h1>
-                        <p class="text-xs text-gray-400 mt-1">Kayıtlı müşteri hesaplarını görüntüleyin ve yönetin.</p>
+                        <p class="text-xs text-gray-400 mt-1">Kayıtlı müşteri hesaplarını, profil fotoğraflarını ve şifrelerini görüntüleyin ve yönetin.</p>
                     </div>
 
                     <div class="bg-[#121212] border border-gray-800 rounded-2xl overflow-hidden shadow-xl">
@@ -323,6 +323,7 @@
                             <table class="w-full text-left border-collapse text-xs">
                                 <thead>
                                     <tr class="bg-[#0A0A0A] border-b border-gray-800 text-[#C5A059] uppercase tracking-wider font-semibold">
+                                        <th class="p-4">Profil Fotoğrafı</th>
                                         <th class="p-4">Müşteri Adı</th>
                                         <th class="p-4">Sistem Şifresi</th>
                                         <th class="p-4 text-center">İşlem / Sil</th>
@@ -476,7 +477,7 @@
         </div>
     </div>
 
-    <!-- Portfolyo Ekleme Modalı (Orijinal Boyut & Çıkış Butonlu) -->
+    <!-- Portfolyo Ekleme Modalı (Orijinal Boyut) -->
     <div id="portfolioModal" class="fixed inset-0 bg-black/80 backdrop-blur z-50 hidden flex items-center justify-center p-4">
         <div class="bg-[#121212] border border-[#C5A059]/40 rounded-3xl max-w-md w-full p-5 space-y-4 shadow-2xl relative max-h-[90vh] overflow-y-auto">
             <button onclick="window.closePortfolioModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-gray-800/80 hover:bg-red-950 hover:text-red-400 text-gray-300 flex items-center justify-center text-lg transition z-10">&times;</button>
@@ -492,11 +493,7 @@
             </div>
 
             <div id="portPreviewWrapper" class="hidden space-y-2 pt-1">
-                <div class="flex justify-between items-center">
-                    <span class="font-semibold text-gray-300 text-[11px]">Orijinal Önizleme</span>
-                    <span class="text-[10px] bg-emerald-950 text-emerald-400 border border-emerald-800 px-2 py-0.5 rounded-full font-bold">Orijinal Boyut</span>
-                </div>
-                <div class="relative w-full h-44 bg-[#0A0A0A] rounded-2xl border border-gray-800 overflow-hidden flex items-center justify-center">
+                <div class="relative w-full h-[220px] bg-[#0A0A0A] rounded-2xl border border-gray-800 overflow-hidden flex items-center justify-center">
                     <img id="portPreviewImg" src="" class="max-h-full max-w-full object-contain">
                 </div>
             </div>
@@ -560,6 +557,14 @@
         let revenueChartInstance = null;
         let activeReplyAppId = null;
         let currentAppointmentFilter = 'Aktif';
+
+        document.addEventListener('DOMContentLoaded', () => {
+            setInterval(() => {
+                const now = new Date();
+                const clockEl = document.getElementById('liveClock');
+                if (clockEl) clockEl.innerText = now.toLocaleTimeString('tr-TR');
+            }, 1000);
+        });
 
         window.loginToPortal = function() {
             const passInput = document.getElementById('portalPassInput');
@@ -720,12 +725,18 @@
             let pendingCount = 0;
 
             apps.forEach(a => {
-                if (a.status === 'Tamamlandı') {
-                    completedCount++;
-                    if (a.totalPrice) totalRevenue += a.totalPrice;
-                } else if (a.status === 'Beklemede') {
-                    pendingCount++;
-                }
+                if (a.status === 'Tamamlandı') completedCount++;
+                else if (a.status === 'Beklemede') pendingCount++;
+            });
+
+            // Calculate revenue from permanent ledger records
+            let spendingRecords = {};
+            try { spendingRecords = JSON.parse(localStorage.getItem('nes_spending_records')) || {}; } catch(e) {}
+            
+            Object.keys(spendingRecords).forEach(user => {
+                (spendingRecords[user] || []).forEach(rec => {
+                    totalRevenue += (rec.amount || 0);
+                });
             });
 
             const revEl = document.getElementById('dashTotalRevenue');
@@ -764,10 +775,10 @@
                 }
             }
 
-            renderRevenueChart(apps);
+            renderRevenueChart(spendingRecords);
         }
 
-        function renderRevenueChart(apps) {
+        function renderRevenueChart(spendingRecords) {
             const ctx = document.getElementById('revenueChart');
             if (!ctx) return;
 
@@ -776,10 +787,12 @@
             }
 
             const days = {};
-            apps.forEach(a => {
-                if (a.status === 'Tamamlandı' && a.date) {
-                    days[a.date] = (days[a.date] || 0) + (a.totalPrice || 0);
-                }
+            Object.keys(spendingRecords).forEach(user => {
+                (spendingRecords[user] || []).forEach(rec => {
+                    if (rec.date) {
+                        days[rec.date] = (days[rec.date] || 0) + (rec.amount || 0);
+                    }
+                });
             });
 
             const labels = Object.keys(days).sort().slice(-7);
@@ -898,7 +911,6 @@
             let apps = getStoredApps();
             const target = apps.find(a => a.id === id);
             
-            // Eğer randevuda kullanılmış kupon varsa ve iptal/silme yapılıyorsa kuponu iade et
             if (target && target.usedCouponObject && target.status !== 'Müşteri İptali' && target.status !== 'İptal') {
                 let coupons = getStoredCoupons();
                 if (new Date().getTime() < target.usedCouponObject.expiresAt) {
@@ -909,9 +921,9 @@
 
             apps = apps.filter(a => a.id !== id);
             saveStoredApps(apps);
-            addAuditLog('Randevu Silindi', `#${id} ID'li randevu kalıcı olarak silindi.`);
+            addAuditLog('Randevu Silindi', `#${id} ID'li randevu kalıcı olarak silindi. (Ciro etkilenmez)`);
             window.syncAllData();
-            showToast('Randevu başarıyla silindi ve kupon iade edildi.', 'info');
+            showToast('Randevu başarıyla silindi (Ciro kaydı korundu).', 'info');
         };
 
         window.updateAppStatus = function(id, newStatus) {
@@ -921,7 +933,6 @@
                 const oldStatus = target.status;
                 target.status = newStatus;
 
-                // Eğer admin randevuyu iptal ediyorsa ve kullanılmış kuponu varsa kuponu iade et
                 if ((newStatus === 'İptal' || newStatus === 'Müşteri İptali') && oldStatus !== 'İptal' && oldStatus !== 'Müşteri İptali') {
                     if (target.usedCouponObject) {
                         let coupons = getStoredCoupons();
@@ -1007,83 +1018,66 @@
         };
 
         window.submitAdminReply = function() {
-            const text = document.getElementById('replyModalInput').value;
-            const apps = getStoredApps();
+            const text = document.getElementById('replyModalInput').value.trim();
+            if (!activeReplyAppId) return;
+
+            let apps = getStoredApps();
             const target = apps.find(a => a.id === activeReplyAppId);
             if (target) {
                 target.reply = text;
                 saveStoredApps(apps);
-                addAuditLog('Müşteri Yanıtı', `#${activeReplyAppId} ID'li randevuya yanıt iletildi.`);
+                addAuditLog('Randevu Yanıtı', `#${activeReplyAppId} ID'li randevuya salon yanıtı eklendi.`);
                 window.closeReplyModal();
                 window.syncAllData();
-                showToast('Müşteriye yanıt kaydedildi.', 'success');
+                showToast('Yanıt müşteriye iletildi.', 'success');
             }
         };
 
-        function renderServicesGrid(srvs) {
+        function renderServicesGrid(services) {
             const container = document.getElementById('servicesGridContainer');
             if (!container) return;
             container.innerHTML = '';
 
-            srvs.forEach(s => {
+            services.forEach(srv => {
                 const card = document.createElement('div');
-                card.className = "bg-[#121212] border border-gray-800 hover:border-[#C5A059]/60 p-5 rounded-2xl flex flex-col justify-between space-y-4 transition";
+                card.className = "bg-[#121212] border border-gray-800 p-5 rounded-2xl flex flex-col justify-between space-y-4";
                 card.innerHTML = `
-                    <div class="space-y-2">
+                    <div>
                         <div class="flex justify-between items-start">
-                            <span class="w-8 h-8 rounded-lg bg-[#C5A059]/10 text-[#C5A059] flex items-center justify-center font-bold text-sm">
-                                <i class="fa-solid fa-scissors"></i>
-                            </span>
-                            <span class="text-lg font-bold font-serif-title gold-gradient-text">${s.price.toLocaleString('tr-TR')} ₺</span>
+                            <span class="text-sm font-bold text-white">${srv.name}</span>
+                            <span class="gold-text font-bold text-base font-serif-title">${srv.price.toLocaleString('tr-TR')} ₺</span>
                         </div>
-                        <h4 class="font-bold text-white text-sm">${s.name}</h4>
-                        <span class="text-xs text-gray-500 block"><i class="fa-regular fa-clock mr-1"></i>Tahmini Süre: ${s.durationMin} Dakika</span>
+                        <p class="text-xs text-gray-400 mt-1"><i class="fa-solid fa-clock gold-text mr-1"></i> Süre: ${srv.durationMin} Dakika</p>
                     </div>
-                    <div class="flex gap-2 pt-2 border-t border-gray-800/80">
-                        <button onclick="window.openEditServiceModal('${s.id}')" class="w-1/2 bg-[#0A0A0A] border border-gray-800 text-gray-300 hover:text-white hover:border-[#C5A059] py-2 rounded-xl text-xs font-semibold transition">
-                            <i class="fa-solid fa-pen-to-square mr-1"></i> Düzenle
-                        </button>
-                        <button onclick="window.deleteService('${s.id}')" class="w-1/2 bg-red-950/40 border border-red-900 text-red-400 hover:bg-red-900 hover:text-white py-2 rounded-xl text-xs font-semibold transition">
-                            <i class="fa-solid fa-trash mr-1"></i> Sil
-                        </button>
+                    <div class="flex gap-2 pt-2 border-t border-gray-800">
+                        <button onclick="window.openEditServiceModal('${srv.id}')" class="flex-1 bg-gray-800 hover:bg-gray-700 text-gray-200 py-2 rounded-xl text-xs font-semibold transition">Düzenle</button>
+                        <button onclick="window.deleteServiceItem('${srv.id}')" class="bg-red-950/50 border border-red-900 text-red-400 hover:bg-red-900 hover:text-white px-3 py-2 rounded-xl text-xs transition"><i class="fa-solid fa-trash"></i></button>
                     </div>
                 `;
                 container.appendChild(card);
             });
         }
 
-        window.deleteService = function(srvId) {
-            let srvs = getStoredServices();
-            const target = srvs.find(s => s.id === srvId);
-            srvs = srvs.filter(s => s.id !== srvId);
-            saveStoredServices(srvs);
-            if (target) {
-                addAuditLog('Hizmet Silindi', `"${target.name}" kataloğdan kaldırıldı.`);
-            }
-            window.syncAllData();
-            showToast('Hizmet silindi.', 'info');
-        };
-
         window.openAddServiceModal = function() {
-            document.getElementById('serviceModalTitle').innerText = "Yeni Hizmet Ekle";
-            document.getElementById('modalSrvId').value = "";
-            document.getElementById('modalSrvName').value = "";
-            document.getElementById('modalSrvPrice').value = "";
-            document.getElementById('modalSrvDuration').value = "";
+            document.getElementById('modalSrvId').value = '';
+            document.getElementById('modalSrvName').value = '';
+            document.getElementById('modalSrvPrice').value = '';
+            document.getElementById('modalSrvDuration').value = '60';
+            document.getElementById('serviceModalTitle').innerText = 'Yeni Hizmet Ekle';
             document.getElementById('serviceEditModal').classList.remove('hidden');
         };
 
-        window.openEditServiceModal = function(srvId) {
-            const srvs = getStoredServices();
-            const target = srvs.find(s => s.id === srvId);
-            if (!target) return;
-
-            document.getElementById('serviceModalTitle').innerText = "Hizmeti Düzenle";
-            document.getElementById('modalSrvId').value = target.id;
-            document.getElementById('modalSrvName').value = target.name;
-            document.getElementById('modalSrvPrice').value = target.price;
-            document.getElementById('modalSrvDuration').value = target.durationMin;
-            document.getElementById('serviceEditModal').classList.remove('hidden');
+        window.openEditServiceModal = function(id) {
+            const services = getStoredServices();
+            const srv = services.find(s => s.id === id);
+            if (srv) {
+                document.getElementById('modalSrvId').value = srv.id;
+                document.getElementById('modalSrvName').value = srv.name;
+                document.getElementById('modalSrvPrice').value = srv.price;
+                document.getElementById('modalSrvDuration').value = srv.durationMin;
+                document.getElementById('serviceModalTitle').innerText = 'Hizmeti Düzenle';
+                document.getElementById('serviceEditModal').classList.remove('hidden');
+            }
         };
 
         window.closeServiceModal = function() {
@@ -1093,91 +1087,90 @@
         window.saveServiceForm = function() {
             const id = document.getElementById('modalSrvId').value;
             const name = document.getElementById('modalSrvName').value.trim();
-            const price = parseFloat(document.getElementById('modalSrvPrice').value);
-            const durationMin = parseInt(document.getElementById('modalSrvDuration').value, 10);
+            const price = parseFloat(document.getElementById('modalSrvPrice').value) || 0;
+            const durationMin = parseInt(document.getElementById('modalSrvDuration').value) || 30;
 
-            if (!name || isNaN(price) || isNaN(durationMin)) {
-                return showToast('Lütfen tüm alanları doldurun.', 'warning');
+            if (!name || price <= 0) {
+                return showToast('Geçerli bir hizmet adı ve fiyat giriniz.', 'warning');
             }
 
-            let srvs = getStoredServices();
-
+            let services = getStoredServices();
             if (id) {
-                const idx = srvs.findIndex(s => s.id === id);
-                if (idx !== -1) {
-                    srvs[idx] = { id, name, price, durationMin };
-                    addAuditLog('Hizmet Güncellendi', `"${name}" güncellendi.`);
+                const srv = services.find(s => s.id === id);
+                if (srv) {
+                    srv.name = name;
+                    srv.price = price;
+                    srv.durationMin = durationMin;
                 }
             } else {
                 const newId = 'srv_' + Date.now();
-                srvs.push({ id: newId, name, price, durationMin });
-                addAuditLog('Yeni Hizmet', `"${name}" eklendi.`);
+                services.push({ id: newId, name, price, durationMin });
             }
 
-            saveStoredServices(srvs);
+            saveStoredServices(services);
+            addAuditLog('Hizmet Kataloğu', `"${name}" hizmeti güncellendi/eklendi.`);
             window.closeServiceModal();
             window.syncAllData();
-            showToast('Katalog kaydedildi.', 'success');
+            showToast('Hizmet kataloğu kaydedildi.', 'success');
         };
 
-        function renderNotepadGrid(notes) {
+        window.deleteServiceItem = function(id) {
+            let services = getStoredServices();
+            services = services.filter(s => s.id !== id);
+            saveStoredServices(services);
+            addAuditLog('Hizmet Silindi', `ID: ${id} hizmet silindi.`);
+            window.syncAllData();
+            showToast('Hizmet silindi.', 'info');
+        };
+
+        function renderNotepadGrid(notepad) {
             const container = document.getElementById('notepadGridContainer');
             if (!container) return;
             container.innerHTML = '';
 
-            if (!notes || notes.length === 0) {
-                container.innerHTML = '<p class="text-gray-500 italic text-center py-8 col-span-full">Defterde henüz kayıtlı not bulunmuyor.</p>';
+            if (notepad.length === 0) {
+                container.innerHTML = '<p class="text-gray-500 italic col-span-full text-center py-6">Kayıtlı saç reçetesi bulunmuyor.</p>';
                 return;
             }
 
-            notes.forEach(item => {
+            notepad.forEach(note => {
                 const card = document.createElement('div');
-                card.className = "bg-[#121212] border border-gray-800 hover:border-[#C5A059]/60 p-5 rounded-2xl flex flex-col justify-between space-y-4 transition";
+                card.className = "bg-[#121212] border border-gray-800 p-5 rounded-2xl flex flex-col justify-between space-y-4";
                 card.innerHTML = `
                     <div class="space-y-2">
                         <div class="flex justify-between items-start">
-                            <span class="w-8 h-8 rounded-lg bg-[#C5A059]/10 text-[#C5A059] flex items-center justify-center font-bold text-sm">
-                                <i class="fa-solid fa-book"></i>
-                            </span>
-                            <span class="text-[10px] text-gray-500">${item.updatedAt || ''}</span>
+                            <strong class="text-white text-sm">${note.customerName}</strong>
+                            <button onclick="window.deleteNotepadItem(${note.id})" class="text-red-400 hover:text-red-300 text-xs"><i class="fa-solid fa-trash"></i></button>
                         </div>
-                        <h4 class="font-bold text-white text-sm">${item.customerName}</h4>
-                        <p class="text-xs text-gray-300"><strong>Saç Tipi:</strong> ${item.hairType || 'Belirtilmemiş'}</p>
-                        <p class="text-xs font-mono text-[#C5A059] bg-[#0A0A0A] p-2.5 rounded-xl border border-gray-800"><strong>Reçete:</strong> ${item.formula || 'Yok'}</p>
+                        <p class="text-xs text-gray-300"><b>Saç Tipi:</b> ${note.hairType || '-'}</p>
+                        <p class="text-xs text-[#C5A059] font-mono bg-[#0A0A0A] p-2.5 rounded-xl border border-gray-800"><b>Reçete:</b> ${note.formula || '-'}</p>
                     </div>
-                    <div class="flex gap-2 pt-2 border-t border-gray-800/80">
-                        <button onclick="window.openEditNotepadModal('${item.id}')" class="w-1/2 bg-[#0A0A0A] border border-gray-800 text-gray-300 hover:text-white hover:border-[#C5A059] py-2 rounded-xl text-xs font-semibold transition">
-                            <i class="fa-solid fa-pen-to-square mr-1"></i> Düzenle
-                        </button>
-                        <button onclick="window.deleteNotepad('${item.id}')" class="w-1/2 bg-red-950/40 border border-red-900 text-red-400 hover:bg-red-900 hover:text-white py-2 rounded-xl text-xs font-semibold transition">
-                            <i class="fa-solid fa-trash mr-1"></i> Sil
-                        </button>
-                    </div>
+                    <button onclick="window.openEditNotepadModal(${note.id})" class="w-full bg-gray-800 hover:bg-gray-700 text-gray-200 py-2 rounded-xl text-xs font-semibold transition">Düzenle</button>
                 `;
                 container.appendChild(card);
             });
         }
 
         window.openAddNotepadModal = function() {
-            document.getElementById('notepadModalTitle').innerText = "Yeni Müşteri Notu Ekle";
-            document.getElementById('modalNotepadId').value = "";
-            document.getElementById('modalNotepadCustomer').value = "";
-            document.getElementById('modalNotepadHairType').value = "";
-            document.getElementById('modalNotepadFormula').value = "";
+            document.getElementById('modalNotepadId').value = '';
+            document.getElementById('modalNotepadCustomer').value = '';
+            document.getElementById('modalNotepadHairType').value = '';
+            document.getElementById('modalNotepadFormula').value = '';
+            document.getElementById('notepadModalTitle').innerText = 'Müşteri Reçetesi Ekle';
             document.getElementById('notepadModal').classList.remove('hidden');
         };
 
         window.openEditNotepadModal = function(id) {
-            const notes = getStoredNotepad();
-            const target = notes.find(n => String(n.id) === String(id));
-            if (!target) return;
-
-            document.getElementById('notepadModalTitle').innerText = "Müşteri Notunu Düzenle";
-            document.getElementById('modalNotepadId').value = target.id;
-            document.getElementById('modalNotepadCustomer').value = target.customerName || '';
-            document.getElementById('modalNotepadHairType').value = target.hairType || '';
-            document.getElementById('modalNotepadFormula').value = target.formula || '';
-            document.getElementById('notepadModal').classList.remove('hidden');
+            let notepad = getStoredNotepad();
+            const note = notepad.find(n => n.id === id);
+            if (note) {
+                document.getElementById('modalNotepadId').value = note.id;
+                document.getElementById('modalNotepadCustomer').value = note.customerName;
+                document.getElementById('modalNotepadHairType').value = note.hairType;
+                document.getElementById('modalNotepadFormula').value = note.formula;
+                document.getElementById('notepadModalTitle').innerText = 'Reçeteyi Düzenle';
+                document.getElementById('notepadModal').classList.remove('hidden');
+            }
         };
 
         window.closeNotepadModal = function() {
@@ -1191,37 +1184,39 @@
             const formula = document.getElementById('modalNotepadFormula').value.trim();
 
             if (!customerName) {
-                return showToast('Lütfen müşteri adını girin.', 'warning');
+                return showToast('Müşteri adı girmelisiniz.', 'warning');
             }
 
-            let notes = getStoredNotepad();
-            const timeStr = new Date().toLocaleString('tr-TR');
-
+            let notepad = getStoredNotepad();
             if (id) {
-                const idx = notes.findIndex(n => String(n.id) === String(id));
-                if (idx !== -1) {
-                    notes[idx] = { id, customerName, hairType, formula, updatedAt: timeStr };
-                    addAuditLog('Not Defteri Güncellendi', `"${customerName}" için saç reçetesi güncellendi.`);
+                const note = notepad.find(n => n.id == id);
+                if (note) {
+                    note.customerName = customerName;
+                    note.hairType = hairType;
+                    note.formula = formula;
                 }
             } else {
-                const newId = 'note_' + Date.now();
-                notes.push({ id: newId, customerName, hairType, formula, updatedAt: timeStr });
-                addAuditLog('Yeni Not Defteri Kaydı', `"${customerName}" için yeni saç reçetesi eklendi.`);
+                notepad.push({
+                    id: Date.now(),
+                    customerName,
+                    hairType,
+                    formula
+                });
             }
 
-            saveStoredNotepad(notes);
+            saveStoredNotepad(notepad);
+            addAuditLog('Not Defteri', `"${customerName}" saç reçetesi kaydedildi.`);
             window.closeNotepadModal();
             window.syncAllData();
-            showToast('Müşteri notu başarıyla kaydedildi.', 'success');
+            showToast('Saç reçetesi kaydedildi.', 'success');
         };
 
-        window.deleteNotepad = function(id) {
-            let notes = getStoredNotepad();
-            notes = notes.filter(n => String(n.id) !== String(id));
-            saveStoredNotepad(notes);
-            addAuditLog('Not Defteri Silindi', `ID #${id} olan not defteri kaydı silindi.`);
+        window.deleteNotepadItem = function(id) {
+            let notepad = getStoredNotepad();
+            notepad = notepad.filter(n => n.id !== id);
+            saveStoredNotepad(notepad);
             window.syncAllData();
-            showToast('Müşteri notu silindi.', 'info');
+            showToast('Not silindi.', 'info');
         };
 
         function renderCouponsTable(coupons) {
@@ -1229,24 +1224,25 @@
             if (!tbody) return;
             tbody.innerHTML = '';
 
-            if (!coupons || coupons.length === 0) {
+            if (coupons.length === 0) {
                 tbody.innerHTML = '<tr><td colspan="5" class="text-center py-6 text-gray-500">Tanımlı aktif kupon bulunmuyor.</td></tr>';
                 return;
             }
 
             coupons.forEach(c => {
-                const expiresDateStr = new Date(c.expiresAt).toLocaleString('tr-TR');
-                const isExpired = new Date().getTime() > c.expiresAt;
+                const now = new Date().getTime();
+                const isExpired = now >= c.expiresAt;
+                const expireDateStr = new Date(c.expiresAt).toLocaleString('tr-TR');
 
                 const tr = document.createElement('tr');
-                tr.className = "hover:bg-gray-900/40 transition";
+                tr.className = "hover:bg-gray-950 transition";
                 tr.innerHTML = `
                     <td class="p-4 font-bold text-white">${c.customerName}</td>
-                    <td class="p-4 font-mono font-bold text-[#C5A059]">${c.code}</td>
-                    <td class="p-4"><span class="bg-[#C5A059]/20 text-[#C5A059] px-2.5 py-1 rounded-full font-bold">-%${c.discountPercent}</span></td>
-                    <td class="p-4 text-xs ${isExpired ? 'text-red-400 font-bold' : 'text-emerald-400'}">${expiresDateStr} ${isExpired ? '(Süresi Doldu)' : ''}</td>
+                    <td class="p-4 font-mono gold-text font-bold">${c.code}</td>
+                    <td class="p-4"><span class="bg-[#C5A059]/20 text-[#C5A059] px-2.5 py-1 rounded-full font-bold">%${c.discountPercent}</span></td>
+                    <td class="p-4 text-gray-300">${expireDateStr} ${isExpired ? '<span class="text-red-400 font-semibold">(Süresi Doldu)</span>' : '<span class="text-emerald-400 font-semibold">(Aktif)</span>'}</td>
                     <td class="p-4 text-center">
-                        <button onclick="window.deleteCoupon('${c.id}')" class="p-2 bg-red-950/40 border border-red-900 text-red-400 rounded-xl hover:bg-red-900 transition" title="Kuponu Sil"><i class="fa-solid fa-trash"></i></button>
+                        <button onclick="window.deleteCoupon(${c.id})" class="p-2 bg-red-950/60 border border-red-800 text-red-400 rounded-lg hover:bg-red-900 transition" title="Kuponu Sil"><i class="fa-solid fa-trash"></i></button>
                     </td>
                 `;
                 tbody.appendChild(tr);
@@ -1254,26 +1250,16 @@
         }
 
         window.openAddCouponModal = function() {
-            const selectEl = document.getElementById('modalCouponCustomer');
+            const select = document.getElementById('modalCouponCustomer');
+            select.innerHTML = '<option value="">Müşteri Seçiniz</option>';
             const users = getStoredUsers();
-            selectEl.innerHTML = '<option value="">Müşteri Seçiniz</option>';
             users.forEach(u => {
                 const opt = document.createElement('option');
                 opt.value = u.name;
                 opt.textContent = u.name;
-                selectEl.appendChild(opt);
+                select.appendChild(opt);
             });
-
-            document.getElementById('modalCouponCode').value = "NES10";
-            document.getElementById('modalCouponDiscount').value = "10";
             document.getElementById('couponModal').classList.remove('hidden');
-
-            document.getElementById('modalCouponCode').onchange = function() {
-                const val = this.value;
-                if (val === 'NES10') document.getElementById('modalCouponDiscount').value = "10";
-                else if (val === 'NES20') document.getElementById('modalCouponDiscount').value = "20";
-                else if (val === 'NES30') document.getElementById('modalCouponDiscount').value = "30";
-            };
         };
 
         window.closeCouponModal = function() {
@@ -1283,64 +1269,152 @@
         window.saveCouponForm = function() {
             const customerName = document.getElementById('modalCouponCustomer').value;
             const code = document.getElementById('modalCouponCode').value;
-            const discountPercent = parseInt(document.getElementById('modalCouponDiscount').value, 10);
 
             if (!customerName) {
-                return showToast('Lütfen bir müşteri seçin.', 'warning');
+                return showToast('Lütfen bir müşteri seçiniz.', 'warning');
             }
+
+            let discountPercent = 10;
+            if (code === 'NES20') discountPercent = 20;
+            if (code === 'NES30') discountPercent = 30;
 
             let coupons = getStoredCoupons();
             const now = new Date().getTime();
-            const sevenDaysMs = 7 * 24 * 60 * 60 * 1000; // 7 gün
+            const expiresAt = now + (7 * 24 * 60 * 60 * 1000); // 7 Days validity
 
-            const newCoupon = {
-                id: 'coupon_' + Date.now(),
+            coupons.push({
+                id: Date.now(),
                 customerName: customerName,
                 code: code,
                 discountPercent: discountPercent,
                 createdAt: now,
-                expiresAt: now + sevenDaysMs
-            };
+                expiresAt: expiresAt
+            });
 
-            coupons.unshift(newCoupon);
             saveStoredCoupons(coupons);
-            addAuditLog('İndirim Kuponu Tanımlandı', `"${customerName}" müşterisine ${code} (%${discountPercent}) kuponu tanımlandı.`);
+            addAuditLog('Kupon Tanımlandı', `"${customerName}" müşterisine ${code} (%${discountPercent}) kuponu tanımlandı.`);
             window.closeCouponModal();
             window.syncAllData();
-            showToast('Kupon başarıyla tanımlandı (7 gün geçerli).', 'success');
+            showToast(`${code} kuponu başarıyla tanımlandı!`, 'success');
         };
 
         window.deleteCoupon = function(id) {
             let coupons = getStoredCoupons();
             coupons = coupons.filter(c => c.id !== id);
             saveStoredCoupons(coupons);
-            addAuditLog('İndirim Kuponu Silindi', `Kupon ID #${id} silindi.`);
             window.syncAllData();
             showToast('Kupon silindi.', 'info');
         };
 
-        function renderPortfolioGrid(items) {
+        function renderCustomersTable(users) {
+            const tbody = document.getElementById('userTableBody');
+            if (!tbody) return;
+            tbody.innerHTML = '';
+
+            if (users.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="4" class="text-center py-6 text-gray-500">Kayıtlı müşteri bulunmuyor.</td></tr>';
+                return;
+            }
+
+            users.forEach(u => {
+                const avatarHtml = u.avatar ? `<img src="${u.avatar}" class="w-9 h-9 rounded-full object-cover border border-[#C5A059]">` : `<div class="w-9 h-9 rounded-full gold-gradient text-black font-bold flex items-center justify-center">${u.name.charAt(0).toUpperCase()}</div>`;
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-gray-950 transition";
+                tr.innerHTML = `
+                    <td class="p-4">${avatarHtml}</td>
+                    <td class="p-4 font-bold text-white">${u.name}</td>
+                    <td class="p-4 font-mono text-gray-400">••••••••</td>
+                    <td class="p-4 text-center">
+                        <button onclick="window.deleteUserAccount('${u.name}')" class="p-2 bg-red-950/60 border border-red-800 text-red-400 rounded-lg hover:bg-red-900 transition" title="Müşteriyi Sil"><i class="fa-solid fa-trash"></i></button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        window.deleteUserAccount = function(name) {
+            let users = getStoredUsers();
+            users = users.filter(u => u.name.toLowerCase() !== name.toLowerCase());
+            saveStoredUsers(users);
+            addAuditLog('Müşteri Silindi', `"${name}" müşteri hesabı silindi.`);
+            window.syncAllData();
+            showToast('Müşteri hesabı silindi.', 'info');
+        };
+
+        function renderSpendingTable(users) {
+            const tbody = document.getElementById('spendingTableBody');
+            if (!tbody) return;
+            tbody.innerHTML = '';
+
+            let spendingRecords = {};
+            try { spendingRecords = JSON.parse(localStorage.getItem('nes_spending_records')) || {}; } catch(e) {}
+
+            let hasRecords = false;
+
+            Object.keys(spendingRecords).forEach(userKey => {
+                const recs = spendingRecords[userKey] || [];
+                if (recs.length === 0) return;
+                hasRecords = true;
+
+                let totalUserSpent = 0;
+                let years = {};
+                let months = {};
+                let days = {};
+
+                recs.forEach(r => {
+                    totalUserSpent += r.amount;
+                    years[r.year] = (years[r.year] || 0) + r.amount;
+                    months[r.month] = (months[r.month] || 0) + r.amount;
+                    days[r.date] = (days[r.date] || 0) + r.amount;
+                });
+
+                let yearStr = Object.keys(years).map(y => `${y}: ${years[y].toLocaleString('tr-TR')} ₺`).join(', ');
+                let monthStr = Object.keys(months).map(m => `${m}: ${months[m].toLocaleString('tr-TR')} ₺`).join(', ');
+                let dayStr = Object.keys(days).map(d => `${d}: ${days[d].toLocaleString('tr-TR')} ₺`).join(', ');
+
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-gray-950 transition";
+                tr.innerHTML = `
+                    <td class="p-4 font-bold text-white">${userKey}</td>
+                    <td class="p-4 font-bold gold-text font-serif-title text-sm">${totalUserSpent.toLocaleString('tr-TR')} ₺</td>
+                    <td class="p-4 text-xs text-gray-300 font-mono">${yearStr || '-'}</td>
+                    <td class="p-4 text-xs text-gray-300 font-mono">${monthStr || '-'}</td>
+                    <td class="p-4 text-xs text-gray-300 font-mono">${dayStr || '-'}</td>
+                    <td class="p-4 text-center">
+                        <button onclick="window.clearUserSpending('${userKey}')" class="px-3 py-1.5 bg-red-950/60 border border-red-800 text-red-400 rounded-lg hover:bg-red-900 transition text-xs font-semibold">Sıfırla</button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+            if (!hasRecords) {
+                tbody.innerHTML = '<tr><td colspan="6" class="text-center py-6 text-gray-500">Tamamlanan randevulardan oluşan ciro kaydı bulunmuyor.</td></tr>';
+            }
+        }
+
+        window.clearUserSpending = function(userKey) {
+            let spendingRecords = {};
+            try { spendingRecords = JSON.parse(localStorage.getItem('nes_spending_records')) || {}; } catch(e) {}
+            delete spendingRecords[userKey];
+            localStorage.setItem('nes_spending_records', JSON.stringify(spendingRecords));
+            addAuditLog('Ciro Sıfırlandı', `"${userKey}" müşterisinin harcama kayıtları sıfırlandı.`);
+            window.syncAllData();
+            showToast('Müşteri harcama kayıtları sıfırlandı.', 'info');
+        };
+
+        function renderPortfolioGrid(portfolio) {
             const container = document.getElementById('portfolioGridContainer');
             if (!container) return;
             container.innerHTML = '';
 
-            if (!items || items.length === 0) {
-                container.innerHTML = '<p class="text-gray-500 italic text-center py-8 col-span-full">Galeride henüz fotoğraf bulunmuyor.</p>';
-                return;
-            }
-
-            items.forEach(item => {
+            portfolio.forEach(item => {
                 const card = document.createElement('div');
-                card.className = "bg-[#121212] border border-gray-800 hover:border-[#C5A059]/60 rounded-2xl overflow-hidden flex flex-col justify-between transition group";
+                card.className = "overflow-hidden rounded-2xl aspect-[3/4] border border-gray-800 relative group bg-[#121212]";
                 card.innerHTML = `
-                    <div class="h-48 overflow-hidden relative bg-[#0A0A0A] flex items-center justify-center">
-                        <img src="${item.image}" alt="${item.title || 'Portfolyo'}" class="max-h-full max-w-full object-contain group-hover:scale-105 transition duration-300" onerror="this.src='https://placehold.co/600x400/121212/C5A059?text=Gorsel+Yok'">
-                    </div>
-                    <div class="p-3 flex items-center justify-between gap-2 border-t border-gray-800">
-                        <span class="text-xs font-semibold text-white truncate">${item.title || 'Fotoğraf'}</span>
-                        <button onclick="window.deletePortfolioItem('${item.id}')" class="p-1.5 bg-red-950/40 border border-red-900 text-red-400 hover:bg-red-900 hover:text-white rounded-lg text-xs transition" title="Fotoğrafı Sil">
-                            <i class="fa-solid fa-trash"></i>
-                        </button>
+                    <img src="${item.image}" alt="${item.title}" class="w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition duration-300 flex justify-between items-end p-4">
+                        <span class="text-xs font-bold text-[#C5A059] font-serif-title">${item.title}</span>
+                        <button onclick="window.deletePortfolioItem('${item.id}')" class="p-2 bg-red-950/80 border border-red-800 text-red-300 rounded-lg hover:bg-red-900 transition"><i class="fa-solid fa-trash text-xs"></i></button>
                     </div>
                 `;
                 container.appendChild(card);
@@ -1349,129 +1423,23 @@
 
         window.deletePortfolioItem = function(id) {
             let portfolio = getStoredPortfolio();
-            const target = portfolio.find(p => String(p.id) === String(id));
-            portfolio = portfolio.filter(p => String(p.id) !== String(id));
+            portfolio = portfolio.filter(p => p.id !== id);
             saveStoredPortfolio(portfolio);
-            if (target) {
-                addAuditLog('Portfolyo Silindi', `"${target.title}" fotoğrafı galeriden kaldırıldı.`);
-            }
+            addAuditLog('Portfolyo Silindi', `ID: ${id} görsel galeriden silindi.`);
             window.syncAllData();
-            showToast('Fotoğraf galeriden silindi.', 'info');
-        };
-
-        function renderCustomersTable(users) {
-            const tbody = document.getElementById('userTableBody');
-            if (!tbody) return;
-            tbody.innerHTML = '';
-
-            if (!users || users.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="3" class="text-center py-6 text-gray-500">Kayıtlı kullanıcı hesabı bulunmuyor.</td></tr>';
-                return;
-            }
-
-            users.forEach((u, index) => {
-                const tr = document.createElement('tr');
-                tr.className = "hover:bg-gray-900/40 transition align-middle";
-                tr.innerHTML = `
-                    <td class="p-4 font-bold text-white">${u.name}</td>
-                    <td class="p-4 text-gray-400 font-mono">${u.pass}</td>
-                    <td class="p-4 text-center">
-                        <button onclick="window.deleteUser(${index})" class="p-2 bg-red-950/40 border border-red-900 text-red-400 rounded-xl hover:bg-red-900 transition" title="Kullanıcıyı Sil"><i class="fa-solid fa-trash"></i></button>
-                    </td>
-                `;
-                tbody.appendChild(tr);
-            });
-        }
-
-        window.deleteUser = function(userIndex) {
-            let users = getStoredUsers();
-            const u = users[userIndex];
-            if (!u) return;
-            const userName = u.name;
-
-            users.splice(userIndex, 1);
-            saveStoredUsers(users);
-
-            addAuditLog('Kullanıcı Silindi', `"${userName}" hesabı sistemden kaldırıldı.`);
-            window.syncAllData();
-            showToast(`"${userName}" hesabı silindi.`, 'info');
-        };
-
-        function renderSpendingTable(users) {
-            const tbody = document.getElementById('spendingTableBody');
-            if (!tbody) return;
-            tbody.innerHTML = '';
-
-            let spendingMap = {};
-            try { spendingMap = JSON.parse(localStorage.getItem('nes_spending_records')) || {}; } catch(e){}
-
-            if (!users || users.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="6" class="text-center py-6 text-gray-500">Veri yok.</td></tr>';
-                return;
-            }
-
-            users.forEach(u => {
-                const userKey = (u.name || '').trim().toLowerCase();
-                const records = spendingMap[userKey] || [];
-
-                let total = 0;
-                let byYear = {};
-                let byMonth = {};
-                let byDay = {};
-
-                records.forEach(r => {
-                    total += r.amount;
-                    byYear[r.year] = (byYear[r.year] || 0) + r.amount;
-                    byMonth[r.month] = (byMonth[r.month] || 0) + r.amount;
-                    byDay[r.date] = (byDay[r.date] || 0) + r.amount;
-                });
-
-                const tr = document.createElement('tr');
-                tr.className = "hover:bg-gray-900/40 transition";
-                tr.innerHTML = `
-                    <td class="p-4 font-bold text-white">${u.name}</td>
-                    <td class="p-4 font-bold text-emerald-400">${total.toLocaleString('tr-TR')} ₺</td>
-                    <td class="p-4 text-gray-400 text-[11px]">${Object.entries(byYear).map(([k,v])=>`${k}: ${v}₺`).join(', ') || 'Yok'}</td>
-                    <td class="p-4 text-gray-400 text-[11px]">${Object.entries(byMonth).map(([k,v])=>`${k}: ${v}₺`).join(', ') || 'Yok'}</td>
-                    <td class="p-4 text-gray-400 text-[11px]">${Object.entries(byDay).map(([k,v])=>`${k}: ${v}₺`).join(', ') || 'Yok'}</td>
-                    <td class="p-4 text-center">
-                        <button onclick="window.resetUserSpending('${userKey}', '${u.name.replace(/'/g, "\\'")}')" class="px-3 py-1.5 bg-red-950/50 border border-red-800 text-red-300 hover:bg-red-900 hover:text-white rounded-xl text-xs font-semibold transition flex items-center gap-1 mx-auto" title="Harcama Geçmişini Sıfırla">
-                            <i class="fa-solid fa-trash"></i> Sıfırla
-                        </button>
-                    </td>
-                `;
-                tbody.appendChild(tr);
-            });
-        }
-
-        window.resetUserSpending = function(userKey, userName) {
-            let spendingMap = {};
-            try { spendingMap = JSON.parse(localStorage.getItem('nes_spending_records')) || {}; } catch(e){}
-
-            if (spendingMap[userKey]) {
-                delete spendingMap[userKey];
-                localStorage.setItem('nes_spending_records', JSON.stringify(spendingMap));
-                addAuditLog('Harcama Kaydı Silindi', `"${userName}" adlı müşterinin harcama geçmişi ve ciro katkısı sıfırlandı.`);
-                window.syncAllData();
-                showToast(`"${userName}" harcama geçmişi silindi.`, 'info');
-            } else {
-                showToast('Silinecek harcama kaydı bulunamadı.', 'warning');
-            }
+            showToast('Görsel portfolyodan kaldırıldı.', 'info');
         };
 
         function addAuditLog(action, details) {
-            let logs = [];
-            try { logs = JSON.parse(localStorage.getItem('nes_audit_logs')) || []; } catch(e){}
-
-            logs.unshift({
-                timestamp: new Date().toLocaleString('tr-TR'),
-                action: action,
-                details: details,
-                user: 'Admin'
-            });
-
-            if (logs.length > 100) logs = logs.slice(0, 100);
-            localStorage.setItem('nes_audit_logs', JSON.stringify(logs));
+            try {
+                let logs = JSON.parse(localStorage.getItem('nes_audit_logs')) || [];
+                logs.unshift({
+                    timestamp: new Date().toLocaleString('tr-TR'),
+                    action,
+                    details
+                });
+                localStorage.setItem('nes_audit_logs', JSON.stringify(logs));
+            } catch(e){}
         }
 
         function renderAuditLogs() {
@@ -1483,29 +1451,28 @@
             try { logs = JSON.parse(localStorage.getItem('nes_audit_logs')) || []; } catch(e){}
 
             if (logs.length === 0) {
-                container.innerHTML = '<p class="text-gray-500 italic py-4">Kayıt yok.</p>';
+                container.innerHTML = '<p class="text-gray-500 italic text-center py-4">Denetim izi bulunmuyor.</p>';
                 return;
             }
 
             logs.forEach(l => {
                 const div = document.createElement('div');
-                div.className = "p-2.5 bg-[#0A0A0A] rounded-xl border border-gray-800/80 flex justify-between items-center";
+                div.className = "p-2.5 rounded-xl bg-[#0A0A0A] border border-gray-800/80 flex justify-between items-center text-xs";
                 div.innerHTML = `
-                    <div class="space-x-2">
-                        <span class="text-gray-500">[${l.timestamp}]</span>
-                        <strong class="text-[#C5A059]">${l.action}:</strong>
-                        <span class="text-gray-300">${l.details}</span>
+                    <div>
+                        <span class="text-[#C5A059] font-bold">[${l.action}]</span>
+                        <span class="text-gray-300 ml-2">${l.details}</span>
                     </div>
-                    <span class="text-[10px] bg-gray-800 text-gray-400 px-2 py-0.5 rounded-full">${l.user}</span>
+                    <span class="text-[10px] text-gray-500">${l.timestamp}</span>
                 `;
                 container.appendChild(div);
             });
         }
 
         window.clearAuditLogs = function() {
-            localStorage.removeItem('nes_audit_logs');
-            renderAuditLogs();
-            showToast('Loglar temizlendi.', 'info');
+            localStorage.setItem('nes_audit_logs', JSON.stringify([]));
+            window.syncAllData();
+            showToast('Denetim logları temizlendi.', 'info');
         };
 
         function showToast(message, type = 'info') {
@@ -1527,25 +1494,6 @@
                 setTimeout(() => toast.remove(), 300);
             }, 3000);
         }
-
-        document.addEventListener('DOMContentLoaded', function() {
-            const passInput = document.getElementById('portalPassInput');
-            if (passInput) {
-                passInput.addEventListener('keypress', function(e) {
-                    if (e.key === 'Enter') {
-                        window.loginToPortal();
-                    }
-                });
-            }
-
-            setInterval(function() {
-                const clock = document.getElementById('liveClock');
-                if (clock) {
-                    const now = new Date();
-                    clock.innerText = now.toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
-                }
-            }, 1000);
-        });
     </script>
 </body>
 </html>
