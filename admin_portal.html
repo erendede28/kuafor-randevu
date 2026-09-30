@@ -167,12 +167,15 @@
                             <h1 class="text-2xl font-bold font-serif-title text-white">Yönetim Gösterge Paneli</h1>
                             <p class="text-xs text-gray-400 mt-1">Salon performansı, Bugünkü Randevular ve Anlık Doluluk Oranları.</p>
                         </div>
-                        <div class="flex items-center gap-2">
+                        <div class="flex flex-wrap items-center gap-2">
                             <button onclick="window.openAddDailyRevenueModal()" class="gold-gradient text-black text-xs font-bold px-4 py-2.5 rounded-xl shadow hover:opacity-90 transition flex items-center gap-2">
                                 <i class="fa-solid fa-plus-circle"></i> Günlük Ciro Ekle
                             </button>
                             <button onclick="window.clearAllRevenueLedger()" class="bg-red-950/60 border border-red-800 text-red-400 hover:bg-red-900 hover:text-white text-xs font-bold px-4 py-2.5 rounded-xl transition flex items-center gap-2">
                                 <i class="fa-solid fa-trash-can"></i> Ciro Sıfırla
+                            </button>
+                            <button onclick="window.clearLifetimeAppointmentsStats()" class="bg-amber-950/60 border border-amber-800 text-amber-400 hover:bg-amber-900 hover:text-white text-xs font-bold px-4 py-2.5 rounded-xl transition flex items-center gap-2">
+                                <i class="fa-solid fa-rotate-left"></i> Randevuları Sıfırlat
                             </button>
                         </div>
                     </div>
@@ -663,6 +666,15 @@
             }
         };
 
+        window.clearLifetimeAppointmentsStats = function() {
+            if (confirm('Gösterge panelindeki toplam müşteri randevu sayacını sıfırlamak istediğinize emin misiniz?')) {
+                localStorage.setItem('nes_lifetime_appointment_stats', JSON.stringify({ totalApps: 0, completedApps: 0 }));
+                addAuditLog('Randevu Sayacı Sıfırlandı', 'Toplam müşteri randevuları sayacı sıfırlandı.');
+                window.syncAllData();
+                showToast('Randevu sayacı sıfırlandı.', 'info');
+            }
+        };
+
         window.openAddPortfolioModal = function() {
             document.getElementById('modalPortTitle').value = "";
             document.getElementById('modalPortFile').value = "";
@@ -842,7 +854,7 @@
             const usersEl = document.getElementById('dashTotalUsers');
 
             if (revEl) revEl.innerText = `${totalRevenue.toLocaleString('tr-TR')} ₺`;
-            if (appsEl) appsEl.innerText = stats.totalApps || apps.length;
+            if (appsEl) appsEl.innerText = stats.totalApps || 0;
             if (compEl) compEl.innerText = `${stats.completedApps || 0} Tamamlanan`;
             if (pendEl) pendEl.innerText = pendingCount;
             if (usersEl) usersEl.innerText = users.length;
@@ -1034,7 +1046,7 @@
             saveStoredApps(apps);
             addAuditLog('Randevu Silindi', `#${id} ID'li randevu silindi.`);
             window.syncAllData();
-            showToast('Randevu silindi (Ciro ve İstatistikler korundu).', 'info');
+            showToast('Randevu silindi.', 'info');
         };
 
         window.updateAppStatus = function(id, newStatus) {
@@ -1062,13 +1074,6 @@
                         let stats = getLifetimeStats();
                         stats.totalApps = (stats.totalApps || 0) + 1;
                         stats.completedApps = (stats.completedApps || 0) + 1;
-                        saveLifetimeStats(stats);
-                    }
-                } else {
-                    let stats = getLifetimeStats();
-                    if (stats.totalApps === 0) {
-                        stats.totalApps = apps.length;
-                        stats.completedApps = apps.filter(a => a.status === 'Tamamlandı').length;
                         saveLifetimeStats(stats);
                     }
                 }
