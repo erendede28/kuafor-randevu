@@ -15,13 +15,12 @@
     <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-    <!-- Firebase SDK Imports -->
+    <!-- Firebase SDK Imports (v11.6.1 Stable ESM) -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, doc, getDoc, setDoc, updateDoc, deleteDoc, onSnapshot, collection, query, getDocs } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getFirestore, collection, onSnapshot, doc, setDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        // Global Firebase handles
         window.firebaseApp = null;
         window.db = null;
         window.auth = null;
@@ -30,7 +29,7 @@
 
         async function initFirebase() {
             try {
-                const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {
+                const firebaseConfig = {
                     apiKey: "AIzaSyAt7FRt7Q8Ha0VjFRY38m0ThYgP-MsdC2A",
                     authDomain: "nes-kuafor.firebaseapp.com",
                     projectId: "nes-kuafor",
@@ -54,7 +53,7 @@
                 onAuthStateChanged(window.auth, (user) => {
                     if (user) {
                         window.userId = user.uid;
-                        console.log("Firebase Auth OK. User ID:", window.userId);
+                        console.log("Firebase Auth OK (Admin). User ID:", window.userId);
                         if (typeof window.startRealtimeListeners === 'function') {
                             window.startRealtimeListeners();
                         }
@@ -135,7 +134,6 @@
         <aside class="w-full md:w-64 bg-[#121212] border-r border-gray-800 flex flex-col shrink-0">
             <div class="p-6 border-b border-gray-800 flex items-center justify-between relative">
                 <div class="flex items-center gap-3">
-                    <!-- Üç Nokta Menü Butonu -->
                     <div class="relative">
                         <button onclick="window.toggleAdminMenuDropdown(event)" class="w-10 h-10 rounded-xl bg-[#0A0A0A] border border-gray-800 text-[#C5A059] hover:border-[#C5A059] flex flex-col items-center justify-center gap-1 transition shadow group" title="Yönetim Menüsü">
                             <span class="w-1.5 h-1.5 rounded-full bg-[#C5A059] group-hover:scale-125 transition"></span>
@@ -143,11 +141,10 @@
                             <span class="w-1.5 h-1.5 rounded-full bg-[#C5A059] group-hover:scale-125 transition"></span>
                         </button>
 
-                        <!-- Dropdown Menü Kutusu -->
                         <div id="adminMenuDropdown" class="hidden absolute left-0 mt-2 w-64 bg-[#121212] border border-[#C5A059]/40 rounded-2xl shadow-2xl py-3 z-50 divide-y divide-gray-800/80">
                             <div class="px-4 py-2 text-[10px] uppercase tracking-widest text-gray-500 font-semibold flex items-center justify-between">
                                 <span>Yönetim Modülleri</span>
-                                <i class="fa-solid fa-compass gold-text"></i>
+                                <i class="fa-solid fa-compass text-[#C5A059]"></i>
                             </div>
                             <div class="py-1 space-y-0.5">
                                 <button onclick="window.switchTab('dashboard')" id="nav_dashboard" class="w-full flex items-center justify-between px-4 py-2.5 text-xs font-semibold text-gray-300 hover:text-[#C5A059] hover:bg-gray-900/60 transition">
@@ -193,7 +190,6 @@
                 </div>
             </div>
 
-            <!-- Aktif Modül Göstergesi / Özet Durum -->
             <div class="p-6 flex-1 flex flex-col justify-center items-center text-center space-y-4">
                 <div class="w-16 h-16 rounded-2xl bg-[#0A0A0A] border border-[#C5A059]/40 flex items-center justify-center text-2xl text-[#C5A059] shadow-inner" id="activeModuleIcon">
                     <i class="fa-solid fa-chart-pie"></i>
@@ -202,7 +198,7 @@
                     <span class="text-[10px] text-gray-500 uppercase tracking-widest block">Aktif Bölüm</span>
                     <h3 class="text-sm font-bold text-white font-serif-title mt-0.5" id="activeModuleTitle">Gösterge Paneli</h3>
                 </div>
-                <p class="text-xs text-gray-400 max-w-[200px] leading-relaxed">Sol üstteki <b class="gold-text">üç nokta</b> menüsüne tıklayarak diğer modüllere geçiş yapabilirsiniz.</p>
+                <p class="text-xs text-gray-400 max-w-[200px] leading-relaxed">Sol üstteki <b class="text-[#C5A059]">üç nokta</b> menüsüne tıklayarak diğer modüllere geçiş yapabilirsiniz.</p>
             </div>
 
             <div class="p-4 border-t border-gray-800 bg-[#0A0A0A]/50 space-y-3">
@@ -227,7 +223,7 @@
             <header class="h-16 bg-[#121212]/80 backdrop-blur border-b border-gray-800 px-6 flex items-center justify-between sticky top-0 z-30">
                 <div class="flex items-center gap-3">
                     <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-                    <span class="text-xs text-gray-300 font-medium">Canlı Veritabanı Senkronizasyonu Aktif</span>
+                    <span class="text-xs text-gray-300 font-medium">Canlı Firebase Firestore Senkronizasyonu Aktif</span>
                 </div>
                 <div class="flex items-center gap-4 text-xs">
                     <button onclick="window.syncAllData()" class="bg-[#0A0A0A] border border-gray-800 hover:border-[#C5A059] text-[#C5A059] px-3.5 py-2 rounded-xl transition flex items-center gap-1.5 font-medium shadow">
@@ -240,6 +236,7 @@
 
             <div class="p-6 md:p-8 space-y-8 max-w-7xl mx-auto w-full">
                 
+                <!-- Dashboard View -->
                 <div id="view_dashboard" class="space-y-6">
                     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                         <div>
@@ -315,16 +312,17 @@
                     </div>
                 </div>
 
+                <!-- Appointments View -->
                 <div id="view_appointments" class="space-y-6 hidden">
                     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-gray-800 pb-4">
                         <div>
                             <h1 class="text-2xl font-bold font-serif-title text-white">Müşteri Randevu Yönetimi & Arşivi</h1>
-                            <p class="text-xs text-gray-400 mt-1">Aktif randevuları yönetin, tamamlanan veya iptal edilen geçmiş randevuları arşivde inceleyin.</p>
+                            <p class="text-xs text-gray-400 mt-1">Telefon ve web üzerinden gelen tüm randevular anında buraya düşer.</p>
                         </div>
                         <div class="flex flex-wrap gap-2">
                             <button onclick="window.filterApps('Hepsi')" id="btnFilter_Hepsi" class="text-xs bg-gray-800 px-3.5 py-2 rounded-xl text-gray-300 font-semibold hover:text-white transition">Tümü</button>
                             <button onclick="window.filterApps('Aktif')" id="btnFilter_Aktif" class="text-xs bg-[#C5A059]/20 border border-[#C5A059] text-[#C5A059] px-3.5 py-2 rounded-xl font-semibold transition">Aktif Randevular</button>
-                            <button onclick="window.filterApps('Gecmis')" id="btnFilter_Gecmis" class="text-xs bg-gray-800 px-3.5 py-2 rounded-xl text-gray-300 font-semibold hover:text-white transition">Geçmiş Arşiv (Tamamlanan / İptal)</button>
+                            <button onclick="window.filterApps('Gecmis')" id="btnFilter_Gecmis" class="text-xs bg-gray-800 px-3.5 py-2 rounded-xl text-gray-300 font-semibold hover:text-white transition">Geçmiş Arşiv</button>
                         </div>
                     </div>
 
@@ -347,14 +345,14 @@
                     </div>
                 </div>
 
+                <!-- Forgot Requests View -->
                 <div id="view_forgot_requests" class="space-y-6 hidden">
                     <div class="flex justify-between items-center border-b border-gray-800 pb-4">
                         <div>
                             <h1 class="text-2xl font-bold font-serif-title text-white">Müşteri Şifre Sıfırlama Talepleri</h1>
-                            <p class="text-xs text-gray-400 mt-1">Web sitesinden şifresini unutup talep gönderen müşterileri buradan inceleyip yeni şifre tanımlayabilirsiniz.</p>
+                            <p class="text-xs text-gray-400 mt-1">Web sitesinden şifresini unutup talep gönderen müşteriler.</p>
                         </div>
                     </div>
-
                     <div class="bg-[#121212] border border-gray-800 rounded-2xl overflow-hidden shadow-xl">
                         <div class="overflow-x-auto">
                             <table class="w-full text-left border-collapse text-xs">
@@ -372,45 +370,45 @@
                     </div>
                 </div>
 
+                <!-- Services View -->
                 <div id="view_services" class="space-y-6 hidden">
                     <div class="flex justify-between items-center border-b border-gray-800 pb-4">
                         <div>
                             <h1 class="text-2xl font-bold font-serif-title text-white">Hizmet & Fiyat Kataloğu Yönetimi</h1>
-                            <p class="text-xs text-gray-400 mt-1">Buradan eklediğiniz, düzenlediğiniz veya sildiğiniz hizmetler müşterinin rezervasyon ekranına anında yansır.</p>
+                            <p class="text-xs text-gray-400 mt-1">Burada yapılan değişiklikler anında müşterinin rezervasyon ekranına yansır.</p>
                         </div>
                         <button onclick="window.openAddServiceModal()" class="gold-gradient text-black text-xs font-bold px-4 py-2.5 rounded-xl shadow hover:opacity-90 transition">
                             <i class="fa-solid fa-plus mr-1"></i> Yeni Hizmet Ekle
                         </button>
                     </div>
-
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="servicesGridContainer"></div>
                 </div>
 
+                <!-- Notepad View -->
                 <div id="view_notepad" class="space-y-6 hidden">
                     <div class="flex justify-between items-center border-b border-gray-800 pb-4">
                         <div>
                             <h1 class="text-2xl font-bold font-serif-title text-white">Müşteri Saç & Boya Not Defteri</h1>
-                            <p class="text-xs text-gray-400 mt-1">Müşterilerinizin saç özellikleri ve boya reçetelerini kaydedin.</p>
+                            <p class="text-xs text-gray-400 mt-1">Müşterilerinizin saç özellikleri ve boya reçeteleri.</p>
                         </div>
                         <button onclick="window.openAddNotepadModal()" class="gold-gradient text-black text-xs font-bold px-4 py-2.5 rounded-xl shadow hover:opacity-90 transition">
                             <i class="fa-solid fa-plus mr-1"></i> Yeni Not / Reçete Ekle
                         </button>
                     </div>
-
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="notepadGridContainer"></div>
                 </div>
 
+                <!-- Coupons View -->
                 <div id="view_coupons" class="space-y-6 hidden">
                     <div class="flex justify-between items-center border-b border-gray-800 pb-4">
                         <div>
                             <h1 class="text-2xl font-bold font-serif-title text-white">Müşteri İndirim Kuponları Yönetimi</h1>
-                            <p class="text-xs text-gray-400 mt-1">Müşterilere NES10, NES20, NES30 kuponları tanımlayın (7 gün geçerlidir).</p>
+                            <p class="text-xs text-gray-400 mt-1">Müşterilere NES10, NES20, NES30 kuponları tanımlayın.</p>
                         </div>
                         <button onclick="window.openAddCouponModal()" class="gold-gradient text-black text-xs font-bold px-4 py-2.5 rounded-xl shadow hover:opacity-90 transition">
                             <i class="fa-solid fa-ticket mr-1"></i> Yeni Kupon Tanımla
                         </button>
                     </div>
-
                     <div class="bg-[#121212] border border-gray-800 rounded-2xl overflow-hidden shadow-xl">
                         <div class="overflow-x-auto">
                             <table class="w-full text-left border-collapse text-xs">
@@ -419,7 +417,7 @@
                                         <th class="p-4">Müşteri Adı</th>
                                         <th class="p-4">Kupon Kodu</th>
                                         <th class="p-4">İndirim Oranı</th>
-                                        <th class="p-4">Son Geçerlilik Tarihi (7 Gün)</th>
+                                        <th class="p-4">Son Geçerlilik</th>
                                         <th class="p-4 text-center">İşlem / Sil</th>
                                     </tr>
                                 </thead>
@@ -429,12 +427,12 @@
                     </div>
                 </div>
 
+                <!-- Customers CRM View -->
                 <div id="view_customers" class="space-y-6 hidden">
                     <div class="border-b border-gray-800 pb-4">
                         <h1 class="text-2xl font-bold font-serif-title text-white">Müşteri CRM Yönetimi</h1>
-                        <p class="text-xs text-gray-400 mt-1">Kayıtlı müşteri hesaplarını, profil fotoğraflarını ve şifrelerini görüntülemek için müşterinin üzerine tıklayın.</p>
+                        <p class="text-xs text-gray-400 mt-1">Telefondan kayıt olan tüm müşteri hesapları anında buraya senkronize edilir.</p>
                     </div>
-
                     <div class="bg-[#121212] border border-gray-800 rounded-2xl overflow-hidden shadow-xl">
                         <div class="overflow-x-auto">
                             <table class="w-full text-left border-collapse text-xs">
@@ -452,12 +450,12 @@
                     </div>
                 </div>
 
+                <!-- Financials View -->
                 <div id="view_financials" class="space-y-6 hidden">
                     <div class="border-b border-gray-800 pb-4">
                         <h1 class="text-2xl font-bold font-serif-title text-white">Finansal Harcama & Raporlama</h1>
-                        <p class="text-xs text-gray-400 mt-1">Müşteri/Kasa bazlı kaydedilen ciro girişlerini yönetin ve dilerseniz silin.</p>
+                        <p class="text-xs text-gray-400 mt-1">Ciro ve kazanç kayıtları.</p>
                     </div>
-
                     <div class="bg-[#121212] border border-gray-800 rounded-2xl overflow-hidden shadow-xl">
                         <div class="overflow-x-auto">
                             <table class="w-full text-left border-collapse text-xs">
@@ -475,31 +473,31 @@
                     </div>
                 </div>
 
+                <!-- Portfolio View -->
                 <div id="view_portfolio" class="space-y-6 hidden">
                     <div class="flex justify-between items-center border-b border-gray-800 pb-4">
                         <div>
                             <h1 class="text-2xl font-bold font-serif-title text-white">Portfolyo & Galeri Yönetimi</h1>
-                            <p class="text-xs text-gray-400 mt-1">Eklediğiniz fotoğraflar orijinal boyutları ve kalitesiyle ana sayfadaki Portfolyo alanına yansır.</p>
+                            <p class="text-xs text-gray-400 mt-1">Galeriye eklenen görseller ana sayfaya yansır.</p>
                         </div>
                         <button onclick="window.openAddPortfolioModal()" class="gold-gradient text-black text-xs font-bold px-4 py-2.5 rounded-xl shadow hover:opacity-90 transition">
                             <i class="fa-solid fa-plus mr-1"></i> Yeni Fotoğraf Ekle
                         </button>
                     </div>
-
                     <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4" id="portfolioGridContainer"></div>
                 </div>
 
+                <!-- Audit Logs View -->
                 <div id="view_audit" class="space-y-6 hidden">
                     <div class="border-b border-gray-800 pb-4 flex justify-between items-center">
                         <div>
                             <h1 class="text-2xl font-bold font-serif-title text-white">Sistem Denetim İzleri (Audit Logs)</h1>
-                            <p class="text-xs text-gray-400 mt-1">Yapılan tüm yönetimsel işlemler.</p>
+                            <p class="text-xs text-gray-400 mt-1">Yönetimsel işlem logları.</p>
                         </div>
                         <button onclick="window.clearAuditLogs()" class="text-xs bg-red-950/40 border border-red-900 text-red-300 px-3 py-1.5 rounded-xl hover:bg-red-900 transition">
                             Logları Temizle
                         </button>
                     </div>
-
                     <div class="bg-[#121212] border border-gray-800 rounded-2xl overflow-hidden p-4 space-y-2">
                         <div id="auditLogContainer" class="space-y-2 max-h-[500px] overflow-y-auto font-mono text-xs"></div>
                     </div>
@@ -509,12 +507,11 @@
         </main>
     </div>
 
-    <!-- Günlük Ciro Ekleme Modalı -->
+    <!-- Modals -->
     <div id="dailyRevenueModal" class="fixed inset-0 bg-black/80 backdrop-blur z-50 hidden flex items-center justify-center p-4">
         <div class="bg-[#121212] border border-[#C5A059]/40 rounded-3xl max-w-md w-full p-6 space-y-4 shadow-2xl relative">
             <button onclick="window.closeDailyRevenueModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white text-2xl">&times;</button>
             <h3 class="text-xl font-bold font-serif-title text-white">Günlük Ciro / Gelir Ekle</h3>
-            
             <div>
                 <label class="block text-xs font-semibold text-gray-400 mb-1">Tarih</label>
                 <input type="date" id="modalRevDate" class="w-full bg-[#0A0A0A] border border-gray-800 text-white p-3 rounded-xl text-xs focus:border-[#C5A059] focus:outline-none">
@@ -524,22 +521,17 @@
                 <input type="number" id="modalRevAmount" placeholder="Örn: 2500" class="w-full bg-[#0A0A0A] border border-gray-800 text-white p-3 rounded-xl text-xs focus:border-[#C5A059] focus:outline-none">
             </div>
             <div>
-                <label class="block text-xs font-semibold text-gray-400 mb-1">Açıklama (Opsiyonel)</label>
+                <label class="block text-xs font-semibold text-gray-400 mb-1">Açıklama</label>
                 <input type="text" id="modalRevNote" placeholder="Örn: Günlük Salon Kasası" class="w-full bg-[#0A0A0A] border border-gray-800 text-white p-3 rounded-xl text-xs focus:border-[#C5A059] focus:outline-none">
             </div>
-
-            <button onclick="window.saveDailyRevenueForm()" class="w-full gold-gradient text-black font-bold py-3 rounded-xl text-xs uppercase tracking-wider shadow">
-                Ciroya Ekle & Kaydet
-            </button>
+            <button onclick="window.saveDailyRevenueForm()" class="w-full gold-gradient text-black font-bold py-3 rounded-xl text-xs uppercase tracking-wider shadow">Kaydet</button>
         </div>
     </div>
 
-    <!-- Hizmet Modalı -->
     <div id="serviceEditModal" class="fixed inset-0 bg-black/80 backdrop-blur z-50 hidden flex items-center justify-center p-4">
         <div class="bg-[#121212] border border-[#C5A059]/40 rounded-3xl max-w-md w-full p-6 space-y-4 shadow-2xl relative">
             <button onclick="window.closeServiceModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white text-2xl">&times;</button>
-            <h3 class="text-xl font-bold font-serif-title text-white" id="serviceModalTitle">Hizmet Bilgilerini Düzenle</h3>
-            
+            <h3 class="text-xl font-bold font-serif-title text-white" id="serviceModalTitle">Hizmet Düzenle</h3>
             <input type="hidden" id="modalSrvId">
             <div>
                 <label class="block text-xs font-semibold text-gray-400 mb-1">Hizmet Adı</label>
@@ -551,71 +543,56 @@
                     <input type="number" id="modalSrvPrice" class="w-full bg-[#0A0A0A] border border-gray-800 text-white p-3 rounded-xl text-xs focus:border-[#C5A059] focus:outline-none">
                 </div>
                 <div>
-                    <label class="block text-xs font-semibold text-gray-400 mb-1">Süre (Dakika)</label>
+                    <label class="block text-xs font-semibold text-gray-400 mb-1">Süre (Dk)</label>
                     <input type="number" id="modalSrvDuration" class="w-full bg-[#0A0A0A] border border-gray-800 text-white p-3 rounded-xl text-xs focus:border-[#C5A059] focus:outline-none">
                 </div>
             </div>
-
-            <button onclick="window.saveServiceForm()" class="w-full gold-gradient text-black font-bold py-3 rounded-xl text-xs uppercase tracking-wider shadow">
-                Kaydet & Yayınla
-            </button>
+            <button onclick="window.saveServiceForm()" class="w-full gold-gradient text-black font-bold py-3 rounded-xl text-xs uppercase tracking-wider shadow">Kaydet</button>
         </div>
     </div>
 
-    <!-- Not Defteri Modalı -->
     <div id="notepadModal" class="fixed inset-0 bg-black/80 backdrop-blur z-50 hidden flex items-center justify-center p-4">
         <div class="bg-[#121212] border border-[#C5A059]/40 rounded-3xl max-w-md w-full p-6 space-y-4 shadow-2xl relative">
             <button onclick="window.closeNotepadModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white text-2xl">&times;</button>
             <h3 class="text-xl font-bold font-serif-title text-white" id="notepadModalTitle">Müşteri Notu Ekle</h3>
-            
             <input type="hidden" id="modalNotepadId">
             <div>
                 <label class="block text-xs font-semibold text-gray-400 mb-1">Müşteri Adı Soyadı</label>
-                <input type="text" id="modalNotepadCustomer" placeholder="Örn: Elif Demir" class="w-full bg-[#0A0A0A] border border-gray-800 text-white p-3 rounded-xl text-xs focus:border-[#C5A059] focus:outline-none">
+                <input type="text" id="modalNotepadCustomer" placeholder="Elif Demir" class="w-full bg-[#0A0A0A] border border-gray-800 text-white p-3 rounded-xl text-xs focus:border-[#C5A059] focus:outline-none">
             </div>
             <div>
-                <label class="block text-xs font-semibold text-gray-400 mb-1">Saç Tipi & Yapısı</label>
-                <input type="text" id="modalNotepadHairType" placeholder="Örn: Kalın telli, boyalı" class="w-full bg-[#0A0A0A] border border-gray-800 text-white p-3 rounded-xl text-xs focus:border-[#C5A059] focus:outline-none">
+                <label class="block text-xs font-semibold text-gray-400 mb-1">Saç Tipi</label>
+                <input type="text" id="modalNotepadHairType" placeholder="Kalın telli" class="w-full bg-[#0A0A0A] border border-gray-800 text-white p-3 rounded-xl text-xs focus:border-[#C5A059] focus:outline-none">
             </div>
             <div>
-                <label class="block text-xs font-semibold text-gray-400 mb-1">Boya Reçetesi / Formül</label>
-                <textarea id="modalNotepadFormula" rows="3" placeholder="Örn: Kök: 6.0 + 20vol | Uçlar: 8.1 cila" class="w-full bg-[#0A0A0A] border border-gray-800 text-white p-3 rounded-xl text-xs focus:border-[#C5A059] focus:outline-none"></textarea>
+                <label class="block text-xs font-semibold text-gray-400 mb-1">Boya Reçetesi</label>
+                <textarea id="modalNotepadFormula" rows="3" placeholder="Formül..." class="w-full bg-[#0A0A0A] border border-gray-800 text-white p-3 rounded-xl text-xs focus:border-[#C5A059] focus:outline-none"></textarea>
             </div>
-
-            <button onclick="window.saveNotepadForm()" class="w-full gold-gradient text-black font-bold py-3 rounded-xl text-xs uppercase tracking-wider shadow">
-                Notu Kaydet
-            </button>
+            <button onclick="window.saveNotepadForm()" class="w-full gold-gradient text-black font-bold py-3 rounded-xl text-xs uppercase tracking-wider shadow">Kaydet</button>
         </div>
     </div>
 
-    <!-- Portfolyo Ekleme Modalı -->
     <div id="portfolioModal" class="fixed inset-0 bg-black/80 backdrop-blur z-50 hidden flex items-center justify-center p-4">
         <div class="bg-[#121212] border border-[#C5A059]/40 rounded-3xl max-w-md w-full p-6 space-y-4 shadow-2xl relative">
             <button onclick="window.closePortfolioModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white text-2xl">&times;</button>
-            <h3 class="text-xl font-bold font-serif-title text-white">Portfolyoya Yeni Görsel Ekle</h3>
-            
+            <h3 class="text-xl font-bold font-serif-title text-white">Portfolyo Görseli Ekle</h3>
             <div>
                 <label class="block text-xs font-semibold text-gray-400 mb-1">Görsel Başlığı</label>
-                <input type="text" id="modalPortfolioTitle" placeholder="Örn: Özel Sombre Tasarımı" class="w-full bg-[#0A0A0A] border border-gray-800 text-white p-3 rounded-xl text-xs focus:border-[#C5A059] focus:outline-none">
+                <input type="text" id="modalPortfolioTitle" placeholder="Özel Sombre" class="w-full bg-[#0A0A0A] border border-gray-800 text-white p-3 rounded-xl text-xs focus:border-[#C5A059] focus:outline-none">
             </div>
             <div>
                 <label class="block text-xs font-semibold text-gray-400 mb-1">Görsel Dosyası veya URL</label>
                 <input type="file" id="modalPortfolioFile" accept="image/*" class="w-full text-xs text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-[#C5A059] file:text-black cursor-pointer mb-2">
-                <input type="text" id="modalPortfolioUrl" placeholder="Veya doğrudan resim URL'si girin" class="w-full bg-[#0A0A0A] border border-gray-800 text-white p-3 rounded-xl text-xs focus:border-[#C5A059] focus:outline-none">
+                <input type="text" id="modalPortfolioUrl" placeholder="Veya Resim URL'si" class="w-full bg-[#0A0A0A] border border-gray-800 text-white p-3 rounded-xl text-xs focus:border-[#C5A059] focus:outline-none">
             </div>
-
-            <button onclick="window.savePortfolioForm()" class="w-full gold-gradient text-black font-bold py-3 rounded-xl text-xs uppercase tracking-wider shadow">
-                Galeriye Ekle & Yayınla
-            </button>
+            <button onclick="window.savePortfolioForm()" class="w-full gold-gradient text-black font-bold py-3 rounded-xl text-xs uppercase tracking-wider shadow">Yayınla</button>
         </div>
     </div>
 
-    <!-- Kupon Modalı -->
     <div id="couponModal" class="fixed inset-0 bg-black/80 backdrop-blur z-50 hidden flex items-center justify-center p-4">
         <div class="bg-[#121212] border border-[#C5A059]/40 rounded-3xl max-w-md w-full p-6 space-y-4 shadow-2xl relative">
             <button onclick="window.closeCouponModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white text-2xl">&times;</button>
-            <h3 class="text-xl font-bold font-serif-title text-white">Müşteriye İndirim Kuponu Tanımla (7 Gün)</h3>
-            
+            <h3 class="text-xl font-bold font-serif-title text-white">İndirim Kuponu Tanımla (7 Gün)</h3>
             <div>
                 <label class="block text-xs font-semibold text-gray-400 mb-1">Müşteri Seçin</label>
                 <select id="modalCouponCustomer" class="w-full bg-[#0A0A0A] border border-gray-800 text-white p-3 rounded-xl text-xs focus:border-[#C5A059] focus:outline-none">
@@ -623,38 +600,27 @@
                 </select>
             </div>
             <div>
-                <label class="block text-xs font-semibold text-gray-400 mb-1">Kupon Adı / Kodu</label>
+                <label class="block text-xs font-semibold text-gray-400 mb-1">Kupon Kodu</label>
                 <select id="modalCouponCode" class="w-full bg-[#0A0A0A] border border-gray-800 text-white p-3 rounded-xl text-xs focus:border-[#C5A059] focus:outline-none">
                     <option value="NES10">NES10 (%10 İndirim)</option>
                     <option value="NES20">NES20 (%20 İndirim)</option>
                     <option value="NES30">NES30 (%30 İndirim)</option>
                 </select>
             </div>
-            <div>
-                <label class="block text-xs font-semibold text-gray-400 mb-1">İndirim Oranı (%)</label>
-                <input type="number" id="modalCouponDiscount" value="10" readonly class="w-full bg-[#0A0A0A] border border-gray-800 text-[#C5A059] font-bold p-3 rounded-xl text-xs focus:outline-none">
-            </div>
-
-            <button onclick="window.saveCouponForm()" class="w-full gold-gradient text-black font-bold py-3 rounded-xl text-xs uppercase tracking-wider shadow">
-                Kuponu Tanımla
-            </button>
+            <button onclick="window.saveCouponForm()" class="w-full gold-gradient text-black font-bold py-3 rounded-xl text-xs uppercase tracking-wider shadow">Tanımla</button>
         </div>
     </div>
 
-    <!-- Müşteri CRM Detay Modalı -->
     <div id="customerDetailModal" class="fixed inset-0 bg-black/80 backdrop-blur z-50 hidden flex items-center justify-center p-4">
         <div class="bg-[#121212] border border-[#C5A059]/40 rounded-3xl max-w-md w-full p-6 space-y-5 shadow-2xl relative">
             <button onclick="window.closeCustomerDetailModal()" class="absolute top-4 right-4 w-8 h-8 rounded-full bg-gray-800 hover:bg-red-950 hover:text-red-400 text-gray-300 flex items-center justify-center text-lg transition">&times;</button>
             <div class="text-center space-y-3 pt-2">
-                <div id="modalCustAvatarWrapper" class="w-20 h-20 mx-auto rounded-full overflow-hidden border-2 border-[#C5A059] shadow-lg flex items-center justify-center bg-[#0A0A0A]">
-                    <!-- Avatar or Initial -->
-                </div>
+                <div id="modalCustAvatarWrapper" class="w-20 h-20 mx-auto rounded-full overflow-hidden border-2 border-[#C5A059] shadow-lg flex items-center justify-center bg-[#0A0A0A]"></div>
                 <div>
                     <h3 class="text-xl font-bold font-serif-title text-white" id="modalCustName">Müşteri Adı</h3>
                     <span class="text-[10px] uppercase tracking-widest text-[#C5A059] font-bold block mt-0.5">NES VIP Müşteri Profili</span>
                 </div>
             </div>
-
             <div class="space-y-3 bg-[#0A0A0A] p-4 rounded-2xl border border-gray-800 text-xs">
                 <div class="flex justify-between items-center pb-2 border-b border-gray-800">
                     <span class="text-gray-400">Sistem Şifresi:</span>
@@ -669,41 +635,31 @@
                     <span id="modalCustCouponCount" class="text-emerald-400 font-bold">0 Adet</span>
                 </div>
             </div>
-
-            <button onclick="window.closeCustomerDetailModal()" class="w-full bg-gray-800 hover:bg-gray-700 text-gray-200 font-semibold py-3 rounded-xl text-xs uppercase tracking-wider transition">
-                Kapat
-            </button>
+            <button onclick="window.closeCustomerDetailModal()" class="w-full bg-gray-800 hover:bg-gray-700 text-gray-200 font-semibold py-3 rounded-xl text-xs uppercase tracking-wider transition">Kapat</button>
         </div>
     </div>
 
-    <!-- Şifre Sıfırlama Atama Modalı -->
     <div id="forgotResetModal" class="fixed inset-0 bg-black/80 backdrop-blur z-50 hidden flex items-center justify-center p-4">
         <div class="bg-[#121212] border border-[#C5A059]/40 rounded-3xl max-w-md w-full p-6 space-y-4 shadow-2xl relative">
             <button onclick="window.closeForgotResetModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white text-2xl">&times;</button>
             <h3 class="text-xl font-bold font-serif-title text-white">Müşteriye Yeni Şifre Ata</h3>
-            
             <input type="hidden" id="modalForgotReqId">
             <div>
                 <label class="block text-xs font-semibold text-gray-400 mb-1">Müşteri Adı</label>
                 <input type="text" id="modalForgotCustName" readonly class="w-full bg-[#0A0A0A] border border-gray-800 text-[#C5A059] font-bold p-3 rounded-xl text-xs focus:outline-none">
             </div>
             <div>
-                <label class="block text-xs font-semibold text-gray-400 mb-1">Yeni Şifre Belirle</label>
-                <input type="text" id="modalNewPasswordInput" placeholder="Örn: yeniSifre123" class="w-full bg-[#0A0A0A] border border-gray-800 text-white p-3 rounded-xl text-xs focus:border-[#C5A059] focus:outline-none">
+                <label class="block text-xs font-semibold text-gray-400 mb-1">Yeni Şifre</label>
+                <input type="text" id="modalNewPasswordInput" placeholder="Yeni Şifre" class="w-full bg-[#0A0A0A] border border-gray-800 text-white p-3 rounded-xl text-xs focus:border-[#C5A059] focus:outline-none">
             </div>
-
-            <button onclick="window.saveAndAssignNewPassword()" class="w-full gold-gradient text-black font-bold py-3 rounded-xl text-xs uppercase tracking-wider shadow">
-                Şifreyi Güncelle & Talebi Çöz
-            </button>
+            <button onclick="window.saveAndAssignNewPassword()" class="w-full gold-gradient text-black font-bold py-3 rounded-xl text-xs uppercase tracking-wider shadow">Güncelle</button>
         </div>
     </div>
 
-    <!-- Yanıt Modalı -->
     <div id="replyModal" class="fixed inset-0 bg-black/80 backdrop-blur z-50 hidden flex items-center justify-center p-4">
         <div class="bg-[#121212] border border-[#C5A059]/40 rounded-3xl max-w-2xl w-full p-6 space-y-4 shadow-2xl relative">
             <button onclick="window.closeReplyModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white text-2xl">&times;</button>
             <h3 class="text-xl font-bold font-serif-title gold-gradient-text">Müşteri Notu & Görsel İnceleme</h3>
-
             <div class="grid md:grid-cols-2 gap-4">
                 <div id="replyModalMedia" class="bg-[#0A0A0A] rounded-2xl border border-gray-800 p-2 flex items-center justify-center min-h-[180px]"></div>
                 <div class="space-y-3">
@@ -717,11 +673,9 @@
                     </div>
                     <div>
                         <label class="block text-[10px] text-gray-500 uppercase tracking-wider mb-1 font-semibold">Salon Yanıtınız</label>
-                        <textarea id="replyModalInput" rows="3" placeholder="Müşteriye iletilecek mesaj..." class="w-full bg-[#0A0A0A] border border-gray-800 text-white p-3 rounded-xl text-xs focus:border-[#C5A059] focus:outline-none"></textarea>
+                        <textarea id="replyModalInput" rows="3" placeholder="Mesajınız..." class="w-full bg-[#0A0A0A] border border-gray-800 text-white p-3 rounded-xl text-xs focus:border-[#C5A059] focus:outline-none"></textarea>
                     </div>
-                    <button onclick="window.submitAdminReply()" class="w-full gold-gradient text-black font-bold py-2.5 rounded-xl text-xs uppercase">
-                        Yanıtı İlet
-                    </button>
+                    <button onclick="window.submitAdminReply()" class="w-full gold-gradient text-black font-bold py-2.5 rounded-xl text-xs uppercase">Yanıtı İlet</button>
                 </div>
             </div>
         </div>
@@ -757,7 +711,7 @@
             'customers': { title: 'Müşteri CRM Yönetimi', icon: 'fa-users' },
             'financials': { title: 'Finans & Harcama Raporu', icon: 'fa-wallet' },
             'portfolio': { title: 'Portfolyo & Galeri', icon: 'fa-images' },
-            'audit': { title: 'Denetim İzleri (Audit Logs)', icon: 'fa-clock-rotate-left' }
+            'audit': { title: 'Denetim İzleri', icon: 'fa-clock-rotate-left' }
         };
 
         let activeTab = 'dashboard';
@@ -765,14 +719,13 @@
         let activeReplyAppId = null;
         let currentAppointmentFilter = 'Aktif';
 
+        // Firebase Realtime Listeners (Crucial for live sync with phones)
         window.startRealtimeListeners = function() {
             if (!window.db || !window.appId) return;
 
-            // Firestore Public Data paths
-            // Path: /artifacts/{appId}/public/data/{collectionName}
             import("https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js").then(({ collection, onSnapshot }) => {
                 
-                // 1. Randevular Dinleyicisi
+                // 1. Appointments Listener
                 onSnapshot(collection(window.db, 'artifacts', window.appId, 'public', 'data', 'nes_apps'), (snapshot) => {
                     let apps = [];
                     snapshot.forEach(doc => { apps.push({ id: doc.id, ...doc.data() }); });
@@ -780,7 +733,7 @@
                     window.syncAllData();
                 }, (err) => console.error("Apps listener error:", err));
 
-                // 2. Müşteri CRM Listesi Dinleyicisi
+                // 2. Users / CRM Listener
                 onSnapshot(collection(window.db, 'artifacts', window.appId, 'public', 'data', 'nes_users_list'), (snapshot) => {
                     let users = [];
                     snapshot.forEach(doc => { users.push({ id: doc.id, ...doc.data() }); });
@@ -790,7 +743,7 @@
                     }
                 }, (err) => console.error("Users listener error:", err));
 
-                // 3. Şifre Talepleri Dinleyicisi
+                // 3. Forgot Password Requests Listener
                 onSnapshot(collection(window.db, 'artifacts', window.appId, 'public', 'data', 'nes_forgot_password_requests'), (snapshot) => {
                     let reqs = [];
                     snapshot.forEach(doc => { reqs.push({ id: doc.id, ...doc.data() }); });
@@ -808,7 +761,6 @@
                 if (clockEl) clockEl.innerText = now.toLocaleTimeString('tr-TR');
             }, 1000);
 
-            // Dışarı tıklandığında menüyü kapatma
             document.addEventListener('click', (e) => {
                 const dropdown = document.getElementById('adminMenuDropdown');
                 const menuBtn = e.target.closest('button');
@@ -816,14 +768,13 @@
                     dropdown.classList.add('hidden');
                 }
             });
+            window.syncAllData();
         });
 
         window.toggleAdminMenuDropdown = function(e) {
             if (e) e.stopPropagation();
             const dropdown = document.getElementById('adminMenuDropdown');
-            if (dropdown) {
-                dropdown.classList.toggle('hidden');
-            }
+            if (dropdown) dropdown.classList.toggle('hidden');
         };
 
         window.loginToPortal = function() {
@@ -835,12 +786,12 @@
                 document.getElementById('authOverlay').classList.add('hidden');
                 document.getElementById('portalMainApp').classList.remove('hidden');
                 if (err) err.classList.add('hidden');
-                addAuditLog('Giriş Yapıldı', 'Yönetici güvenli portalda oturum açtı.');
+                addAuditLog('Giriş Yapıldı', 'Yönetici oturum açtı.');
                 window.syncAllData();
-                showToast('Giriş başarılı. Yönetim portalına hoş geldiniz.', 'success');
+                showToast('Giriş başarılı.', 'success');
             } else {
                 if (err) err.classList.remove('hidden');
-                showToast('Hatalı yetkilendirme şifresi!', 'warning');
+                showToast('Hatalı şifre!', 'warning');
             }
         };
 
@@ -849,60 +800,11 @@
             document.getElementById('authOverlay').classList.remove('hidden');
             const passInput = document.getElementById('portalPassInput');
             if (passInput) passInput.value = '';
-            addAuditLog('Oturum Kapatıldı', 'Yönetici güvenli çıkış yaptı.');
-            showToast('Güvenli çıkış yapıldı.', 'info');
-        };
-
-        window.openAddDailyRevenueModal = function() {
-            const dateInput = document.getElementById('modalRevDate');
-            if (dateInput) dateInput.value = new Date().toISOString().split('T')[0];
-            document.getElementById('modalRevAmount').value = '';
-            document.getElementById('modalRevNote').value = '';
-            document.getElementById('dailyRevenueModal').classList.remove('hidden');
-        };
-
-        window.closeDailyRevenueModal = function() {
-            document.getElementById('dailyRevenueModal').classList.add('hidden');
-        };
-
-        window.saveDailyRevenueForm = function() {
-            const dateVal = document.getElementById('modalRevDate').value;
-            const amount = parseFloat(document.getElementById('modalRevAmount').value) || 0;
-            const note = document.getElementById('modalRevNote').value.trim() || 'Günlük Salon Kasası';
-
-            if (!dateVal || amount <= 0) {
-                return showToast('Geçerli bir tarih ve ciro tutarı giriniz.', 'warning');
-            }
-
-            addRevenueRecord(note, amount, dateVal);
-            addAuditLog('Günlük Ciro Eklendi', `${dateVal} tarihine ${amount.toLocaleString('tr-TR')} ₺ ciro eklendi.`);
-            window.closeDailyRevenueModal();
-            window.syncAllData();
-            showToast('Günlük ciro başarıyla eklendi.', 'success');
-        };
-
-        window.clearAllRevenueLedger = function() {
-            if (confirm('Tüm ciro kayıtlarını ve kazanç trendini kalıcı olarak sıfırlamak istediğinize emin misiniz?')) {
-                localStorage.removeItem('nes_revenue_ledger');
-                addAuditLog('Ciro Sıfırlandı', 'Tüm salon ciro ve harcama defteri sıfırlandı.');
-                window.syncAllData();
-                showToast('Tüm ciro verileri sıfırlandı.', 'info');
-            }
-        };
-
-        window.clearLifetimeAppointmentsStats = function() {
-            if (confirm('Gösterge panelindeki toplam müşteri randevu sayacını sıfırlamak istediğinize emin misiniz?')) {
-                localStorage.setItem('nes_lifetime_appointment_stats', JSON.stringify({ totalApps: 0, completedApps: 0 }));
-                addAuditLog('Randevu Sayacı Sıfırllandı', 'Toplam müşteri randevuları sayacı sıfırlandı.');
-                window.syncAllData();
-                showToast('Randevu sayacı sıfırllandı.', 'info');
-            }
+            showToast('Çıkış yapıldı.', 'info');
         };
 
         window.switchTab = function(tabName) {
             activeTab = tabName;
-            
-            // Dropdown menüyü kapat
             const dropdown = document.getElementById('adminMenuDropdown');
             if (dropdown) dropdown.classList.add('hidden');
 
@@ -910,19 +812,14 @@
                 const view = document.getElementById(`view_${t}`);
                 const nav = document.getElementById(`nav_${t}`);
                 if (view) view.classList.add('hidden');
-                if (nav) {
-                    nav.className = "w-full flex items-center justify-between px-4 py-2.5 text-xs font-semibold text-gray-300 hover:text-[#C5A059] hover:bg-gray-900/60 transition";
-                }
+                if (nav) nav.className = "w-full flex items-center justify-between px-4 py-2.5 text-xs font-semibold text-gray-300 hover:text-[#C5A059] hover:bg-gray-900/60 transition";
             });
 
             const activeView = document.getElementById(`view_${tabName}`);
             const activeNav = document.getElementById(`nav_${tabName}`);
             if (activeView) activeView.classList.remove('hidden');
-            if (activeNav) {
-                activeNav.className = "w-full flex items-center justify-between px-4 py-2.5 text-xs font-semibold bg-[#C5A059]/20 text-[#C5A059] border border-[#C5A059]/40 transition";
-            }
+            if (activeNav) activeNav.className = "w-full flex items-center justify-between px-4 py-2.5 text-xs font-semibold bg-[#C5A059]/20 text-[#C5A059] border border-[#C5A059]/40 transition";
 
-            // Sol paneldeki aktif modül göstergesini güncelle
             const modInfo = MODULE_TITLES[tabName] || { title: 'Modül', icon: 'fa-circle' };
             const titleEl = document.getElementById('activeModuleTitle');
             const iconEl = document.getElementById('activeModuleIcon');
@@ -965,7 +862,6 @@
         }
         function saveStoredApps(apps) { 
             localStorage.setItem('nes_apps', JSON.stringify(apps));
-            // Cloud Sync
             if (window.db && window.appId) {
                 import("https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js").then(({ doc, setDoc }) => {
                     apps.forEach(a => {
@@ -1036,15 +932,8 @@
 
         function addRevenueRecord(note, amount, dateStr) {
             let ledger = getRevenueLedger();
-            ledger.unshift({
-                id: 'rev_' + Date.now(),
-                note: note,
-                amount: amount,
-                date: dateStr,
-                timestamp: Date.now()
-            });
+            ledger.unshift({ id: 'rev_' + Date.now(), note, amount, date: dateStr, timestamp: Date.now() });
             saveRevenueLedger(ledger);
-
             let stats = getLifetimeStats();
             stats.totalApps = (stats.totalApps || 0) + 1;
             stats.completedApps = (stats.completedApps || 0) + 1;
@@ -1055,7 +944,6 @@
             let ledger = getRevenueLedger();
             ledger = ledger.filter(r => r.id !== id);
             saveRevenueLedger(ledger);
-            addAuditLog('Ciro Kaydı Silindi', `ID: ${id} ciro kaydı silindi.`);
             window.syncAllData();
             showToast('Kayıt silindi.', 'info');
         };
@@ -1063,9 +951,7 @@
         function renderDashboard(apps, users) {
             let totalRevenue = 0;
             let ledger = getRevenueLedger();
-            ledger.forEach(r => {
-                totalRevenue += (r.amount || 0);
-            });
+            ledger.forEach(r => { totalRevenue += (r.amount || 0); });
 
             let stats = getLifetimeStats();
             let pendingCount = apps.filter(a => a.status === 'Beklemede').length;
@@ -1077,8 +963,8 @@
             const usersEl = document.getElementById('dashTotalUsers');
 
             if (revEl) revEl.innerText = `${totalRevenue.toLocaleString('tr-TR')} ₺`;
-            if (appsEl) appsEl.innerText = stats.totalApps || 0;
-            if (compEl) compEl.innerText = `${stats.completedApps || 0} Tamamlanan`;
+            if (appsEl) appsEl.innerText = stats.totalApps || apps.length;
+            if (compEl) compEl.innerText = `${stats.completedApps || apps.filter(a => a.status === 'Tamamlandı').length} Tamamlanan`;
             if (pendEl) pendEl.innerText = pendingCount;
             if (usersEl) usersEl.innerText = users.length;
 
@@ -1088,26 +974,9 @@
             
             if (todayContainer) {
                 todayContainer.innerHTML = '';
-                
-                let todayItems = [];
-                ledger.forEach(r => {
-                    if (r.date === todayStr) {
-                        todayItems.push(`
-                            <div class="bg-[#0A0A0A] p-3 rounded-xl border border-emerald-900/60 flex justify-between items-center">
-                                <div>
-                                    <strong class="text-emerald-400 block">${r.note || 'Günlük Ciro'}</strong>
-                                    <span class="text-gray-400 text-[10px]">${r.date} - Kasa Kazancı</span>
-                                </div>
-                                <span class="text-xs font-bold gold-text">+${(r.amount || 0).toLocaleString('tr-TR')} ₺</span>
-                            </div>
-                        `);
-                    }
-                });
-
-                if (todayApps.length === 0 && todayItems.length === 0) {
+                if (todayApps.length === 0) {
                     todayContainer.innerHTML = '<p class="text-gray-500 italic text-center py-4">Bugün için kayıtlı işlem yok.</p>';
                 } else {
-                    todayItems.forEach(html => { todayContainer.innerHTML += html; });
                     todayApps.slice(0, 5).forEach(a => {
                         const item = document.createElement('div');
                         item.className = "bg-[#0A0A0A] p-3 rounded-xl border border-gray-800/80 flex justify-between items-center";
@@ -1122,25 +991,16 @@
                     });
                 }
             }
-
             renderRevenueChart(ledger);
         }
 
         function renderRevenueChart(ledger) {
             const ctx = document.getElementById('revenueChart');
             if (!ctx) return;
-
-            if (revenueChartInstance) {
-                revenueChartInstance.destroy();
-            }
+            if (revenueChartInstance) revenueChartInstance.destroy();
 
             let days = {};
-            ledger.forEach(r => {
-                if (r.date) {
-                    days[r.date] = (days[r.date] || 0) + (r.amount || 0);
-                }
-            });
-
+            ledger.forEach(r => { if (r.date) days[r.date] = (days[r.date] || 0) + (r.amount || 0); });
             const labels = Object.keys(days).sort().slice(-7);
             const data = labels.map(l => days[l]);
 
@@ -1149,7 +1009,7 @@
                 data: {
                     labels: labels.length ? labels : ['Bugün'],
                     datasets: [{
-                        label: 'Toplam Ciro (₺)',
+                        label: 'Ciro (₺)',
                         data: data.length ? data : [0],
                         borderColor: '#C5A059',
                         backgroundColor: 'rgba(197, 160, 89, 0.1)',
@@ -1174,11 +1034,7 @@
             ['Hepsi', 'Aktif', 'Gecmis'].forEach(f => {
                 const btn = document.getElementById(`btnFilter_${f}`);
                 if (btn) {
-                    if (f === filterType) {
-                        btn.className = "text-xs bg-[#C5A059]/20 border border-[#C5A059] text-[#C5A059] px-3.5 py-2 rounded-xl font-semibold transition";
-                    } else {
-                        btn.className = "text-xs bg-gray-800 px-3.5 py-2 rounded-xl text-gray-300 font-semibold hover:text-white transition";
-                    }
+                    btn.className = f === filterType ? "text-xs bg-[#C5A059]/20 border border-[#C5A059] text-[#C5A059] px-3.5 py-2 rounded-xl font-semibold transition" : "text-xs bg-gray-800 px-3.5 py-2 rounded-xl text-gray-300 font-semibold hover:text-white transition";
                 }
             });
             renderAppointmentsTable(getStoredApps(), filterType);
@@ -1197,7 +1053,7 @@
             }
 
             if (filtered.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="6" class="text-center py-6 text-gray-500">Bu kategoride randevu bulunmuyor.</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="6" class="text-center py-6 text-gray-500">Randevu bulunmuyor.</td></tr>';
                 return;
             }
 
@@ -1208,25 +1064,9 @@
                 tr.className = "hover:bg-gray-900/40 transition";
                 const cleanPhone = (a.phone || '').replace(/\s+/g, '');
                 const waPhone = cleanPhone.startsWith('0') ? '9' + cleanPhone : cleanPhone;
-
                 const uObj = users.find(u => u.name.toLowerCase() === (a.name || '').toLowerCase());
                 const avatar = uObj && uObj.avatar ? uObj.avatar : '';
-                const avatarHtml = avatar ? 
-                    `<img src="${avatar}" class="w-8 h-8 rounded-full object-cover border border-[#C5A059] shrink-0">` : 
-                    `<div class="w-8 h-8 rounded-full gold-gradient text-black font-bold text-xs flex items-center justify-center shrink-0">${(a.name || 'M').charAt(0).toUpperCase()}</div>`;
-
-                const phoneHtml = a.phone ? `
-                    <div class="flex items-center gap-2 mt-1 text-[11px] font-mono text-gray-400">
-                        <i class="fa-solid fa-phone text-[#C5A059]"></i>
-                        <span>${a.phone}</span>
-                        <a href="https://wa.me/${waPhone}" target="_blank" class="text-emerald-400 hover:text-emerald-300 ml-1" title="WhatsApp Mesaj Gönder">
-                            <i class="fa-brands fa-whatsapp text-sm"></i>
-                        </a>
-                        <a href="tel:${cleanPhone}" class="text-blue-400 hover:text-blue-300" title="Ara">
-                            <i class="fa-solid fa-phone-flip text-xs"></i>
-                        </a>
-                    </div>
-                ` : '<span class="text-[10px] text-gray-600 block">Tel: Yok</span>';
+                const avatarHtml = avatar ? `<img src="${avatar}" class="w-8 h-8 rounded-full object-cover border border-[#C5A059] shrink-0">` : `<div class="w-8 h-8 rounded-full gold-gradient text-black font-bold text-xs flex items-center justify-center shrink-0">${(a.name || 'M').charAt(0).toUpperCase()}</div>`;
 
                 tr.innerHTML = `
                     <td class="p-4">
@@ -1234,8 +1074,7 @@
                             ${avatarHtml}
                             <div>
                                 <strong class="text-white block text-sm">${a.name}</strong>
-                                ${phoneHtml}
-                                <span class="text-[10px] text-gray-500">ID: #${a.id}</span>
+                                <span class="text-[11px] font-mono text-gray-400">${a.phone || ''}</span>
                             </div>
                         </div>
                     </td>
@@ -1249,43 +1088,48 @@
                         <span class="px-2.5 py-1 rounded-full text-[10px] font-bold ${
                             a.status === 'Onaylandı' ? 'bg-emerald-950/60 text-emerald-400 border border-emerald-800' :
                             a.status === 'Tamamlandı' ? 'bg-blue-950/60 text-blue-400 border border-blue-800' :
-                            a.status === 'Müşteri İptali' ? 'bg-red-950/90 text-red-300 border border-red-600 font-extrabold' :
-                            a.status === 'İptal' ? 'bg-red-950/60 text-red-400 border border-red-800' :
+                            a.status === 'Müşteri İptali' || a.status === 'İptal' ? 'bg-red-950/60 text-red-400 border border-red-800' :
                             'bg-amber-950/60 text-amber-400 border border-amber-800'
                         }">${a.status}</span>
                     </td>
                     <td class="p-4 text-center space-x-1">
                         <button onclick="window.updateAppStatus(${a.id}, 'Onaylandı')" class="p-2 bg-emerald-950/50 border border-emerald-800 text-emerald-400 rounded-lg hover:bg-emerald-900 transition" title="Onayla"><i class="fa-solid fa-check"></i></button>
                         <button onclick="window.updateAppStatus(${a.id}, 'Tamamlandı')" class="p-2 bg-blue-950/50 border border-blue-800 text-blue-400 rounded-lg hover:bg-blue-900 transition" title="Tamamlandı"><i class="fa-solid fa-flag-checkered"></i></button>
-                        <button onclick="window.openReplyModalForApp(${a.id})" class="p-2 bg-amber-950/50 border border-amber-800 text-amber-400 rounded-lg hover:bg-amber-900 transition" title="Not / Görsel"><i class="fa-solid fa-comment"></i></button>
-                        <button onclick="window.updateAppStatus(${a.id}, 'İptal')" class="p-2 bg-red-950/50 border border-red-800 text-red-300 rounded-lg hover:bg-red-900 transition" title="İptal Et"><i class="fa-solid fa-xmark"></i></button>
-                        <button onclick="window.deleteAppointment(${a.id})" class="p-2 bg-red-950/80 border border-red-800 text-red-300 rounded-lg hover:bg-red-900 transition" title="Sil"><i class="fa-solid fa-trash"></i></button>
+                        <button onclick="window.openReplyModalForApp(${a.id})" class="p-2 bg-amber-950/50 border border-amber-800 text-amber-400 rounded-lg hover:bg-amber-900 transition" title="Not"><i class="fa-solid fa-comment"></i></button>
+                        <button onclick="window.updateAppStatus(${a.id}, 'İptal')" class="p-2 bg-red-950/50 border border-red-800 text-red-300 rounded-lg hover:bg-red-900 transition" title="İptal"><i class="fa-solid fa-xmark"></i></button>
                     </td>
                 `;
                 tbody.appendChild(tr);
             });
         }
 
+        window.updateAppStatus = function(id, newStatus) {
+            let apps = getStoredApps();
+            const target = apps.find(a => a.id === id);
+            if (target) {
+                target.status = newStatus;
+                saveStoredApps(apps);
+                window.syncAllData();
+                showToast(`Randevu durumu "${newStatus}" yapıldı.`, 'success');
+            }
+        };
+
         function renderForgotRequestsTable(reqs) {
             const tbody = document.getElementById('forgotTableBody');
             if (!tbody) return;
             tbody.innerHTML = '';
-
             if (reqs.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="4" class="text-center py-6 text-gray-500">Şifre sıfırlama talebi bulunmuyor.</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="4" class="text-center py-6 text-gray-500">Talep yok.</td></tr>';
                 return;
             }
-
             reqs.forEach(req => {
                 const tr = document.createElement('tr');
-                tr.className = "hover:bg-gray-950 transition";
                 tr.innerHTML = `
                     <td class="p-4 font-bold text-white">${req.name}</td>
                     <td class="p-4 font-mono text-[#C5A059]">${req.phone}</td>
                     <td class="p-4 text-gray-300">${req.timestamp}</td>
-                    <td class="p-4 text-center space-x-2">
-                        <button onclick="window.openForgotResetModal(${req.id}, '${req.name.replace(/'/g, "\\'")}')" class="px-3 py-1.5 bg-[#C5A059]/20 border border-[#C5A059] text-[#C5A059] rounded-lg hover:bg-[#C5A059] hover:text-black transition text-xs font-semibold">Şifre Ata</button>
-                        <button onclick="window.deleteForgotRequest(${req.id})" class="p-2 bg-red-950/60 border border-red-800 text-red-400 rounded-lg hover:bg-red-900 transition" title="Talebi Sil"><i class="fa-solid fa-trash"></i></button>
+                    <td class="p-4 text-center">
+                        <button onclick="window.openForgotResetModal(${req.id}, '${req.name}')" class="px-3 py-1.5 bg-[#C5A059]/20 border border-[#C5A059] text-[#C5A059] rounded-lg text-xs font-semibold">Şifre Ata</button>
                     </td>
                 `;
                 tbody.appendChild(tr);
@@ -1295,163 +1139,34 @@
         window.openForgotResetModal = function(reqId, custName) {
             document.getElementById('modalForgotReqId').value = reqId;
             document.getElementById('modalForgotCustName').value = custName;
-            document.getElementById('modalNewPasswordInput').value = '';
             document.getElementById('forgotResetModal').classList.remove('hidden');
         };
-
-        window.closeForgotResetModal = function() {
-            document.getElementById('forgotResetModal').classList.add('hidden');
-        };
+        window.closeForgotResetModal = function() { document.getElementById('forgotResetModal').classList.add('hidden'); };
 
         window.saveAndAssignNewPassword = function() {
             const reqId = parseInt(document.getElementById('modalForgotReqId').value, 10);
             const custName = document.getElementById('modalForgotCustName').value.trim();
             const newPass = document.getElementById('modalNewPasswordInput').value.trim();
-
-            if (!newPass || newPass.length < 4) {
-                return showToast('Lütfen en az 4 karakterli geçerli bir şifre giriniz.', 'warning');
-            }
+            if (!newPass) return showToast('Yeni şifre girin.', 'warning');
 
             let users = getStoredUsers();
-            const uObj = users.find(u => u.name.toLowerCase() === custName.toLowerCase());
-            if (uObj) {
-                uObj.pass = newPass;
-                saveStoredUsers(users);
-            } else {
-                users.push({ name: custName, pass: newPass, avatar: '' });
-                saveStoredUsers(users);
-            }
+            let uObj = users.find(u => u.name.toLowerCase() === custName.toLowerCase());
+            if (uObj) { uObj.pass = newPass; } else { users.push({ name: custName, pass: newPass, avatar: '' }); }
+            saveStoredUsers(users);
 
             let reqs = getStoredForgotRequests();
             reqs = reqs.filter(r => r.id !== reqId);
             saveStoredForgotRequests(reqs);
 
-            addAuditLog('Şifre Sıfırlandı', `"${custName}" müşterisine admin tarafından yeni şifre atandı.`);
             window.closeForgotResetModal();
             window.syncAllData();
-            showToast(`"${custName}" müşterisinin şifresi başarıyla güncellendi!`, 'success');
-        };
-
-        window.deleteForgotRequest = function(reqId) {
-            let reqs = getStoredForgotRequests();
-            reqs = reqs.filter(r => r.id !== reqId);
-            saveStoredForgotRequests(reqs);
-            window.syncAllData();
-            showToast('Şifre talebi silindi.', 'info');
-        };
-
-        window.deleteAppointment = function(id) {
-            let apps = getStoredApps();
-            const target = apps.find(a => a.id === id);
-            
-            if (target && target.usedCouponObject && target.status !== 'Müşteri İptali' && target.status !== 'İptal') {
-                let coupons = getStoredCoupons();
-                if (new Date().getTime() < target.usedCouponObject.expiresAt) {
-                    coupons.push(target.usedCouponObject);
-                    saveStoredCoupons(coupons);
-                }
-            }
-
-            apps = apps.filter(a => a.id !== id);
-            saveStoredApps(apps);
-            addAuditLog('Randevu Silindi', `#${id} ID'li randevu silindi.`);
-            window.syncAllData();
-            showToast('Randevu silindi.', 'info');
-        };
-
-        window.updateAppStatus = function(id, newStatus) {
-            const apps = getStoredApps();
-            const target = apps.find(a => a.id === id);
-            if (target) {
-                const oldStatus = target.status;
-                target.status = newStatus;
-
-                if ((newStatus === 'İptal' || newStatus === 'Müşteri İptali') && oldStatus !== 'İptal' && oldStatus !== 'Müşteri İptali') {
-                    if (target.usedCouponObject) {
-                        let coupons = getStoredCoupons();
-                        if (new Date().getTime() < target.usedCouponObject.expiresAt) {
-                            coupons.push(target.usedCouponObject);
-                            saveStoredCoupons(coupons);
-                        }
-                    }
-                }
-
-                if (newStatus === 'Tamamlandı' && oldStatus !== 'Tamamlandı') {
-                    let amountToAdd = target.totalPrice || 0;
-                    if (amountToAdd > 0) {
-                        addRevenueRecord(`Randevu #${target.id} (${target.name || 'Müşteri'})`, amountToAdd, target.date || new Date().toISOString().split('T')[0]);
-                    } else {
-                        let stats = getLifetimeStats();
-                        stats.totalApps = (stats.totalApps || 0) + 1;
-                        stats.completedApps = (stats.completedApps || 0) + 1;
-                        saveLifetimeStats(stats);
-                    }
-                }
-
-                saveStoredApps(apps);
-                addAuditLog('Randevu Güncelleme', `#${id} ID'li randevu durumu "${newStatus}" yapıldı.`);
-                window.syncAllData();
-                showToast(`Randevu "${newStatus}" olarak kaydedildi.`, 'success');
-            }
-        };
-
-        window.openReplyModalForApp = function(id) {
-            activeReplyAppId = id;
-            const apps = getStoredApps();
-            const target = apps.find(a => a.id === id);
-            if (!target) return;
-
-            const mediaContainer = document.getElementById('replyModalMedia');
-            const noteEl = document.getElementById('replyModalNote');
-            const phoneEl = document.getElementById('replyModalPhone');
-            const inputEl = document.getElementById('replyModalInput');
-
-            if (target.image) {
-                mediaContainer.innerHTML = `<img src="${target.image}" class="max-h-48 rounded-xl border border-gray-800">`;
-            } else {
-                mediaContainer.innerHTML = `<span class="text-xs text-gray-500 italic">Müşteri görsel yüklemedi</span>`;
-            }
-
-            if (phoneEl) {
-                const cleanPhone = (target.phone || '').replace(/\s+/g, '');
-                const waPhone = cleanPhone.startsWith('0') ? '9' + cleanPhone : cleanPhone;
-                phoneEl.innerHTML = `
-                    <span>${target.phone || 'Telefon Belirtilmedi'}</span>
-                    ${target.phone ? `<a href="https://wa.me/${waPhone}" target="_blank" class="bg-emerald-950/80 text-emerald-400 border border-emerald-800 px-2.5 py-1 rounded-lg hover:bg-emerald-900 transition flex items-center gap-1 text-[11px] font-sans font-normal"><i class="fa-brands fa-whatsapp text-sm"></i> WhatsApp</a>` : ''}
-                `;
-            }
-
-            noteEl.innerText = target.note || 'Özel not eklenmemiş.';
-            inputEl.value = target.reply || '';
-
-            document.getElementById('replyModal').classList.remove('hidden');
-        };
-
-        window.closeReplyModal = function() {
-            document.getElementById('replyModal').classList.add('hidden');
-        };
-
-        window.submitAdminReply = function() {
-            const text = document.getElementById('replyModalInput').value.trim();
-            if (!activeReplyAppId) return;
-
-            let apps = getStoredApps();
-            const target = apps.find(a => a.id === activeReplyAppId);
-            if (target) {
-                target.reply = text;
-                saveStoredApps(apps);
-                addAuditLog('Randevu Yanıtı', `#${activeReplyAppId} ID'li randevuya salon yanıtı eklendi.`);
-                window.closeReplyModal();
-                window.syncAllData();
-                showToast('Yanıt müşteriye iletildi.', 'success');
-            }
+            showToast('Şifre güncellendi.', 'success');
         };
 
         function renderServicesGrid(services) {
             const container = document.getElementById('servicesGridContainer');
             if (!container) return;
             container.innerHTML = '';
-
             services.forEach(srv => {
                 const card = document.createElement('div');
                 card.className = "bg-[#121212] border border-gray-800 p-5 rounded-2xl flex flex-col justify-between space-y-4";
@@ -1461,361 +1176,91 @@
                             <span class="text-sm font-bold text-white">${srv.name}</span>
                             <span class="gold-text font-bold text-base font-serif-title">${srv.price.toLocaleString('tr-TR')} ₺</span>
                         </div>
-                        <p class="text-xs text-gray-400 mt-1"><i class="fa-solid fa-clock gold-text mr-1"></i> Süre: ${srv.durationMin} Dakika</p>
-                    </div>
-                    <div class="flex gap-2 pt-2 border-t border-gray-800">
-                        <button onclick="window.openEditServiceModal('${srv.id}')" class="flex-1 bg-gray-800 hover:bg-gray-700 text-gray-200 py-2 rounded-xl text-xs font-semibold transition">Düzenle</button>
-                        <button onclick="window.deleteServiceItem('${srv.id}')" class="bg-red-950/50 border border-red-900 text-red-400 hover:bg-red-900 hover:text-white px-3 py-2 rounded-xl text-xs transition"><i class="fa-solid fa-trash"></i></button>
+                        <p class="text-xs text-gray-400 mt-1">Süre: ${srv.durationMin} Dk</p>
                     </div>
                 `;
                 container.appendChild(card);
             });
         }
-
-        window.openAddServiceModal = function() {
-            document.getElementById('modalSrvId').value = '';
-            document.getElementById('modalSrvName').value = '';
-            document.getElementById('modalSrvPrice').value = '';
-            document.getElementById('modalSrvDuration').value = '60';
-            document.getElementById('serviceModalTitle').innerText = 'Yeni Hizmet Ekle';
-            document.getElementById('serviceEditModal').classList.remove('hidden');
-        };
-
-        window.openEditServiceModal = function(id) {
-            const services = getStoredServices();
-            const srv = services.find(s => s.id === id);
-            if (srv) {
-                document.getElementById('modalSrvId').value = srv.id;
-                document.getElementById('modalSrvName').value = srv.name;
-                document.getElementById('modalSrvPrice').value = srv.price;
-                document.getElementById('modalSrvDuration').value = srv.durationMin;
-                document.getElementById('serviceModalTitle').innerText = 'Hizmeti Düzenle';
-                document.getElementById('serviceEditModal').classList.remove('hidden');
-            }
-        };
-
-        window.closeServiceModal = function() {
-            document.getElementById('serviceEditModal').classList.add('hidden');
-        };
-
-        window.saveServiceForm = function() {
-            const id = document.getElementById('modalSrvId').value;
-            const name = document.getElementById('modalSrvName').value.trim();
-            const price = parseFloat(document.getElementById('modalSrvPrice').value) || 0;
-            const durationMin = parseInt(document.getElementById('modalSrvDuration').value) || 30;
-
-            if (!name || price <= 0) {
-                return showToast('Geçerli bir hizmet adı ve fiyat giriniz.', 'warning');
-            }
-
-            let services = getStoredServices();
-            if (id) {
-                const srv = services.find(s => s.id === id);
-                if (srv) {
-                    srv.name = name;
-                    srv.price = price;
-                    srv.durationMin = durationMin;
-                }
-            } else {
-                const newId = 'srv_' + Date.now();
-                services.push({ id: newId, name, price, durationMin });
-            }
-
-            saveStoredServices(services);
-            addAuditLog('Hizmet Kataloğu', `"${name}" hizmeti güncellendi/eklendi.`);
-            window.closeServiceModal();
-            window.syncAllData();
-            showToast('Hizmet kataloğu kaydedildi.', 'success');
-        };
-
-        window.deleteServiceItem = function(id) {
-            let services = getStoredServices();
-            services = services.filter(s => s.id !== id);
-            saveStoredServices(services);
-            addAuditLog('Hizmet Silindi', `ID: ${id} hizmet silindi.`);
-            window.syncAllData();
-            showToast('Hizmet silindi.', 'info');
-        };
 
         function renderNotepadGrid(notepad) {
             const container = document.getElementById('notepadGridContainer');
             if (!container) return;
             container.innerHTML = '';
-
-            if (notepad.length === 0) {
-                container.innerHTML = '<p class="text-gray-500 italic col-span-full text-center py-6">Kayıtlı saç reçetesi bulunmuyor.</p>';
-                return;
-            }
-
             notepad.forEach(note => {
                 const card = document.createElement('div');
-                card.className = "bg-[#121212] border border-gray-800 p-5 rounded-2xl flex flex-col justify-between space-y-4";
+                card.className = "bg-[#121212] border border-gray-800 p-5 rounded-2xl space-y-2";
                 card.innerHTML = `
-                    <div class="space-y-2">
-                        <div class="flex justify-between items-start">
-                            <strong class="text-white text-sm">${note.customerName}</strong>
-                            <button onclick="window.deleteNotepadItem(${note.id})" class="text-red-400 hover:text-red-300 text-xs"><i class="fa-solid fa-trash"></i></button>
-                        </div>
-                        <p class="text-xs text-gray-300"><b>Saç Tipi:</b> ${note.hairType || '-'}</p>
-                        <p class="text-xs text-[#C5A059] font-mono bg-[#0A0A0A] p-2.5 rounded-xl border border-gray-800"><b>Reçete:</b> ${note.formula || '-'}</p>
-                    </div>
-                    <button onclick="window.openEditNotepadModal(${note.id})" class="w-full bg-gray-800 hover:bg-gray-700 text-gray-200 py-2 rounded-xl text-xs font-semibold transition">Düzenle</button>
+                    <strong class="text-white text-sm">${note.customerName}</strong>
+                    <p class="text-xs text-gray-300">Saç: ${note.hairType || '-'}</p>
+                    <p class="text-xs text-[#C5A059] font-mono bg-[#0A0A0A] p-2 rounded-xl">Reçete: ${note.formula || '-'}</p>
                 `;
                 container.appendChild(card);
             });
         }
 
-        window.openAddNotepadModal = function() {
-            document.getElementById('modalNotepadId').value = '';
-            document.getElementById('modalNotepadCustomer').value = '';
-            document.getElementById('modalNotepadHairType').value = '';
-            document.getElementById('modalNotepadFormula').value = '';
-            document.getElementById('notepadModalTitle').innerText = 'Müşteri Reçetesi Ekle';
-            document.getElementById('notepadModal').classList.remove('hidden');
-        };
-
-        window.openEditNotepadModal = function(id) {
-            let notepad = getStoredNotepad();
-            const note = notepad.find(n => n.id === id);
-            if (note) {
-                document.getElementById('modalNotepadId').value = note.id;
-                document.getElementById('modalNotepadCustomer').value = note.customerName;
-                document.getElementById('modalNotepadHairType').value = note.hairType;
-                document.getElementById('modalNotepadFormula').value = note.formula;
-                document.getElementById('notepadModalTitle').innerText = 'Reçeteyi Düzenle';
-                document.getElementById('notepadModal').classList.remove('hidden');
-            }
-        };
-
-        window.closeNotepadModal = function() {
-            document.getElementById('notepadModal').classList.add('hidden');
-        };
-
-        window.saveNotepadForm = function() {
-            const id = document.getElementById('modalNotepadId').value;
-            const customerName = document.getElementById('modalNotepadCustomer').value.trim();
-            const hairType = document.getElementById('modalNotepadHairType').value.trim();
-            const formula = document.getElementById('modalNotepadFormula').value.trim();
-
-            if (!customerName) {
-                return showToast('Müşteri adı girmelisiniz.', 'warning');
-            }
-
-            let notepad = getStoredNotepad();
-            if (id) {
-                const note = notepad.find(n => n.id == id);
-                if (note) {
-                    note.customerName = customerName;
-                    note.hairType = hairType;
-                    note.formula = formula;
-                }
-            } else {
-                notepad.push({
-                    id: Date.now(),
-                    customerName,
-                    hairType,
-                    formula
-                });
-            }
-
-            saveStoredNotepad(notepad);
-            addAuditLog('Not Defteri', `"${customerName}" saç reçetesi kaydedildi.`);
-            window.closeNotepadModal();
-            window.syncAllData();
-            showToast('Saç reçetesi kaydedildi.', 'success');
-        };
-
-        window.deleteNotepadItem = function(id) {
-            let notepad = getStoredNotepad();
-            notepad = notepad.filter(n => n.id !== id);
-            saveStoredNotepad(notepad);
-            window.syncAllData();
-            showToast('Not silindi.', 'info');
-        };
-
         function renderCouponsTable(coupons) {
             const tbody = document.getElementById('couponTableBody');
             if (!tbody) return;
             tbody.innerHTML = '';
-
-            if (coupons.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="5" class="text-center py-6 text-gray-500">Tanımlı aktif kupon bulunmuyor.</td></tr>';
-                return;
-            }
-
             coupons.forEach(c => {
-                const now = new Date().getTime();
-                const isExpired = now >= c.expiresAt;
-                const expireDateStr = new Date(c.expiresAt).toLocaleString('tr-TR');
-
                 const tr = document.createElement('tr');
-                tr.className = "hover:bg-gray-950 transition";
                 tr.innerHTML = `
                     <td class="p-4 font-bold text-white">${c.customerName}</td>
-                    <td class="p-4 font-mono gold-text font-bold">${c.code}</td>
-                    <td class="p-4"><span class="bg-[#C5A059]/20 text-[#C5A059] px-2.5 py-1 rounded-full font-bold">%${c.discountPercent}</span></td>
-                    <td class="p-4 text-gray-300">${expireDateStr} ${isExpired ? '<span class="text-red-400 font-semibold">(Süresi Doldu)</span>' : '<span class="text-emerald-400 font-semibold">(Aktif)</span>'}</td>
-                    <td class="p-4 text-center">
-                        <button onclick="window.deleteCoupon(${c.id})" class="p-2 bg-red-950/60 border border-red-800 text-red-400 rounded-lg hover:bg-red-900 transition" title="Kuponu Sil"><i class="fa-solid fa-trash"></i></button>
-                    </td>
+                    <td class="p-4 font-mono text-[#C5A059]">${c.code}</td>
+                    <td class="p-4">%${c.discountPercent}</td>
+                    <td class="p-4 text-gray-300">${new Date(c.expiresAt).toLocaleString('tr-TR')}</td>
+                    <td class="p-4 text-center"><button onclick="window.deleteCoupon(${c.id})" class="text-red-400"><i class="fa-solid fa-trash"></i></button></td>
                 `;
                 tbody.appendChild(tr);
             });
         }
 
-        window.openAddCouponModal = function() {
-            const select = document.getElementById('modalCouponCustomer');
-            select.innerHTML = '<option value="">Müşteri Seçiniz</option>';
-            const users = getStoredUsers();
-            users.forEach(u => {
-                const opt = document.createElement('option');
-                opt.value = u.name;
-                opt.textContent = u.name;
-                select.appendChild(opt);
-            });
-            document.getElementById('couponModal').classList.remove('hidden');
-        };
-
-        window.closeCouponModal = function() {
-            document.getElementById('couponModal').classList.add('hidden');
-        };
-
-        window.saveCouponForm = function() {
-            const customerName = document.getElementById('modalCouponCustomer').value;
-            const code = document.getElementById('modalCouponCode').value;
-
-            if (!customerName) {
-                return showToast('Lütfen bir müşteri seçiniz.', 'warning');
-            }
-
-            let discountPercent = 10;
-            if (code === 'NES20') discountPercent = 20;
-            if (code === 'NES30') discountPercent = 30;
-
-            let coupons = getStoredCoupons();
-            const now = new Date().getTime();
-            const expiresAt = now + (7 * 24 * 60 * 60 * 1000);
-
-            coupons.push({
-                id: Date.now(),
-                customerName: customerName,
-                code: code,
-                discountPercent: discountPercent,
-                createdAt: now,
-                expiresAt: expiresAt
-            });
-
-            saveStoredCoupons(coupons);
-            addAuditLog('Kupon Tanımlandı', `"${customerName}" müşterisine ${code} kuponu tanımlandı.`);
-            window.closeCouponModal();
-            window.syncAllData();
-            showToast(`${code} kuponu başarıyla tanımlandı!`, 'success');
-        };
-
         window.deleteCoupon = function(id) {
-            let coupons = getStoredCoupons();
-            coupons = coupons.filter(c => c.id !== id);
+            let coupons = getStoredCoupons().filter(c => c.id !== id);
             saveStoredCoupons(coupons);
             window.syncAllData();
-            showToast('Kupon silindi.', 'info');
         };
 
         function renderCustomersTable(users) {
             const tbody = document.getElementById('userTableBody');
             if (!tbody) return;
             tbody.innerHTML = '';
-
             if (users.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="4" class="text-center py-6 text-gray-500">Kayıtlı müşteri bulunmuyor.</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="4" class="text-center py-6 text-gray-500">Kayıtlı müşteri yok.</td></tr>';
                 return;
             }
-
             users.forEach(u => {
-                const avatarHtml = u.avatar ? `<img src="${u.avatar}" class="w-9 h-9 rounded-full object-cover border border-[#C5A059]">` : `<div class="w-9 h-9 rounded-full gold-gradient text-black font-bold flex items-center justify-center">${u.name.charAt(0).toUpperCase()}</div>`;
+                const avatar = u.avatar ? `<img src="${u.avatar}" class="w-9 h-9 rounded-full object-cover border border-[#C5A059]">` : `<div class="w-9 h-9 rounded-full gold-gradient text-black font-bold flex items-center justify-center">${u.name.charAt(0)}</div>`;
                 const tr = document.createElement('tr');
-                tr.className = "hover:bg-gray-950 transition cursor-pointer";
                 tr.innerHTML = `
-                    <td class="p-4" onclick="window.openCustomerDetailModal('${u.name.replace(/'/g, "\\'")}')">${avatarHtml}</td>
-                    <td class="p-4 font-bold text-white" onclick="window.openCustomerDetailModal('${u.name.replace(/'/g, "\\'")}')">${u.name}</td>
-                    <td class="p-4 font-mono text-[#C5A059]" onclick="window.openCustomerDetailModal('${u.name.replace(/'/g, "\\'")}')">
-                        <span class="bg-[#0A0A0A] border border-gray-800 px-2.5 py-1 rounded-lg">${u.pass || '-'}</span>
-                    </td>
-                    <td class="p-4 text-center" onclick="event.stopPropagation()">
-                        <button onclick="window.deleteUserAccount('${u.name.replace(/'/g, "\\'")}')" class="p-2 bg-red-950/60 border border-red-800 text-red-400 rounded-lg hover:bg-red-900 transition" title="Müşteriyi Sil"><i class="fa-solid fa-trash"></i></button>
-                    </td>
+                    <td class="p-4">${avatar}</td>
+                    <td class="p-4 font-bold text-white">${u.name}</td>
+                    <td class="p-4 font-mono text-[#C5A059]">${u.pass || '-'}</td>
+                    <td class="p-4 text-center"><button onclick="window.deleteUserAccount('${u.name}')" class="text-red-400"><i class="fa-solid fa-trash"></i></button></td>
                 `;
                 tbody.appendChild(tr);
             });
         }
 
-        window.openCustomerDetailModal = function(userName) {
-            const users = getStoredUsers();
-            const user = users.find(u => u.name.toLowerCase() === userName.toLowerCase());
-            if (!user) return;
-
-            const avatarWrapper = document.getElementById('modalCustAvatarWrapper');
-            const nameEl = document.getElementById('modalCustName');
-            const passEl = document.getElementById('modalCustPass');
-            const appCountEl = document.getElementById('modalCustAppCount');
-            const couponCountEl = document.getElementById('modalCustCouponCount');
-
-            if (nameEl) nameEl.innerText = user.name;
-            if (passEl) passEl.innerText = user.pass || 'Şifre Yok';
-
-            if (avatarWrapper) {
-                if (user.avatar) {
-                    avatarWrapper.innerHTML = `<img src="${user.avatar}" class="w-full h-full object-cover">`;
-                } else {
-                    avatarWrapper.innerHTML = `<div class="w-full h-full gold-gradient text-black font-bold text-2xl flex items-center justify-center">${user.name.charAt(0).toUpperCase()}</div>`;
-                }
-            }
-
-            let apps = getStoredApps();
-            let myApps = apps.filter(a => a.name && a.name.toLowerCase() === user.name.toLowerCase());
-            if (appCountEl) appCountEl.innerText = myApps.length;
-
-            let coupons = getStoredCoupons();
-            let myCoupons = coupons.filter(c => c.customerName.toLowerCase() === user.name.toLowerCase() && new Date().getTime() < c.expiresAt);
-            if (couponCountEl) couponCountEl.innerText = `${myCoupons.length} Adet Aktif`;
-
-            document.getElementById('customerDetailModal').classList.remove('hidden');
-        };
-
-        window.closeCustomerDetailModal = function() {
-            document.getElementById('customerDetailModal').classList.add('hidden');
-        };
-
         window.deleteUserAccount = function(name) {
-            let users = getStoredUsers();
-            users = users.filter(u => u.name.toLowerCase() !== name.toLowerCase());
+            let users = getStoredUsers().filter(u => u.name.toLowerCase() !== name.toLowerCase());
             saveStoredUsers(users);
-            addAuditLog('Müşteri Silindi', `"${name}" müşteri hesabı silindi.`);
             window.syncAllData();
-            showToast('Müşteri hesabı silindi.', 'info');
         };
 
         function renderFinancialsTable() {
             const tbody = document.getElementById('spendingTableBody');
             if (!tbody) return;
             tbody.innerHTML = '';
-
             let ledger = getRevenueLedger();
-
-            if (ledger.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="4" class="text-center py-6 text-gray-500">Kayıtlı ciro veya harcama kaydı bulunmuyor.</td></tr>';
-                return;
-            }
-
             ledger.forEach(r => {
                 const tr = document.createElement('tr');
-                tr.className = "hover:bg-gray-950 transition";
                 tr.innerHTML = `
-                    <td class="p-4 font-bold text-white">${r.note || 'Ciro Girişi'}</td>
-                    <td class="p-4 text-gray-300 font-mono">${r.date || '-'}</td>
-                    <td class="p-4 font-bold gold-text font-serif-title text-sm">+${(r.amount || 0).toLocaleString('tr-TR')} ₺</td>
-                    <td class="p-4 text-center">
-                        <button onclick="window.deleteRevenueRecord('${r.id}')" class="px-3 py-1.5 bg-red-950/60 border border-red-800 text-red-400 rounded-lg hover:bg-red-900 transition text-xs font-semibold"><i class="fa-solid fa-trash mr-1"></i> Sil</button>
-                    </td>
+                    <td class="p-4 font-bold text-white">${r.note}</td>
+                    <td class="p-4 text-gray-300">${r.date}</td>
+                    <td class="p-4 font-bold text-[#C5A059]">+${r.amount} ₺</td>
+                    <td class="p-4 text-center"><button onclick="window.deleteRevenueRecord('${r.id}')" class="text-red-400"><i class="fa-solid fa-trash"></i></button></td>
                 `;
                 tbody.appendChild(tr);
             });
@@ -1825,140 +1270,68 @@
             const container = document.getElementById('portfolioGridContainer');
             if (!container) return;
             container.innerHTML = '';
-
             portfolio.forEach(item => {
                 const card = document.createElement('div');
-                card.className = "overflow-hidden rounded-2xl aspect-[3/4] border border-gray-800 relative group bg-[#121212]";
-                card.innerHTML = `
-                    <img src="${item.image}" alt="${item.title}" class="w-full h-full object-cover">
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition duration-300 flex justify-between items-end p-4">
-                        <span class="text-xs font-bold text-[#C5A059] font-serif-title">${item.title}</span>
-                        <button onclick="window.deletePortfolioItem('${item.id}')" class="p-2 bg-red-950/80 border border-red-800 text-red-300 rounded-lg hover:bg-red-900 transition"><i class="fa-solid fa-trash text-xs"></i></button>
-                    </div>
-                `;
+                card.className = "rounded-2xl aspect-[3/4] border border-gray-800 relative group bg-[#121212]";
+                card.innerHTML = `<img src="${item.image}" class="w-full h-full object-cover rounded-2xl"><div class="absolute bottom-2 right-2"><button onclick="window.deletePortfolioItem('${item.id}')" class="p-2 bg-red-950 text-red-400 rounded-lg"><i class="fa-solid fa-trash"></i></button></div>`;
                 container.appendChild(card);
             });
         }
 
         window.deletePortfolioItem = function(id) {
-            let portfolio = getStoredPortfolio();
-            portfolio = portfolio.filter(p => p.id !== id);
+            let portfolio = getStoredPortfolio().filter(p => p.id !== id);
             saveStoredPortfolio(portfolio);
-            addAuditLog('Portfolyo Silindi', `ID: ${id} görsel galeriden silindi.`);
             window.syncAllData();
-            showToast('Görsel portfolyodan kaldırıldı.', 'info');
         };
-
-        window.openAddPortfolioModal = function() {
-            document.getElementById('modalPortfolioTitle').value = '';
-            document.getElementById('modalPortfolioUrl').value = '';
-            const fileInput = document.getElementById('modalPortfolioFile');
-            if (fileInput) fileInput.value = '';
-            document.getElementById('portfolioModal').classList.remove('hidden');
-        };
-
-        window.closePortfolioModal = function() {
-            document.getElementById('portfolioModal').classList.add('hidden');
-        };
-
-        window.savePortfolioForm = function() {
-            const title = document.getElementById('modalPortfolioTitle').value.trim() || 'Saç Tasarımı';
-            const urlInput = document.getElementById('modalPortfolioUrl').value.trim();
-            const fileInput = document.getElementById('modalPortfolioFile');
-
-            const saveItem = (imgSrc) => {
-                if (!imgSrc) {
-                    return showToast('Lütfen bir görsel seçin veya URL girin.', 'warning');
-                }
-                let portfolio = getStoredPortfolio();
-                portfolio.unshift({
-                    id: 'p_' + Date.now(),
-                    title: title,
-                    image: imgSrc
-                });
-                saveStoredPortfolio(portfolio);
-                addAuditLog('Portfolyo Eklendi', `"${title}" galeriyə eklendi.`);
-                window.closePortfolioModal();
-                window.syncAllData();
-                showToast('Görsel başarıyla eklendi!', 'success');
-            };
-
-            if (fileInput && fileInput.files && fileInput.files[0]) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    saveItem(e.target.result);
-                };
-                reader.readAsDataURL(fileInput.files[0]);
-            } else if (urlInput) {
-                saveItem(urlInput);
-            } else {
-                showToast('Lütfen bir görsel seçiniz ya da URL giriniz.', 'warning');
-            }
-        };
-
-        function addAuditLog(action, details) {
-            try {
-                let logs = JSON.parse(localStorage.getItem('nes_audit_logs')) || [];
-                logs.unshift({
-                    timestamp: new Date().toLocaleString('tr-TR'),
-                    action,
-                    details
-                });
-                localStorage.setItem('nes_audit_logs', JSON.stringify(logs));
-            } catch(e){}
-        }
 
         function renderAuditLogs() {
             const container = document.getElementById('auditLogContainer');
             if (!container) return;
             container.innerHTML = '';
-
             let logs = [];
             try { logs = JSON.parse(localStorage.getItem('nes_audit_logs')) || []; } catch(e){}
-
-            if (logs.length === 0) {
-                container.innerHTML = '<p class="text-gray-500 italic text-center py-4">Denetim izi bulunmuyor.</p>';
-                return;
-            }
-
             logs.forEach(l => {
                 const div = document.createElement('div');
-                div.className = "p-2.5 rounded-xl bg-[#0A0A0A] border border-gray-800/80 flex justify-between items-center text-xs";
-                div.innerHTML = `
-                    <div>
-                        <span class="text-[#C5A059] font-bold">[${l.action}]</span>
-                        <span class="text-gray-300 ml-2">${l.details}</span>
-                    </div>
-                    <span class="text-[10px] text-gray-500">${l.timestamp}</span>
-                `;
+                div.className = "p-2 rounded-xl bg-[#0A0A0A] border border-gray-800 text-xs flex justify-between";
+                div.innerHTML = `<span><b>[${l.action}]</b> ${l.details}</span><span class="text-gray-500">${l.timestamp}</span>`;
                 container.appendChild(div);
             });
+        }
+
+        function addAuditLog(action, details) {
+            try {
+                let logs = JSON.parse(localStorage.getItem('nes_audit_logs')) || [];
+                logs.unshift({ timestamp: new Date().toLocaleString('tr-TR'), action, details });
+                localStorage.setItem('nes_audit_logs', JSON.stringify(logs));
+            } catch(e){}
         }
 
         window.clearAuditLogs = function() {
             localStorage.setItem('nes_audit_logs', JSON.stringify([]));
             window.syncAllData();
-            showToast('Denetim logları temizlendi.', 'info');
+        };
+
+        window.openAddDailyRevenueModal = function() { document.getElementById('dailyRevenueModal').classList.remove('hidden'); };
+        window.closeDailyRevenueModal = function() { document.getElementById('dailyRevenueModal').classList.add('hidden'); };
+        window.saveDailyRevenueForm = function() {
+            const dateVal = document.getElementById('modalRevDate').value || new Date().toISOString().split('T')[0];
+            const amount = parseFloat(document.getElementById('modalRevAmount').value) || 0;
+            const note = document.getElementById('modalRevNote').value.trim() || 'Günlük Kasa';
+            if (amount > 0) {
+                addRevenueRecord(note, amount, dateVal);
+                window.closeDailyRevenueModal();
+                window.syncAllData();
+            }
         };
 
         function showToast(message, type = 'info') {
             const container = document.getElementById('toastContainer');
             if (!container) return;
-
             const toast = document.createElement('div');
-            toast.className = `pointer-events-auto px-4 py-3 rounded-xl border text-xs font-semibold shadow-2xl transition-all duration-300 ${
-                type === 'success' ? 'bg-[#121212] border-emerald-500 text-emerald-400' :
-                type === 'warning' ? 'bg-[#121212] border-amber-500 text-amber-400' :
-                'bg-[#121212] border-[#C5A059] text-[#C5A059]'
-            }`;
-
+            toast.className = `px-4 py-3 rounded-xl border text-xs font-semibold ${type === 'success' ? 'bg-[#121212] border-emerald-500 text-emerald-400' : 'bg-[#121212] border-[#C5A059] text-[#C5A059]'}`;
             toast.innerText = message;
             container.appendChild(toast);
-
-            setTimeout(() => {
-                toast.classList.add('opacity-0', 'translate-y-2');
-                setTimeout(() => toast.remove(), 300);
-            }, 3000);
+            setTimeout(() => toast.remove(), 3000);
         }
     </script>
 </body>
