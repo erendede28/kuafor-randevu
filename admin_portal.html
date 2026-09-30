@@ -162,9 +162,19 @@
             <div class="p-6 md:p-8 space-y-8 max-w-7xl mx-auto w-full">
                 
                 <div id="view_dashboard" class="space-y-6">
-                    <div>
-                        <h1 class="text-2xl font-bold font-serif-title text-white">Yönetim Gösterge Paneli</h1>
-                        <p class="text-xs text-gray-400 mt-1">Salon performansı, Bugünkü Randevular ve Anlık Doluluk Oranları.</p>
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                        <div>
+                            <h1 class="text-2xl font-bold font-serif-title text-white">Yönetim Gösterge Paneli</h1>
+                            <p class="text-xs text-gray-400 mt-1">Salon performansı, Bugünkü Randevular ve Anlık Doluluk Oranları.</p>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <button onclick="window.openAddDailyRevenueModal()" class="gold-gradient text-black text-xs font-bold px-4 py-2.5 rounded-xl shadow hover:opacity-90 transition flex items-center gap-2">
+                                <i class="fa-solid fa-plus-circle"></i> Günlük Ciro Ekle
+                            </button>
+                            <button onclick="window.clearAllRevenueLedger()" class="bg-red-950/60 border border-red-800 text-red-400 hover:bg-red-900 hover:text-white text-xs font-bold px-4 py-2.5 rounded-xl transition flex items-center gap-2">
+                                <i class="fa-solid fa-trash-can"></i> Ciro Sıfırla
+                            </button>
+                        </div>
                     </div>
 
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -207,7 +217,7 @@
                                 <h3 class="font-bold text-sm text-gray-200 flex items-center gap-2">
                                     <i class="fa-solid fa-chart-line text-[#C5A059]"></i> Ciro & Kazanç Trendi
                                 </h3>
-                                <span class="text-[11px] text-gray-500">Tamamlanan Randevular</span>
+                                <span class="text-[11px] text-gray-500">Tamamlanan Randevular & Günlük Cirolar</span>
                             </div>
                             <div class="h-64 relative">
                                 <canvas id="revenueChart"></canvas>
@@ -338,7 +348,7 @@
                 <div id="view_financials" class="space-y-6 hidden">
                     <div class="border-b border-gray-800 pb-4">
                         <h1 class="text-2xl font-bold font-serif-title text-white">Finansal Harcama & Raporlama</h1>
-                        <p class="text-xs text-gray-400 mt-1">Müşteri bazlı ciro ve harcama detayları.</p>
+                        <p class="text-xs text-gray-400 mt-1">Müşteri/Kasa bazlı kaydedilen ciro girişlerini yönetin ve dilerseniz silin.</p>
                     </div>
 
                     <div class="bg-[#121212] border border-gray-800 rounded-2xl overflow-hidden shadow-xl">
@@ -346,12 +356,10 @@
                             <table class="w-full text-left border-collapse text-xs">
                                 <thead>
                                     <tr class="bg-[#0A0A0A] border-b border-gray-800 text-[#C5A059] uppercase tracking-wider font-semibold">
-                                        <th class="p-4">Müşteri</th>
-                                        <th class="p-4">Toplam Ciro Katkısı</th>
-                                        <th class="p-4">Yıl Bazlı Detay</th>
-                                        <th class="p-4">Ay Bazlı Detay</th>
-                                        <th class="p-4">Gün Bazlı Detay</th>
-                                        <th class="p-4 text-center">İşlem / Temizle</th>
+                                        <th class="p-4">Kayıt / Açıklama</th>
+                                        <th class="p-4">Tarih</th>
+                                        <th class="p-4">Tutar</th>
+                                        <th class="p-4 text-center">İşlem / Sil</th>
                                     </tr>
                                 </thead>
                                 <tbody id="spendingTableBody" class="divide-y divide-gray-800/80"></tbody>
@@ -392,6 +400,31 @@
 
             </div>
         </main>
+    </div>
+
+    <!-- Günlük Ciro Ekleme Modalı -->
+    <div id="dailyRevenueModal" class="fixed inset-0 bg-black/80 backdrop-blur z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-[#121212] border border-[#C5A059]/40 rounded-3xl max-w-md w-full p-6 space-y-4 shadow-2xl relative">
+            <button onclick="window.closeDailyRevenueModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white text-2xl">&times;</button>
+            <h3 class="text-xl font-bold font-serif-title text-white">Günlük Ciro / Gelir Ekle</h3>
+            
+            <div>
+                <label class="block text-xs font-semibold text-gray-400 mb-1">Tarih</label>
+                <input type="date" id="modalRevDate" class="w-full bg-[#0A0A0A] border border-gray-800 text-white p-3 rounded-xl text-xs focus:border-[#C5A059] focus:outline-none">
+            </div>
+            <div>
+                <label class="block text-xs font-semibold text-gray-400 mb-1">Ciro Tutarı (₺)</label>
+                <input type="number" id="modalRevAmount" placeholder="Örn: 2500" class="w-full bg-[#0A0A0A] border border-gray-800 text-white p-3 rounded-xl text-xs focus:border-[#C5A059] focus:outline-none">
+            </div>
+            <div>
+                <label class="block text-xs font-semibold text-gray-400 mb-1">Açıklama (Opsiyonel)</label>
+                <input type="text" id="modalRevNote" placeholder="Örn: Günlük Salon Kasası" class="w-full bg-[#0A0A0A] border border-gray-800 text-white p-3 rounded-xl text-xs focus:border-[#C5A059] focus:outline-none">
+            </div>
+
+            <button onclick="window.saveDailyRevenueForm()" class="w-full gold-gradient text-black font-bold py-3 rounded-xl text-xs uppercase tracking-wider shadow">
+                Ciroya Ekle & Kaydet
+            </button>
+        </div>
     </div>
 
     <!-- Modals -->
@@ -593,6 +626,43 @@
             showToast('Güvenli çıkış yapıldı.', 'info');
         };
 
+        window.openAddDailyRevenueModal = function() {
+            const dateInput = document.getElementById('modalRevDate');
+            if (dateInput) dateInput.value = new Date().toISOString().split('T')[0];
+            document.getElementById('modalRevAmount').value = '';
+            document.getElementById('modalRevNote').value = '';
+            document.getElementById('dailyRevenueModal').classList.remove('hidden');
+        };
+
+        window.closeDailyRevenueModal = function() {
+            document.getElementById('dailyRevenueModal').classList.add('hidden');
+        };
+
+        window.saveDailyRevenueForm = function() {
+            const dateVal = document.getElementById('modalRevDate').value;
+            const amount = parseFloat(document.getElementById('modalRevAmount').value) || 0;
+            const note = document.getElementById('modalRevNote').value.trim() || 'Günlük Salon Kasası';
+
+            if (!dateVal || amount <= 0) {
+                return showToast('Geçerli bir tarih ve ciro tutarı giriniz.', 'warning');
+            }
+
+            addRevenueRecord(note, amount, dateVal);
+            addAuditLog('Günlük Ciro Eklendi', `${dateVal} tarihine ${amount.toLocaleString('tr-TR')} ₺ ciro eklendi.`);
+            window.closeDailyRevenueModal();
+            window.syncAllData();
+            showToast('Günlük ciro başarıyla eklendi.', 'success');
+        };
+
+        window.clearAllRevenueLedger = function() {
+            if (confirm('Tüm ciro kayıtlarını ve kazanç trendini kalıcı olarak sıfırlamak istediğinize emin misiniz?')) {
+                localStorage.removeItem('nes_revenue_ledger');
+                addAuditLog('Ciro Sıfırlandı', 'Tüm salon ciro ve harcama defteri sıfırlandı.');
+                window.syncAllData();
+                showToast('Tüm ciro verileri sıfırlandı.', 'info');
+            }
+        };
+
         window.openAddPortfolioModal = function() {
             document.getElementById('modalPortTitle').value = "";
             document.getElementById('modalPortFile').value = "";
@@ -684,7 +754,7 @@
             renderNotepadGrid(notepad);
             renderCouponsTable(coupons);
             renderCustomersTable(users);
-            renderSpendingTable(users);
+            renderFinancialsTable();
             renderPortfolioGrid(portfolio);
             renderAuditLogs();
         };
@@ -719,6 +789,32 @@
         }
         function saveStoredPortfolio(items) { localStorage.setItem('nes_portfolio_gallery', JSON.stringify(items)); }
 
+        function getRevenueLedger() {
+            try { return JSON.parse(localStorage.getItem('nes_revenue_ledger')) || []; } catch(e) { return []; }
+        }
+        function saveRevenueLedger(ledger) { localStorage.setItem('nes_revenue_ledger', JSON.stringify(ledger)); }
+
+        function addRevenueRecord(note, amount, dateStr) {
+            let ledger = getRevenueLedger();
+            ledger.unshift({
+                id: 'rev_' + Date.now(),
+                note: note,
+                amount: amount,
+                date: dateStr,
+                timestamp: Date.now()
+            });
+            saveRevenueLedger(ledger);
+        }
+
+        window.deleteRevenueRecord = function(id) {
+            let ledger = getRevenueLedger();
+            ledger = ledger.filter(r => r.id !== id);
+            saveRevenueLedger(ledger);
+            addAuditLog('Ciro Kaydı Silindi', `ID: ${id} ciro kaydı silindi.`);
+            window.syncAllData();
+            showToast('Kayıt silindi.', 'info');
+        };
+
         function renderDashboard(apps, users) {
             let totalRevenue = 0;
             let completedCount = 0;
@@ -729,14 +825,9 @@
                 else if (a.status === 'Beklemede') pendingCount++;
             });
 
-            // Calculate revenue from permanent ledger records
-            let spendingRecords = {};
-            try { spendingRecords = JSON.parse(localStorage.getItem('nes_spending_records')) || {}; } catch(e) {}
-            
-            Object.keys(spendingRecords).forEach(user => {
-                (spendingRecords[user] || []).forEach(rec => {
-                    totalRevenue += (rec.amount || 0);
-                });
+            let ledger = getRevenueLedger();
+            ledger.forEach(r => {
+                totalRevenue += (r.amount || 0);
             });
 
             const revEl = document.getElementById('dashTotalRevenue');
@@ -757,9 +848,26 @@
             
             if (todayContainer) {
                 todayContainer.innerHTML = '';
-                if (todayApps.length === 0) {
-                    todayContainer.innerHTML = '<p class="text-gray-500 italic text-center py-4">Yakın tarihli işlem yok.</p>';
+                
+                let todayItems = [];
+                ledger.forEach(r => {
+                    if (r.date === todayStr) {
+                        todayItems.push(`
+                            <div class="bg-[#0A0A0A] p-3 rounded-xl border border-emerald-900/60 flex justify-between items-center">
+                                <div>
+                                    <strong class="text-emerald-400 block">${r.note || 'Günlük Ciro'}</strong>
+                                    <span class="text-gray-400 text-[10px]">${r.date} - Kasa Kazancı</span>
+                                </div>
+                                <span class="text-xs font-bold gold-text">+${(r.amount || 0).toLocaleString('tr-TR')} ₺</span>
+                            </div>
+                        `);
+                    }
+                });
+
+                if (todayApps.length === 0 && todayItems.length === 0) {
+                    todayContainer.innerHTML = '<p class="text-gray-500 italic text-center py-4">Bugün için kayıtlı işlem yok.</p>';
                 } else {
+                    todayItems.forEach(html => { todayContainer.innerHTML += html; });
                     todayApps.slice(0, 5).forEach(a => {
                         const item = document.createElement('div');
                         item.className = "bg-[#0A0A0A] p-3 rounded-xl border border-gray-800/80 flex justify-between items-center";
@@ -775,10 +883,10 @@
                 }
             }
 
-            renderRevenueChart(spendingRecords);
+            renderRevenueChart(ledger);
         }
 
-        function renderRevenueChart(spendingRecords) {
+        function renderRevenueChart(ledger) {
             const ctx = document.getElementById('revenueChart');
             if (!ctx) return;
 
@@ -786,13 +894,11 @@
                 revenueChartInstance.destroy();
             }
 
-            const days = {};
-            Object.keys(spendingRecords).forEach(user => {
-                (spendingRecords[user] || []).forEach(rec => {
-                    if (rec.date) {
-                        days[rec.date] = (days[rec.date] || 0) + (rec.amount || 0);
-                    }
-                });
+            let days = {};
+            ledger.forEach(r => {
+                if (r.date) {
+                    days[r.date] = (days[r.date] || 0) + (r.amount || 0);
+                }
             });
 
             const labels = Object.keys(days).sort().slice(-7);
@@ -803,7 +909,7 @@
                 data: {
                     labels: labels.length ? labels : ['Bugün'],
                     datasets: [{
-                        label: 'Tamamlanan Ciro (₺)',
+                        label: 'Toplam Ciro (₺)',
                         data: data.length ? data : [0],
                         borderColor: '#C5A059',
                         backgroundColor: 'rgba(197, 160, 89, 0.1)',
@@ -921,9 +1027,9 @@
 
             apps = apps.filter(a => a.id !== id);
             saveStoredApps(apps);
-            addAuditLog('Randevu Silindi', `#${id} ID'li randevu kalıcı olarak silindi. (Ciro etkilenmez)`);
+            addAuditLog('Randevu Silindi', `#${id} ID'li randevu silindi. (Ciro etkilenmez)`);
             window.syncAllData();
-            showToast('Randevu başarıyla silindi (Ciro kaydı korundu).', 'info');
+            showToast('Randevu silindi (Ciro korundu).', 'info');
         };
 
         window.updateAppStatus = function(id, newStatus) {
@@ -945,8 +1051,8 @@
 
                 if (newStatus === 'Tamamlandı' && oldStatus !== 'Tamamlandı') {
                     let amountToAdd = target.totalPrice || 0;
-                    if (amountToAdd > 0 && target.name) {
-                        addUserSpendingByDate(target.name, amountToAdd, target.date || new Date().toISOString().split('T')[0]);
+                    if (amountToAdd > 0) {
+                        addRevenueRecord(`Randevu #${target.id} (${target.name || 'Müşteri'})`, amountToAdd, target.date || new Date().toISOString().split('T')[0]);
                     }
                 }
 
@@ -956,30 +1062,6 @@
                 showToast(`Randevu "${newStatus}" olarak kaydedildi.`, 'success');
             }
         };
-
-        function addUserSpendingByDate(userName, amount, dateStr) {
-            let spendingRecords = {};
-            try { spendingRecords = JSON.parse(localStorage.getItem('nes_spending_records')) || {}; } catch(e) {}
-
-            const userKey = (userName || '').trim().toLowerCase();
-            if (!spendingRecords[userKey]) {
-                spendingRecords[userKey] = [];
-            }
-
-            let parts = dateStr.split('-');
-            let year = parts[0] || '2026';
-            let month = parts[1] || '01';
-
-            spendingRecords[userKey].push({
-                date: dateStr,
-                month: `${year}-${month}`,
-                year: year,
-                amount: amount,
-                timestamp: Date.now()
-            });
-
-            localStorage.setItem('nes_spending_records', JSON.stringify(spendingRecords));
-        }
 
         window.openReplyModalForApp = function(id) {
             activeReplyAppId = id;
@@ -1341,66 +1423,32 @@
             showToast('Müşteri hesabı silindi.', 'info');
         };
 
-        function renderSpendingTable(users) {
+        function renderFinancialsTable() {
             const tbody = document.getElementById('spendingTableBody');
             if (!tbody) return;
             tbody.innerHTML = '';
 
-            let spendingRecords = {};
-            try { spendingRecords = JSON.parse(localStorage.getItem('nes_spending_records')) || {}; } catch(e) {}
+            let ledger = getRevenueLedger();
 
-            let hasRecords = false;
+            if (ledger.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="4" class="text-center py-6 text-gray-500">Kayıtlı ciro veya harcama kaydı bulunmuyor.</td></tr>';
+                return;
+            }
 
-            Object.keys(spendingRecords).forEach(userKey => {
-                const recs = spendingRecords[userKey] || [];
-                if (recs.length === 0) return;
-                hasRecords = true;
-
-                let totalUserSpent = 0;
-                let years = {};
-                let months = {};
-                let days = {};
-
-                recs.forEach(r => {
-                    totalUserSpent += r.amount;
-                    years[r.year] = (years[r.year] || 0) + r.amount;
-                    months[r.month] = (months[r.month] || 0) + r.amount;
-                    days[r.date] = (days[r.date] || 0) + r.amount;
-                });
-
-                let yearStr = Object.keys(years).map(y => `${y}: ${years[y].toLocaleString('tr-TR')} ₺`).join(', ');
-                let monthStr = Object.keys(months).map(m => `${m}: ${months[m].toLocaleString('tr-TR')} ₺`).join(', ');
-                let dayStr = Object.keys(days).map(d => `${d}: ${days[d].toLocaleString('tr-TR')} ₺`).join(', ');
-
+            ledger.forEach(r => {
                 const tr = document.createElement('tr');
                 tr.className = "hover:bg-gray-950 transition";
                 tr.innerHTML = `
-                    <td class="p-4 font-bold text-white">${userKey}</td>
-                    <td class="p-4 font-bold gold-text font-serif-title text-sm">${totalUserSpent.toLocaleString('tr-TR')} ₺</td>
-                    <td class="p-4 text-xs text-gray-300 font-mono">${yearStr || '-'}</td>
-                    <td class="p-4 text-xs text-gray-300 font-mono">${monthStr || '-'}</td>
-                    <td class="p-4 text-xs text-gray-300 font-mono">${dayStr || '-'}</td>
+                    <td class="p-4 font-bold text-white">${r.note || 'Ciro Girişi'}</td>
+                    <td class="p-4 text-gray-300 font-mono">${r.date || '-'}</td>
+                    <td class="p-4 font-bold gold-text font-serif-title text-sm">+${(r.amount || 0).toLocaleString('tr-TR')} ₺</td>
                     <td class="p-4 text-center">
-                        <button onclick="window.clearUserSpending('${userKey}')" class="px-3 py-1.5 bg-red-950/60 border border-red-800 text-red-400 rounded-lg hover:bg-red-900 transition text-xs font-semibold">Sıfırla</button>
+                        <button onclick="window.deleteRevenueRecord('${r.id}')" class="px-3 py-1.5 bg-red-950/60 border border-red-800 text-red-400 rounded-lg hover:bg-red-900 transition text-xs font-semibold"><i class="fa-solid fa-trash mr-1"></i> Sil</button>
                     </td>
                 `;
                 tbody.appendChild(tr);
             });
-
-            if (!hasRecords) {
-                tbody.innerHTML = '<tr><td colspan="6" class="text-center py-6 text-gray-500">Tamamlanan randevulardan oluşan ciro kaydı bulunmuyor.</td></tr>';
-            }
         }
-
-        window.clearUserSpending = function(userKey) {
-            let spendingRecords = {};
-            try { spendingRecords = JSON.parse(localStorage.getItem('nes_spending_records')) || {}; } catch(e) {}
-            delete spendingRecords[userKey];
-            localStorage.setItem('nes_spending_records', JSON.stringify(spendingRecords));
-            addAuditLog('Ciro Sıfırlandı', `"${userKey}" müşterisinin harcama kayıtları sıfırlandı.`);
-            window.syncAllData();
-            showToast('Müşteri harcama kayıtları sıfırlandı.', 'info');
-        };
 
         function renderPortfolioGrid(portfolio) {
             const container = document.getElementById('portfolioGridContainer');
