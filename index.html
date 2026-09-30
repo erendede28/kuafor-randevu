@@ -263,7 +263,7 @@
         </div>
     </section>
 
-    <!-- Müşteri Paneli: Randevularım ve Profil Fotoğrafı Yönetimi -->
+    <!-- Müşteri Paneli -->
     <section id="randevularim" class="py-24 px-4 max-w-4xl mx-auto border-b border-gray-800">
         <div class="bg-[#121212] p-8 md:p-12 rounded-3xl shadow-2xl border border-[#C5A059]/30 space-y-6">
             <div class="flex flex-col sm:flex-row justify-between items-center gap-4 border-b border-gray-800 pb-6">
@@ -315,6 +315,7 @@
         </div>
     </section>
 
+    <!-- Kuponlarım Bölümü -->
     <section id="kuponlarim" class="py-24 px-4 max-w-4xl mx-auto border-b border-gray-800">
         <div class="bg-[#121212] p-8 md:p-12 rounded-3xl shadow-2xl border border-[#C5A059]/30 space-y-6">
             <div class="flex justify-between items-center border-b border-gray-800 pb-6">
@@ -360,12 +361,12 @@
         </div>
     </section>
 
-    <!-- Portfolyo Işık (Lightbox) Modalı -->
+    <!-- Portfolyo Işık (Lightbox) Modalı (%50 başlangıç) -->
     <div id="portfolioLightboxModal" class="fixed inset-0 bg-black/95 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
         <button onclick="window.closePortfolioLightbox()" class="absolute top-6 right-6 w-12 h-12 rounded-full bg-[#121212] border border-[#C5A059]/40 text-[#C5A059] flex items-center justify-center text-2xl hover:bg-[#C5A059] hover:text-black transition shadow-2xl z-50">&times;</button>
         <div class="max-w-5xl max-h-[90vh] flex flex-col items-center justify-center relative space-y-4">
             <div class="overflow-auto max-w-full max-h-[75vh] rounded-2xl border border-gray-800 bg-[#0A0A0A] p-2 flex items-center justify-center">
-                <img id="lightboxImg" src="" class="transition-transform duration-200 origin-center max-w-none">
+                <img id="lightboxImg" src="" class="transition-transform duration-200 origin-center max-w-none" style="transform: scale(0.5);">
             </div>
             <div class="flex items-center gap-4 bg-[#121212] border border-[#C5A059]/40 px-6 py-3 rounded-2xl shadow-2xl">
                 <span id="lightboxTitle" class="text-sm font-bold font-serif-title gold-text mr-4"></span>
@@ -407,19 +408,21 @@
                 <p id="loginErrorMsg" class="text-red-400 text-xs text-center hidden"></p>
             </div>
 
+            <!-- Şifremi Unuttum İstek Formu -->
             <div id="forgotStepView" class="space-y-4 hidden">
+                <p class="text-xs text-gray-400 leading-relaxed">Şifrenizi unuttuysanız aşağıya kayıtlı bilgilerinizi girerek admin paneline sıfırlama talebi gönderebilirsiniz.</p>
                 <div>
                     <label class="block text-xs text-gray-400 uppercase mb-1">Kayıtlı Ad Soyad</label>
                     <input type="text" id="forgotName" placeholder="Adınız Soyadınız" class="w-full bg-[#0A0A0A] border border-gray-800 text-white px-4 py-2.5 rounded-xl focus:border-[#C5A059] focus:outline-none">
                 </div>
                 <div>
-                    <label class="block text-xs text-gray-400 uppercase mb-1">Yeni Şifre</label>
-                    <input type="password" id="forgotNewPass" placeholder="Yeni Şifre" class="w-full bg-[#0A0A0A] border border-gray-800 text-white px-4 py-2.5 rounded-xl focus:border-[#C5A059] focus:outline-none">
+                    <label class="block text-xs text-gray-400 uppercase mb-1">Telefon Numaranız</label>
+                    <input type="tel" id="forgotPhone" placeholder="0532 123 45 67" class="w-full bg-[#0A0A0A] border border-gray-800 text-white px-4 py-2.5 rounded-xl focus:border-[#C5A059] focus:outline-none">
                 </div>
                 <div class="flex justify-between items-center text-xs">
                     <button type="button" onclick="window.switchToLoginForm()" class="text-gray-400 hover:text-white"><i class="fa-solid fa-arrow-left mr-1"></i> Geri Dön</button>
                 </div>
-                <button onclick="window.handleDirectPasswordReset()" class="w-full gold-gradient text-black font-semibold py-3 rounded-xl">Şifreyi Yenile</button>
+                <button onclick="window.handleSendForgotRequest()" class="w-full gold-gradient text-black font-semibold py-3 rounded-xl">Admin Paneline Talep Gönder</button>
                 <p id="forgotErrorMsg" class="text-xs text-center hidden"></p>
             </div>
         </div>
@@ -454,7 +457,7 @@
         let clientActiveAppTab = 'aktif';
         let appliedCouponDiscount = 0;
         let appliedCouponName = '';
-        let lightboxCurrentScale = 0.5; // Starts at 50% scale
+        let lightboxCurrentScale = 0.5;
 
         const DEFAULT_SERVICES_DATA = [
             { id: 'ombre', name: 'Ombre Tasarımı', price: 3500, durationMin: 180 },
@@ -820,7 +823,7 @@
             });
 
             if (infoEl) {
-                infoEl.innerText = availableCount === 0 ? '⚠️️ Bu tarih tamamen doludur.' : `✓ ${availableCount} boş saat var.`;
+                infoEl.innerText = availableCount === 0 ? '⚠ Bu tarih tamamen doludur.' : `✓ ${availableCount} boş saat var.`;
                 infoEl.className = `text-xs mt-1.5 block font-medium ${availableCount === 0 ? 'text-red-400' : 'text-emerald-400'}`;
             }
         };
@@ -853,7 +856,6 @@
                 if (navUserName) navUserName.innerText = currentUser;
                 if (userWelcomeSub) userWelcomeSub.innerText = `${currentUser} hesap randevuları ve profil ayarları.`;
 
-                // Kullanıcının avatarını getir
                 let users = getUsersList();
                 const uObj = users.find(u => u.name.toLowerCase() === currentUser.toLowerCase());
                 const avatar = uObj && uObj.avatar ? uObj.avatar : '';
@@ -1245,32 +1247,37 @@
             document.getElementById('forgotStepView').classList.remove('hidden');
         };
 
-        window.handleDirectPasswordReset = function() {
-            const identifier = document.getElementById('forgotName').value.trim().toLowerCase();
-            const newPass = document.getElementById('forgotNewPass').value;
+        window.handleSendForgotRequest = function() {
+            const name = document.getElementById('forgotName').value.trim();
+            const phone = document.getElementById('forgotPhone').value.trim();
             const err = document.getElementById('forgotErrorMsg');
 
-            if (!identifier || !newPass) {
-                err.innerText = "Alanları doldurun!";
+            if (!name || !phone) {
+                err.innerText = "Lütfen ad soyad ve telefon numaranızı yazınız!";
                 err.classList.remove('hidden');
                 return;
             }
 
-            let users = getUsersList();
-            const idx = users.findIndex(u => u.name.toLowerCase() === identifier);
+            let forgotReqs = [];
+            try { forgotReqs = JSON.parse(localStorage.getItem('nes_forgot_password_requests')) || []; } catch(e){}
 
-            if (idx === -1) {
-                err.innerText = "Kullanıcı bulunamadı!";
-                err.classList.remove('hidden');
-                return;
-            }
+            forgotReqs.unshift({
+                id: Date.now(),
+                name: name,
+                phone: phone,
+                timestamp: new Date().toLocaleString('tr-TR')
+            });
 
-            users[idx].pass = newPass;
-            saveUsersList(users);
+            localStorage.setItem('nes_forgot_password_requests', JSON.stringify(forgotReqs));
 
-            err.innerText = "Şifre yenilendi!";
+            err.innerText = "Şifre sıfırlama talebiniz admin paneline iletildi!";
+            err.className = "text-emerald-400 text-xs text-center";
             err.classList.remove('hidden');
-            setTimeout(() => { window.switchToLoginForm(); }, 1500);
+
+            setTimeout(() => {
+                window.closeLoginModal();
+                window.switchToLoginForm();
+            }, 2500);
         };
 
         window.openRegisterModal = function() {
@@ -1322,7 +1329,7 @@
                     localStorage.setItem('nes_logged_user', foundUser.name);
                     sessionStorage.removeItem('nes_logged_user');
                 } else {
-                    sessionStorage.setItem('nes_logged_user', foundUser.name); // Persistent fallback
+                    sessionStorage.setItem('nes_logged_user', foundUser.name);
                     localStorage.setItem('nes_logged_user', foundUser.name);
                 }
                 window.closeLoginModal();
