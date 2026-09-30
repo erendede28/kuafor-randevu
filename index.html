@@ -27,7 +27,7 @@
 
         async function initFirebaseClient() {
             try {
-                const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {
+                const firebaseConfig = {
                     apiKey: "AIzaSyAt7FRt7Q8Ha0VjFRY38m0ThYgP-MsdC2A",
                     authDomain: "nes-kuafor.firebaseapp.com",
                     projectId: "nes-kuafor",
@@ -89,7 +89,6 @@
 </head>
 <body class="bg-[#0A0A0A] text-gray-200 antialiased selection:bg-[#C5A059] selection:text-black min-h-screen flex flex-col">
 
-    <!-- Navigasyon -->
     <nav class="sticky top-0 z-40 bg-[#0A0A0A]/90 backdrop-blur-md border-b border-gray-800/80">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
             <div class="flex items-center gap-4">
@@ -101,35 +100,21 @@
                     </button>
 
                     <div id="dropdownMenu" class="hidden absolute left-0 mt-2 w-56 bg-[#121212] border border-[#C5A059]/40 rounded-2xl shadow-2xl py-3 z-50 divide-y divide-gray-800/80">
-                        <div class="px-4 py-2 text-[10px] uppercase tracking-widest text-gray-500 font-semibold">Menü & Navigasyon</div>
+                        <div class="px-4 py-2 text-[10px] uppercase tracking-widest text-gray-500 font-semibold">Navigasyon</div>
                         <div class="py-1">
-                            <a href="#anasayfa" onclick="window.toggleDropdownMenu()" class="flex items-center gap-3 px-4 py-2.5 text-xs font-semibold text-gray-300 hover:text-[#C5A059] hover:bg-gray-900/60 transition">
-                                <i class="fa-solid fa-house w-4 text-[#C5A059]"></i> Ana Sayfa
-                            </a>
-                            <a href="#hizmetler" onclick="window.toggleDropdownMenu()" class="flex items-center gap-3 px-4 py-2.5 text-xs font-semibold text-gray-300 hover:text-[#C5A059] hover:bg-gray-900/60 transition">
-                                <i class="fa-solid fa-scissors w-4 text-[#C5A059]"></i> Hizmetler & Fiyatlar
-                            </a>
-                            <a href="#galeri" onclick="window.toggleDropdownMenu()" class="flex items-center gap-3 px-4 py-2.5 text-xs font-semibold text-gray-300 hover:text-[#C5A059] hover:bg-gray-900/60 transition">
-                                <i class="fa-solid fa-images w-4 text-[#C5A059]"></i> Portfolyo
-                            </a>
-                            <a href="#randevu" onclick="window.toggleDropdownMenu()" class="flex items-center gap-3 px-4 py-2.5 text-xs font-semibold text-gray-300 hover:text-[#C5A059] hover:bg-gray-900/60 transition">
-                                <i class="fa-solid fa-calendar-plus w-4 text-[#C5A059]"></i> Randevu Al
-                            </a>
-                            <a href="#randevularim" onclick="window.toggleDropdownMenu()" class="flex items-center gap-3 px-4 py-2.5 text-xs font-semibold text-gray-300 hover:text-[#C5A059] hover:bg-gray-900/60 transition">
-                                <i class="fa-solid fa-calendar-check w-4 text-[#C5A059]"></i> Randevularım & Saç Kartım
-                            </a>
-                            <a href="#kuponlarim" onclick="window.toggleDropdownMenu()" class="flex items-center gap-3 px-4 py-2.5 text-xs font-semibold text-gray-300 hover:text-[#C5A059] hover:bg-gray-900/60 transition">
-                                <i class="fa-solid fa-ticket w-4 text-[#C5A059]"></i> Kupon Bilgilerim
-                            </a>
-                            <a href="#konum" onclick="window.toggleDropdownMenu()" class="flex items-center gap-3 px-4 py-2.5 text-xs font-semibold text-gray-300 hover:text-[#C5A059] hover:bg-gray-900/60 transition">
-                                <i class="fa-solid fa-map-location-dot w-4 text-[#C5A059]"></i> Konum & İletişim
-                            </a>
+                            <a href="#anasayfa" onclick="window.toggleDropdownMenu()" class="flex items-center gap-3 px-4 py-2.5 text-xs font-semibold text-gray-300 hover:text-[#C5A059] hover:bg-gray-900/60 transition"><i class="fa-solid fa-house w-4 text-[#C5A059]"></i> Ana Sayfa</a>
+                            <a href="#hizmetler" onclick="window.toggleDropdownMenu()" class="flex items-center gap-3 px-4 py-2.5 text-xs font-semibold text-gray-300 hover:text-[#C5A059] hover:bg-gray-900/60 transition"><i class="fa-solid fa-scissors w-4 text-[#C5A059]"></i> Hizmetler</a>
+                            <a href="#galeri" onclick="window.toggleDropdownMenu()" class="flex items-center gap-3 px-4 py-2.5 text-xs font-semibold text-gray-300 hover:text-[#C5A059] hover:bg-gray-900/60 transition"><i class="fa-solid fa-images w-4 text-[#C5A059]"></i> Portfolyo</a>
+                            <a href="#randevu" onclick="window.toggleDropdownMenu()" class="flex items-center gap-3 px-4 py-2.5 text-xs font-semibold text-gray-300 hover:text-[#C5A059] hover:bg-gray-900/60 transition"><i class="fa-solid fa-calendar-plus w-4 text-[#C5A059]"></i> Randevu Al</a>
+                            <a href="#randevularim" onclick="window.toggleDropdownMenu()" class="flex items-center gap-3 px-4 py-2.5 text-xs font-semibold text-gray-300 hover:text-[#C5A059] hover:bg-gray-900/60 transition"><i class="fa-solid fa-calendar-check w-4 text-[#C5A059]"></i> Randevularım</a>
+                            <a href="#kuponlarim" onclick="window.toggleDropdownMenu()" class="flex items-center gap-3 px-4 py-2.5 text-xs font-semibold text-gray-300 hover:text-[#C5A059] hover:bg-gray-900/60 transition"><i class="fa-solid fa-ticket w-4 text-[#C5A059]"></i> Kuponlarım</a>
+                            <a href="#konum" onclick="window.toggleDropdownMenu()" class="flex items-center gap-3 px-4 py-2.5 text-xs font-semibold text-gray-300 hover:text-[#C5A059] hover:bg-gray-900/60 transition"><i class="fa-solid fa-map-location-dot w-4 text-[#C5A059]"></i> Konum</a>
                         </div>
                     </div>
                 </div>
 
                 <a href="#" class="flex items-center gap-3 group">
-                    <div class="w-10 h-10 rounded-full gold-gradient flex items-center justify-center text-black font-bold shadow-lg shadow-[#C5A059]/20 group-hover:scale-105 transition">
+                    <div class="w-10 h-10 rounded-full gold-gradient flex items-center justify-center text-black font-bold shadow-lg shadow-[#C5A059]/20">
                         <i class="fa-solid fa-scissors"></i>
                     </div>
                     <div>
@@ -141,43 +126,29 @@
 
             <div class="flex items-center gap-3">
                 <div id="authButtonsContainer" class="flex items-center gap-2">
-                    <button onclick="window.openLoginModal()" class="text-xs font-semibold text-gray-300 hover:text-white px-3 py-2 rounded-xl transition">
-                        Giriş Yap
-                    </button>
-                    <button onclick="window.openRegisterModal()" class="text-xs font-semibold gold-gradient text-black px-4 py-2 rounded-xl shadow hover:opacity-90 transition">
-                        Üye Ol
-                    </button>
+                    <button onclick="window.openLoginModal()" class="text-xs font-semibold text-gray-300 hover:text-white px-3 py-2 rounded-xl transition">Giriş Yap</button>
+                    <button onclick="window.openRegisterModal()" class="text-xs font-semibold gold-gradient text-black px-4 py-2 rounded-xl shadow hover:opacity-90 transition">Üye Ol</button>
                 </div>
 
                 <div id="userProfileContainer" class="hidden items-center gap-3 bg-[#121212] border border-[#C5A059]/40 px-3.5 py-1.5 rounded-full">
                     <img id="navUserAvatar" src="" class="w-7 h-7 rounded-full object-cover border border-[#C5A059] hidden" alt="Profil">
                     <span class="text-xs font-semibold text-[#C5A059]" id="navUserName"></span>
-                    <button onclick="window.handleLogout()" class="text-xs text-gray-400 hover:text-red-400 transition ml-1" title="Çıkış Yap">
-                        <i class="fa-solid fa-right-from-bracket"></i>
-                    </button>
+                    <button onclick="window.handleLogout()" class="text-xs text-gray-400 hover:text-red-400 transition ml-1" title="Çıkış Yap"><i class="fa-solid fa-right-from-bracket"></i></button>
                 </div>
             </div>
         </div>
     </nav>
 
-    <!-- Hero Bölümü -->
     <section id="anasayfa" class="relative min-h-[85vh] flex items-center justify-center px-4 overflow-hidden border-b border-gray-800">
         <div class="absolute inset-0 bg-cover bg-center opacity-25 scale-105" style="background-image: url('https://images.unsplash.com/photo-1560066984-138dadb4c035?auto=format&fit=crop&w=1920&q=80');"></div>
         <div class="absolute inset-0 bg-gradient-to-t from-[#0A0A0A] via-[#0A0A0A]/70 to-transparent"></div>
 
         <div class="relative z-10 max-w-4xl mx-auto text-center space-y-6 py-16">
             <span class="inline-block border border-[#C5A059]/40 text-[#C5A059] px-4 py-1.5 rounded-full text-xs font-semibold tracking-widest uppercase bg-[#C5A059]/10">
-                <i class="fa-solid fa-gem mr-1.5"></i> Fıstıkağacı Üsküdar • Firebase Realtime Cloud
+                <i class="fa-solid fa-gem mr-1.5"></i> Fıstıkağacı Üsküdar • Canlı Firebase Bulut Senkronizasyonu
             </span>
-
-            <h1 class="text-4xl sm:text-6xl font-bold font-serif-title gold-gradient-text leading-tight">
-                Zarafet & Sanatın <br> Dokunuşu
-            </h1>
-
-            <p class="text-gray-300 text-sm sm:text-base max-w-2xl mx-auto font-light leading-relaxed">
-                Kişiye özel renk analizleri, birinci sınıf keratin bakımları ve uzman saç tasarım ekibimizle bulut tabanlı senkronize deneyim.
-            </p>
-
+            <h1 class="text-4xl sm:text-6xl font-bold font-serif-title gold-gradient-text leading-tight">Zarafet & Sanatın Dokunuşu</h1>
+            <p class="text-gray-300 text-sm sm:text-base max-w-2xl mx-auto font-light leading-relaxed">Kişiye özel renk analizleri, birinci sınıf keratin bakımları ve uzman saç tasarım ekibimizle bulut tabanlı rezervasyon deneyimi.</p>
             <div class="flex flex-wrap justify-center gap-4 pt-4">
                 <a href="#randevu" class="gold-gradient text-black font-semibold px-8 py-4 rounded-xl shadow-xl hover:opacity-90 transition text-sm uppercase tracking-wider">
                     <i class="fa-solid fa-calendar-plus mr-2"></i> Hemen Randevu Al
@@ -189,38 +160,32 @@
         </div>
     </section>
 
-    <!-- Hizmetler Kataloğu -->
     <section id="hizmetler" class="py-24 px-4 max-w-7xl mx-auto border-b border-gray-800">
         <div class="text-center mb-16">
             <span class="gold-text text-sm tracking-widest uppercase font-semibold">Şeffaf Fiyatlandırma</span>
             <h2 class="text-3xl md:text-4xl font-bold font-serif-title gold-text mt-2">Hizmetlerimiz & Fiyat Listesi</h2>
             <div class="w-24 h-0.5 bg-[#C5A059] mx-auto mt-4"></div>
-            <p class="text-gray-400 text-sm mt-3">Firebase bulut veritabanından dinamik olarak senkronize edilir.</p>
         </div>
-
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="mainServicesCatalogGrid"></div>
     </section>
 
-    <!-- Portfolyo Galeri -->
     <section id="galeri" class="py-24 px-4 bg-[#0A0A0A] border-b border-gray-800">
         <div class="max-w-7xl mx-auto">
             <div class="text-center mb-16">
                 <span class="gold-text text-sm tracking-widest uppercase">Portfolyo</span>
                 <h2 class="text-3xl md:text-4xl font-bold font-serif-title gold-text mt-2">Seçkin Tasarımlarımız</h2>
                 <div class="w-24 h-0.5 bg-[#C5A059] mx-auto mt-4"></div>
-                <p class="text-gray-400 text-sm mt-3">Fotoğraflara tıklayarak yüksek çözünürlüklü ve detaylı halini inceleyebilirsiniz.</p>
             </div>
             <div class="grid grid-cols-2 md:grid-cols-4 gap-4" id="portfolioGridContainer"></div>
         </div>
     </section>
 
-    <!-- Randevu Bölümü -->
     <section id="randevu" class="py-24 px-4 max-w-4xl mx-auto border-b border-gray-800">
         <div class="bg-[#121212] p-8 md:p-12 rounded-3xl shadow-2xl border border-[#C5A059]/30">
             <div class="text-center mb-10">
                 <span class="gold-text text-sm tracking-widest uppercase">VIP Rezervasyon</span>
                 <h2 class="text-3xl font-bold font-serif-title gold-text mt-2">Randevu Oluşturun</h2>
-                <p class="text-gray-400 text-sm mt-1">Bulut veritabanına anında senkronize edilir.</p>
+                <p class="text-gray-400 text-sm mt-1">Telefondan veya bilgisayardan alınan tüm randevular anında admin paneline düşer.</p>
             </div>
 
             <form onsubmit="window.handleBooking(event)" class="space-y-6">
@@ -239,14 +204,13 @@
                     <div class="flex justify-between items-center mb-2">
                         <label class="block text-xs font-semibold text-gray-300 uppercase tracking-wider">Hizmet Seçimi (Çoklu Seçim Aktif)</label>
                     </div>
-
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 mb-4" id="serviceSelectionGrid"></div>
 
-                    <!-- Kupon Kodu Alanı -->
+                    <!-- Coupon Code Input -->
                     <div class="bg-[#0A0A0A] border border-gray-800 p-4 rounded-2xl mb-4 space-y-2">
-                        <label class="block text-xs font-semibold text-gray-300 uppercase tracking-wider">İndirim Kuponu Kodu (Opsiyonel)</label>
+                        <label class="block text-xs font-semibold text-gray-300 uppercase tracking-wider">İndirim Kuponu Kodu</label>
                         <div class="flex gap-2">
-                            <input type="text" id="bCouponCode" placeholder="Örn: NES10, NES20, NES30" class="flex-1 bg-[#121212] border border-gray-800 text-white px-3 py-2.5 rounded-xl text-xs uppercase tracking-wider focus:border-[#C5A059] focus:outline-none">
+                            <input type="text" id="bCouponCode" placeholder="NES10, NES20..." class="flex-1 bg-[#121212] border border-gray-800 text-white px-3 py-2.5 rounded-xl text-xs uppercase focus:border-[#C5A059] focus:outline-none">
                             <button type="button" onclick="window.applyCouponCode()" class="bg-[#C5A059]/20 border border-[#C5A059] text-[#C5A059] px-4 py-2.5 rounded-xl text-xs font-semibold hover:bg-[#C5A059] hover:text-black transition">Uygula</button>
                         </div>
                         <span id="couponFeedback" class="text-xs block font-medium"></span>
@@ -255,23 +219,16 @@
                     <div id="serviceBasketSummary" class="bg-[#0A0A0A] border border-[#C5A059]/30 p-4 rounded-2xl space-y-3">
                         <div class="flex justify-between items-center border-b border-gray-800 pb-2">
                             <span class="text-xs uppercase tracking-wider text-gray-400 font-semibold flex items-center gap-1.5">
-                                <i class="fa-solid fa-basket-shopping gold-text"></i> Sepet
+                                <i class="fa-solid fa-basket-shopping text-[#C5A059]"></i> Sepet Özeti
                             </span>
                             <span id="basketCountBadge" class="text-[10px] bg-[#C5A059]/20 text-[#C5A059] px-2.5 py-0.5 rounded-full font-bold">0 Hizmet</span>
                         </div>
                         <div id="basketItemsList" class="text-xs text-gray-300 space-y-1 max-h-32 overflow-y-auto">
                             <p class="text-gray-500 italic">Lütfen hizmet seçiniz.</p>
                         </div>
-
-                        <div class="flex flex-wrap justify-between items-center pt-2 border-t border-gray-800/80 text-sm font-semibold">
-                            <div class="flex items-center gap-2 text-gray-300 text-xs">
-                                <i class="fa-solid fa-stopwatch gold-text"></i>
-                                <span>Süre: <strong id="basketTotalDuration" class="gold-text">0 Dk</strong></span>
-                            </div>
-                            <div class="text-right">
-                                <span class="text-xs text-gray-400 mr-2">Toplam:</span>
-                                <span id="basketTotalPrice" class="text-lg gold-text font-bold">0 ₺</span>
-                            </div>
+                        <div class="flex justify-between items-center pt-2 border-t border-gray-800 text-sm font-semibold">
+                            <span class="text-xs text-gray-400">Toplam Tutar:</span>
+                            <span id="basketTotalPrice" class="text-lg text-[#C5A059] font-bold">0 ₺</span>
                         </div>
                     </div>
                 </div>
@@ -284,9 +241,7 @@
                     <div>
                         <div class="flex justify-between items-center mb-2">
                             <label class="block text-xs font-semibold text-gray-300 uppercase tracking-wider">Saat *</label>
-                            <button type="button" onclick="window.updateTimeSlotAvailability()" class="text-[10px] text-[#C5A059] hover:underline flex items-center gap-1 font-semibold transition">
-                                <i class="fa-solid fa-rotate"></i> Saatleri Yenile
-                            </button>
+                            <button type="button" onclick="window.updateTimeSlotAvailability()" class="text-[10px] text-[#C5A059] hover:underline flex items-center gap-1 font-semibold transition"><i class="fa-solid fa-rotate"></i> Saatleri Yenile</button>
                         </div>
                         <select id="bTime" required class="w-full bg-[#0A0A0A] border border-gray-800 focus:border-[#C5A059] text-white px-4 py-3 rounded-xl focus:outline-none">
                             <option value="">Saat Seçiniz</option>
@@ -301,25 +256,20 @@
                 </div>
 
                 <div>
-                    <label class="block text-xs font-semibold text-gray-300 uppercase tracking-wider mb-2">Notunuz / Görsel</label>
+                    <label class="block text-xs font-semibold text-gray-300 uppercase tracking-wider mb-2">Notunuz / Görsel Referans</label>
                     <textarea id="bNote" rows="3" placeholder="Örn: Bu modelden istiyorum..." class="w-full bg-[#0A0A0A] border border-gray-800 focus:border-[#C5A059] text-white px-4 py-3 rounded-xl focus:outline-none mb-3"></textarea>
                     <input type="file" id="bFile" accept="image/*" class="w-full text-sm text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-[#C5A059] file:text-black cursor-pointer">
                 </div>
 
-                <button type="submit" class="w-full gold-gradient text-black font-semibold py-4 rounded-xl shadow-lg text-lg hover:opacity-90 transition uppercase tracking-wider text-xs font-bold">
+                <button type="submit" class="w-full gold-gradient text-black font-bold py-4 rounded-xl shadow-lg hover:opacity-90 transition uppercase tracking-wider text-xs">
                     Randevu Talebini Buluta Gönder
                 </button>
             </form>
-            <div id="bookingSuccess" class="hidden mt-6 bg-[#C5A059]/10 border border-[#C5A059] text-[#C5A059] p-4 rounded-xl text-center font-medium">
-                Randevu talebiniz alındı ve buluta kaydedildi!
-            </div>
-            <div id="bookingWarning" class="hidden mt-6 bg-red-900/40 border border-red-800 text-red-300 p-4 rounded-xl text-center font-medium">
-                Önce Giriş Yapmalısınız!
-            </div>
+            <div id="bookingSuccess" class="hidden mt-6 bg-[#C5A059]/10 border border-[#C5A059] text-[#C5A059] p-4 rounded-xl text-center font-medium">Randevu talebiniz buluta kaydedildi!</div>
+            <div id="bookingWarning" class="hidden mt-6 bg-red-900/40 border border-red-800 text-red-300 p-4 rounded-xl text-center font-medium">Önce Giriş Yapmalısınız!</div>
         </div>
     </section>
 
-    <!-- Müşteri Paneli -->
     <section id="randevularim" class="py-24 px-4 max-w-4xl mx-auto border-b border-gray-800">
         <div class="bg-[#121212] p-8 md:p-12 rounded-3xl shadow-2xl border border-[#C5A059]/30 space-y-6">
             <div class="flex flex-col sm:flex-row justify-between items-center gap-4 border-b border-gray-800 pb-6">
@@ -327,15 +277,13 @@
                     <div class="relative group">
                         <img id="profileCardAvatar" src="" class="w-16 h-16 rounded-full object-cover border-2 border-[#C5A059] shadow-lg hidden" alt="Profil">
                         <div id="profileCardAvatarPlaceholder" class="w-16 h-16 rounded-full gold-gradient text-black font-bold text-xl flex items-center justify-center shadow-lg hidden"></div>
-                        <label for="profileImgUploadInput" class="absolute bottom-0 right-0 w-6 h-6 rounded-full bg-[#0A0A0A] border border-[#C5A059] text-[#C5A059] flex items-center justify-center text-xs cursor-pointer hover:bg-[#C5A059] hover:text-black transition" title="Profil Fotoğrafı Değiştir">
-                            <i class="fa-solid fa-camera"></i>
-                        </label>
+                        <label for="profileImgUploadInput" class="absolute bottom-0 right-0 w-6 h-6 rounded-full bg-[#0A0A0A] border border-[#C5A059] text-[#C5A059] flex items-center justify-center text-xs cursor-pointer hover:bg-[#C5A059] hover:text-black transition" title="Fotoğraf Değiştir"><i class="fa-solid fa-camera"></i></label>
                         <input type="file" id="profileImgUploadInput" accept="image/*" class="hidden" onchange="window.handleProfileAvatarUpload(event)">
                     </div>
                     <div>
                         <span class="gold-text text-sm tracking-widest uppercase">Müşteri Paneli</span>
                         <h2 class="text-3xl font-bold font-serif-title gold-text mt-1">Randevularım & Profilim</h2>
-                        <p id="userWelcomeSub" class="text-gray-400 text-sm mt-0.5"></p>
+                        <p id="userWelcomeSub" class="text-gray-400 text-sm mt-0.5">Hesap randevularınız ve kişisel saç reçeteniz.</p>
                     </div>
                 </div>
                 <button onclick="window.renderUserAppointments()" class="text-xs bg-[#C5A059]/20 border border-[#C5A059] text-[#C5A059] px-4 py-2.5 rounded-xl hover:bg-[#C5A059] hover:text-black transition font-semibold flex items-center gap-2 shrink-0">
@@ -343,7 +291,6 @@
                 </button>
             </div>
 
-            <!-- Müşteri Saç Bilgi Kartı Görünümü -->
             <div id="clientHairCardWidget" class="hidden bg-[#0A0A0A] border border-[#C5A059]/40 p-6 rounded-2xl space-y-3">
                 <div class="flex items-center gap-2 text-[#C5A059] font-bold text-sm">
                     <i class="fa-solid fa-wand-magic-sparkles"></i>
@@ -355,43 +302,39 @@
                         <span id="clientWidgetHairType" class="text-white">-</span>
                     </div>
                     <div class="bg-[#121212] p-3 rounded-xl border border-gray-800 sm:col-span-2">
-                        <strong class="text-gray-400 block mb-1">Boya Formülü / Reçete:</strong>
+                        <strong class="text-gray-400 block mb-1">Boya Formülü:</strong>
                         <span id="clientWidgetFormula" class="text-[#C5A059] font-mono">-</span>
                     </div>
                 </div>
             </div>
 
-            <!-- Tab Seçimi: Aktif vs Geçmiş -->
             <div class="flex gap-2 border-b border-gray-800 pb-3">
                 <button onclick="window.switchClientAppTab('aktif')" id="clientTabAktif" class="text-xs bg-[#C5A059]/20 border border-[#C5A059] text-[#C5A059] px-4 py-2 rounded-xl font-semibold transition">Aktif Randevularım</button>
-                <button onclick="window.switchClientAppTab('gecmis')" id="clientTabGecmis" class="text-xs bg-gray-800 text-gray-300 hover:text-white px-4 py-2 rounded-xl font-semibold transition">Geçmiş Arşiv (Tamamlanan / İptal)</button>
+                <button onclick="window.switchClientAppTab('gecmis')" id="clientTabGecmis" class="text-xs bg-gray-800 text-gray-300 hover:text-white px-4 py-2 rounded-xl font-semibold transition">Geçmiş Arşiv</button>
             </div>
 
             <div id="myAppointmentsContainer" class="space-y-4"></div>
         </div>
     </section>
 
-    <!-- Kuponlarım Bölümü -->
     <section id="kuponlarim" class="py-24 px-4 max-w-4xl mx-auto border-b border-gray-800">
         <div class="bg-[#121212] p-8 md:p-12 rounded-3xl shadow-2xl border border-[#C5A059]/30 space-y-6">
             <div class="flex justify-between items-center border-b border-gray-800 pb-6">
                 <div>
                     <span class="gold-text text-sm tracking-widest uppercase">VIP Ayrıcalıklar</span>
                     <h2 class="text-3xl font-bold font-serif-title gold-text mt-2">Kupon Bilgilerim</h2>
-                    <p class="text-gray-400 text-sm mt-1">Salonumuz tarafından size tanımlanan aktif indirim kuponları. <b>Kuponun üzerine tıklayarak sepete otomatik ekleyebilirsiniz.</b></p>
+                    <p class="text-gray-400 text-sm mt-1">Kuponun üzerine tıklayarak sepete otomatik ekleyebilirsiniz.</p>
                 </div>
                 <button onclick="window.renderCustomerCoupons()" class="text-xs bg-[#C5A059]/20 border border-[#C5A059] text-[#C5A059] px-4 py-2.5 rounded-xl hover:bg-[#C5A059] hover:text-black transition font-semibold flex items-center gap-2">
                     <i class="fa-solid fa-rotate"></i> Yenile
                 </button>
             </div>
-
             <div id="customerCouponsContainer" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <p class="text-gray-500 italic col-span-full text-center py-6">Kuponları görebilmek için lütfen giriş yapınız.</p>
+                <p class="text-gray-500 italic col-span-full text-center py-6">Kuponları görebilmek için giriş yapmalısınız.</p>
             </div>
         </div>
     </section>
 
-    <!-- Konum -->
     <section id="konum" class="py-24 px-4 bg-[#0F0F0F] border-t border-gray-800">
         <div class="max-w-7xl mx-auto">
             <div class="text-center mb-16">
@@ -407,18 +350,17 @@
                     </p>
                     <div class="flex flex-col gap-3 text-gray-300 text-sm">
                         <p class="flex items-center gap-2"><i class="fa-solid fa-phone gold-text"></i> +90 (216) 000 00 00</p>
-                        <p class="flex items-center gap-2"><i class="fa-solid fa-calendar-days gold-text"></i> <b>Açık Günler:</b> Pazartesi - Pazar</p>
                         <p class="flex items-center gap-2"><i class="fa-solid fa-clock gold-text"></i> <b>Çalışma Saatleri:</b> 10:00 - 19:00</p>
                     </div>
                 </div>
                 <div class="h-96 rounded-3xl overflow-hidden border border-[#C5A059]/30 shadow-2xl bg-white relative">
-                    <iframe width="100%" height="100%" frameborder="0" scrolling="no" src="https://maps.google.com/maps?q=NES+KUAF%C3%96R,+F%C4%B1st%C4%B1ka%C4%9Fac%C4%B1,+%C4%B0spir+Soka%C4%9F%C4%B1+4/A,+34664+%C3%9Csk%C3%BCdar/%C4%B0stanbul&t=&z=17&ie=UTF8&iwloc=&output=embed" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+                    <iframe width="100%" height="100%" frameborder="0" scrolling="no" src="https://maps.google.com/maps?q=NES+KUAF%C3%96R,+F%C4%B1st%C4%B1ka%C4%9Fac%C4%B1,+%C4%B0spir+Soka%C4%9F%C4%B1+4/A,+34664+%C3%9Csk%C3%5C%C3%BCdar/%C4%B0stanbul&t=&z=17&ie=UTF8&iwloc=&output=embed" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Portfolyo Işık (Lightbox) Modalı (%50 başlangıç) -->
+    <!-- Lightbox Modal -->
     <div id="portfolioLightboxModal" class="fixed inset-0 bg-black/95 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
         <button onclick="window.closePortfolioLightbox()" class="absolute top-6 right-6 w-12 h-12 rounded-full bg-[#121212] border border-[#C5A059]/40 text-[#C5A059] flex items-center justify-center text-2xl hover:bg-[#C5A059] hover:text-black transition shadow-2xl z-50">&times;</button>
         <div class="max-w-5xl max-h-[90vh] flex flex-col items-center justify-center relative space-y-4">
@@ -427,19 +369,14 @@
             </div>
             <div class="flex items-center gap-4 bg-[#121212] border border-[#C5A059]/40 px-6 py-3 rounded-2xl shadow-2xl">
                 <span id="lightboxTitle" class="text-sm font-bold font-serif-title gold-text mr-4"></span>
-                <button onclick="window.zoomLightbox(-0.25)" class="w-9 h-9 rounded-xl bg-[#0A0A0A] border border-gray-800 text-white font-bold hover:border-[#C5A059] transition flex items-center justify-center" title="Küçült"><i class="fa-solid fa-magnifying-glass-minus"></i></button>
+                <button onclick="window.zoomLightbox(-0.25)" class="w-9 h-9 rounded-xl bg-[#0A0A0A] border border-gray-800 text-white font-bold hover:border-[#C5A059] transition flex items-center justify-center"><i class="fa-solid fa-magnifying-glass-minus"></i></button>
                 <span id="lightboxZoomBadge" class="text-xs font-mono gold-text font-bold px-2">%50</span>
-                <button onclick="window.zoomLightbox(0.25)" class="w-9 h-9 rounded-xl bg-[#0A0A0A] border border-gray-800 text-white font-bold hover:border-[#C5A059] transition flex items-center justify-center" title="Büyüt"><i class="fa-solid fa-magnifying-glass-plus"></i></button>
-                <button onclick="window.resetLightboxZoom()" class="text-xs bg-[#C5A059]/20 border border-[#C5A059] text-[#C5A059] px-3 py-2 rounded-xl font-semibold hover:bg-[#C5A059] hover:text-black transition ml-2">Sıfırla</button>
+                <button onclick="window.zoomLightbox(0.25)" class="w-9 h-9 rounded-xl bg-[#0A0A0A] border border-gray-800 text-white font-bold hover:border-[#C5A059] transition flex items-center justify-center"><i class="fa-solid fa-magnifying-glass-plus"></i></button>
             </div>
         </div>
     </div>
 
-    <footer class="py-12 px-4 text-center border-t border-gray-900 text-gray-500 text-sm mt-auto">
-        <p>&copy; 2026 NES KUAFÖR SALONU. Tüm hakları saklıdır. Bulut veritabanı ile senkronize çalışır.</p>
-    </footer>
-
-    <!-- Giriş Yap Modal -->
+    <!-- Login Modal -->
     <div id="loginModal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
         <div class="bg-[#121212] border border-[#C5A059]/40 rounded-3xl max-w-md w-full p-6 md:p-8 shadow-2xl relative">
             <button onclick="window.closeLoginModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white text-2xl">&times;</button>
@@ -454,10 +391,6 @@
                     <label class="block text-xs text-gray-400 uppercase mb-1">Şifre</label>
                     <input type="password" id="loginPass" placeholder="Şifreniz" class="w-full bg-[#0A0A0A] border border-gray-800 text-white px-4 py-2.5 rounded-xl focus:border-[#C5A059] focus:outline-none">
                 </div>
-                <div class="flex items-center gap-2 pt-1">
-                    <input type="checkbox" id="rememberMeCheck" class="w-4 h-4 accent-[#C5A059] rounded cursor-pointer">
-                    <label for="rememberMeCheck" class="text-xs text-gray-300 cursor-pointer select-none">Oturumumu Sürekli Açık Tut (Beni Hatırla)</label>
-                </div>
                 <div class="flex justify-end">
                     <button type="button" onclick="window.switchToForgotPass()" class="text-xs gold-text hover:underline">Şifremi Unuttum?</button>
                 </div>
@@ -465,31 +398,30 @@
                 <p id="loginErrorMsg" class="text-red-400 text-xs text-center hidden"></p>
             </div>
 
-            <!-- Şifremi Unuttum İstek Formu -->
             <div id="forgotStepView" class="space-y-4 hidden">
-                <p class="text-xs text-gray-400 leading-relaxed">Şifrenizi unuttuysanız aşağıya kayıtlı bilgilerinizi girerek admin paneline sıfırlama talebi gönderebilirsiniz.</p>
+                <p class="text-xs text-gray-400 leading-relaxed">Şifrenizi unuttuysanız talep gönderin.</p>
                 <div>
                     <label class="block text-xs text-gray-400 uppercase mb-1">Kayıtlı Ad Soyad</label>
                     <input type="text" id="forgotName" placeholder="Adınız Soyadınız" class="w-full bg-[#0A0A0A] border border-gray-800 text-white px-4 py-2.5 rounded-xl focus:border-[#C5A059] focus:outline-none">
                 </div>
                 <div>
-                    <label class="block text-xs text-gray-400 uppercase mb-1">Telefon Numaranız</label>
+                    <label class="block text-xs text-gray-400 uppercase mb-1">Telefon Numarası</label>
                     <input type="tel" id="forgotPhone" placeholder="0532 123 45 67" class="w-full bg-[#0A0A0A] border border-gray-800 text-white px-4 py-2.5 rounded-xl focus:border-[#C5A059] focus:outline-none">
                 </div>
                 <div class="flex justify-between items-center text-xs">
                     <button type="button" onclick="window.switchToLoginForm()" class="text-gray-400 hover:text-white"><i class="fa-solid fa-arrow-left mr-1"></i> Geri Dön</button>
                 </div>
-                <button onclick="window.handleSendForgotRequest()" class="w-full gold-gradient text-black font-semibold py-3 rounded-xl">Admin Paneline Talep Gönder</button>
+                <button onclick="window.handleSendForgotRequest()" class="w-full gold-gradient text-black font-semibold py-3 rounded-xl">Talep Gönder</button>
                 <p id="forgotErrorMsg" class="text-xs text-center hidden"></p>
             </div>
         </div>
     </div>
 
-    <!-- Üye Ol Modal -->
+    <!-- Register Modal -->
     <div id="registerModal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
         <div class="bg-[#121212] border border-[#C5A059]/40 rounded-3xl max-w-md w-full p-6 md:p-8 shadow-2xl relative">
             <button onclick="window.closeRegisterModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white text-2xl">&times;</button>
-            <h3 class="text-2xl font-bold font-serif-title gold-text mb-4 text-center">Yeni Üyelik Oluştur</h3>
+            <h3 class="text-2xl font-bold font-serif-title gold-text mb-4 text-center">Yeni Üyelik</h3>
             <div class="space-y-4">
                 <div>
                     <label class="block text-xs text-gray-400 uppercase mb-1">Ad Soyad</label>
@@ -533,12 +465,13 @@
             { id: 'p4', title: 'At Kuyruğu', image: 'https://images.unsplash.com/photo-1519699047748-de8e457a634e?auto=format&fit=crop&w=1200&q=80' }
         ];
 
-        // Firebase Realtime listeners
+        // Realtime Client Listeners (Syncs appointments and users instantly with Firestore)
         window.startClientRealtimeListeners = function() {
             if (!window.db || !window.appId) return;
 
             import("https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js").then(({ collection, onSnapshot }) => {
-                // 1. Randevular
+                
+                // 1. Appointments listener
                 onSnapshot(collection(window.db, 'artifacts', window.appId, 'public', 'data', 'nes_apps'), (snapshot) => {
                     let apps = [];
                     snapshot.forEach(doc => { apps.push({ id: doc.id, ...doc.data() }); });
@@ -546,7 +479,7 @@
                     window.renderUserAppointments();
                 });
 
-                // 2. Müşteri listesi
+                // 2. Users list listener
                 onSnapshot(collection(window.db, 'artifacts', window.appId, 'public', 'data', 'nes_users_list'), (snapshot) => {
                     let users = [];
                     snapshot.forEach(doc => { users.push({ id: doc.id, ...doc.data() }); });
@@ -556,7 +489,7 @@
                     }
                 });
 
-                // 3. Hizmetler
+                // 3. Services listener
                 onSnapshot(collection(window.db, 'artifacts', window.appId, 'public', 'data', 'nes_services_catalog'), (snapshot) => {
                     let srvs = [];
                     snapshot.forEach(doc => { srvs.push({ id: doc.id, ...doc.data() }); });
@@ -573,11 +506,8 @@
             if (!mins || mins <= 0) return '0 Dk';
             const hours = Math.floor(mins / 60);
             const remainingMins = mins % 60;
-            if (hours > 0 && remainingMins > 0) {
-                return `${hours} Saat ${remainingMins} Dk`;
-            } else if (hours > 0) {
-                return `${hours} Saat`;
-            }
+            if (hours > 0 && remainingMins > 0) return `${hours} Saat ${remainingMins} Dk`;
+            if (hours > 0) return `${hours} Saat`;
             return `${remainingMins} Dk`;
         }
 
@@ -622,9 +552,7 @@
 
         document.addEventListener('DOMContentLoaded', () => {
             const bDateEl = document.getElementById('bDate');
-            if (bDateEl) {
-                bDateEl.min = new Date().toISOString().split('T')[0];
-            }
+            if (bDateEl) bDateEl.min = new Date().toISOString().split('T')[0];
             window.renderMainServicesCatalog();
             window.renderServiceSelectionGrid();
             window.renderPortfolioGallery();
@@ -635,9 +563,7 @@
             document.addEventListener('click', (e) => {
                 const dropdown = document.getElementById('dropdownMenu');
                 const menuBtn = e.target.closest('button');
-                if (dropdown && !dropdown.contains(e.target) && !menuBtn) {
-                    dropdown.classList.add('hidden');
-                }
+                if (dropdown && !dropdown.contains(e.target) && !menuBtn) dropdown.classList.add('hidden');
             });
         });
 
@@ -645,17 +571,11 @@
             const container = document.getElementById('portfolioGridContainer');
             if (!container) return;
             container.innerHTML = '';
-            const items = getPortfolioData();
-            items.forEach(item => {
+            getPortfolioData().forEach(item => {
                 const card = document.createElement('div');
                 card.className = "overflow-hidden rounded-2xl aspect-[3/4] border border-gray-800 relative group cursor-pointer bg-[#121212]";
                 card.onclick = () => window.openPortfolioLightbox(item.image, item.title);
-                card.innerHTML = `
-                    <img src="${item.image}" alt="${item.title || 'Portfolyo'}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500" onerror="this.src='https://placehold.co/600x800/121212/C5A059?text=Gorsel+Yok'">
-                    <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition duration-300 flex items-end p-4">
-                        <span class="text-xs font-bold text-[#C5A059] font-serif-title">${item.title || ''} (Büyütmek için tıkla)</span>
-                    </div>
-                `;
+                card.innerHTML = `<img src="${item.image}" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">`;
                 container.appendChild(card);
             });
         };
@@ -663,61 +583,38 @@
         window.openPortfolioLightbox = function(imgSrc, title) {
             const modal = document.getElementById('portfolioLightboxModal');
             const img = document.getElementById('lightboxImg');
-            const titleEl = document.getElementById('lightboxTitle');
             if (modal && img) {
                 lightboxCurrentScale = 0.5;
                 img.style.transform = `scale(0.5)`;
                 img.src = imgSrc;
-                const badge = document.getElementById('lightboxZoomBadge');
-                if (badge) badge.innerText = `%50`;
-                if (titleEl) titleEl.innerText = title || 'Seçkin Tasarım';
+                document.getElementById('lightboxTitle').innerText = title || 'Tasarım';
                 modal.classList.remove('hidden');
             }
         };
-
-        window.closePortfolioLightbox = function() {
-            const modal = document.getElementById('portfolioLightboxModal');
-            if (modal) modal.classList.add('hidden');
-        };
-
+        window.closePortfolioLightbox = function() { document.getElementById('portfolioLightboxModal').classList.add('hidden'); };
         window.zoomLightbox = function(delta) {
             lightboxCurrentScale = Math.max(0.1, Math.min(3.5, lightboxCurrentScale + delta));
-            const img = document.getElementById('lightboxImg');
-            const badge = document.getElementById('lightboxZoomBadge');
-            if (img) img.style.transform = `scale(${lightboxCurrentScale})`;
-            if (badge) badge.innerText = `%${Math.round(lightboxCurrentScale * 100)}`;
-        };
-
-        window.resetLightboxZoom = function() {
-            lightboxCurrentScale = 0.5;
-            const img = document.getElementById('lightboxImg');
-            const badge = document.getElementById('lightboxZoomBadge');
-            if (img) img.style.transform = `scale(0.5)`;
-            if (badge) badge.innerText = `%50`;
+            document.getElementById('lightboxImg').style.transform = `scale(${lightboxCurrentScale})`;
+            document.getElementById('lightboxZoomBadge').innerText = `%${Math.round(lightboxCurrentScale * 100)}`;
         };
 
         window.renderMainServicesCatalog = function() {
             const container = document.getElementById('mainServicesCatalogGrid');
             if (!container) return;
             container.innerHTML = '';
-            const services = getServicesData();
-            services.forEach(srv => {
+            getServicesData().forEach(srv => {
                 const card = document.createElement('div');
-                card.className = "bg-[#121212] border border-gray-800 hover:border-[#C5A059]/60 p-6 rounded-2xl transition duration-300 flex flex-col justify-between group";
+                card.className = "bg-[#121212] border border-gray-800 p-6 rounded-2xl flex flex-col justify-between";
                 card.innerHTML = `
                     <div>
                         <div class="flex justify-between items-start mb-4">
-                            <span class="w-10 h-10 rounded-xl bg-[#C5A059]/10 text-[#C5A059] flex items-center justify-center text-lg font-bold">
-                                <i class="fa-solid fa-scissors"></i>
-                            </span>
+                            <span class="w-10 h-10 rounded-xl bg-[#C5A059]/10 text-[#C5A059] flex items-center justify-center font-bold"><i class="fa-solid fa-scissors"></i></span>
                             <span class="text-xl font-bold gold-text font-serif-title">${srv.price.toLocaleString('tr-TR')} ₺</span>
                         </div>
                         <h3 class="text-lg font-bold text-white mb-2">${srv.name}</h3>
-                        <p class="text-gray-400 text-xs leading-relaxed mb-4">Profesyonel salon uygulaması ve kişisel bakım dahil (${formatDuration(srv.durationMin)}).</p>
+                        <p class="text-gray-400 text-xs mb-4">Süre: ${formatDuration(srv.durationMin)}</p>
                     </div>
-                    <button onclick="window.toggleServiceFromGrid('${srv.id}')" class="w-full bg-[#0A0A0A] border border-[#C5A059]/40 text-[#C5A059] hover:bg-[#C5A059] hover:text-black font-semibold py-2.5 rounded-xl text-xs uppercase tracking-wider transition">
-                        Randevuya Ekle
-                    </button>
+                    <button onclick="window.toggleServiceFromGrid('${srv.id}')" class="w-full bg-[#0A0A0A] border border-[#C5A059]/40 text-[#C5A059] hover:bg-[#C5A059] hover:text-black py-2.5 rounded-xl text-xs uppercase tracking-wider transition font-semibold">Randevuya Ekle</button>
                 `;
                 container.appendChild(card);
             });
@@ -727,25 +624,17 @@
             const container = document.getElementById('serviceSelectionGrid');
             if (!container) return;
             container.innerHTML = '';
-            const services = getServicesData();
-            services.forEach(srv => {
+            getServicesData().forEach(srv => {
                 const isSelected = selectedServiceIds.includes(srv.id);
                 const card = document.createElement('div');
                 card.onclick = () => window.toggleServiceSelection(srv.id);
-                card.className = `p-3 rounded-xl border cursor-pointer transition flex justify-between items-center ${
-                    isSelected ? 'bg-[#C5A059]/15 border-[#C5A059] text-white shadow-md' : 'bg-[#0A0A0A] border-gray-800 text-gray-400 hover:border-gray-600'
-                }`;
+                card.className = `p-3 rounded-xl border cursor-pointer transition flex justify-between items-center ${isSelected ? 'bg-[#C5A059]/15 border-[#C5A059] text-white' : 'bg-[#0A0A0A] border-gray-800 text-gray-400'}`;
                 card.innerHTML = `
-                    <div class="pr-2">
-                        <div class="font-medium text-xs text-gray-200 flex items-center gap-1.5">
-                            <i class="fa-solid ${isSelected ? 'fa-square-check gold-text' : 'fa-square text-gray-700'}"></i>
-                            <span>${srv.name}</span>
-                        </div>
-                        <div class="text-[10px] text-gray-400 mt-1">
-                            <span><i class="fa-solid fa-clock gold-text mr-1"></i>${formatDuration(srv.durationMin)}</span>
-                        </div>
+                    <div class="pr-2 text-xs">
+                        <div class="font-medium text-gray-200"><i class="fa-solid ${isSelected ? 'fa-square-check gold-text' : 'fa-square text-gray-700'} mr-1"></i>${srv.name}</div>
+                        <div class="text-[10px] text-gray-400 mt-0.5">${formatDuration(srv.durationMin)}</div>
                     </div>
-                    <span class="gold-text font-bold text-xs shrink-0">${srv.price.toLocaleString('tr-TR')} ₺</span>
+                    <span class="gold-text font-bold text-xs">${srv.price.toLocaleString('tr-TR')} ₺</span>
                 `;
                 container.appendChild(card);
             });
@@ -762,224 +651,122 @@
         };
 
         window.toggleServiceFromGrid = function(id) {
-            if (!selectedServiceIds.includes(id)) {
-                selectedServiceIds.push(id);
-            }
+            if (!selectedServiceIds.includes(id)) selectedServiceIds.push(id);
             window.renderServiceSelectionGrid();
-            const randevuSec = document.getElementById('randevu');
-            if (randevuSec) randevuSec.scrollIntoView({ behavior: 'smooth' });
+            document.getElementById('randevu').scrollIntoView({ behavior: 'smooth' });
         };
 
         window.applyCouponCode = function(codeToApply = null) {
             const input = document.getElementById('bCouponCode');
             const feedback = document.getElementById('couponFeedback');
             if (!input || !feedback) return;
-
-            if (codeToApply) {
-                input.value = codeToApply;
-            }
-
+            if (codeToApply) input.value = codeToApply;
             const code = input.value.trim().toUpperCase();
-            if (!currentUser) {
-                feedback.innerText = "⚠️ Kupon kullanmak için giriş yapmalısınız.";
-                feedback.className = "text-xs block font-medium text-amber-400";
-                return;
-            }
 
-            if (!code) {
-                appliedCouponDiscount = 0;
-                appliedCouponName = '';
-                feedback.innerText = "";
-                updateBasketSummary();
+            if (!currentUser) {
+                feedback.innerText = "⚠️ Kupon için giriş yapmalısınız.";
+                feedback.className = "text-xs block font-medium text-amber-400";
                 return;
             }
 
             let coupons = [];
             try { coupons = JSON.parse(localStorage.getItem('nes_customer_coupons')) || []; } catch(e){}
-
-            const userKey = currentUser.trim().toLowerCase();
-            const found = coupons.find(c => 
-                c.code.toUpperCase() === code && 
-                c.customerName.trim().toLowerCase() === userKey && 
-                new Date().getTime() < c.expiresAt
-            );
+            const found = coupons.find(c => c.code.toUpperCase() === code && c.customerName.toLowerCase() === currentUser.toLowerCase() && new Date().getTime() < c.expiresAt);
 
             if (found) {
                 appliedCouponDiscount = found.discountPercent;
                 appliedCouponName = found.code;
-                feedback.innerText = `✓ ${found.code} kuponu uygulandı (%${found.discountPercent} İndirim)`;
+                feedback.innerText = `✓ ${found.code} uygulandı (%${found.discountPercent})`;
                 feedback.className = "text-xs block font-medium text-emerald-400";
                 updateBasketSummary();
             } else {
                 appliedCouponDiscount = 0;
                 appliedCouponName = '';
-                feedback.innerText = "⚠️ Geçersiz, süresi dolmuş veya bu hesaba tanımlı olmayan kupon.";
+                feedback.innerText = "⚠️ Geçersiz veya süresi dolmuş kupon.";
                 feedback.className = "text-xs block font-medium text-red-400";
                 updateBasketSummary();
             }
         };
 
-        window.useCouponDirectly = function(couponCode) {
-            const randevuSec = document.getElementById('randevu');
-            if (randevuSec) randevuSec.scrollIntoView({ behavior: 'smooth' });
-            window.applyCouponCode(couponCode);
-            showToast(`✓ ${couponCode} kuponu sepete eklendi!`, 'success');
+        window.useCouponDirectly = function(code) {
+            document.getElementById('randevu').scrollIntoView({ behavior: 'smooth' });
+            window.applyCouponCode(code);
+            showToast(`✓ ${code} sepete eklendi!`, 'success');
         };
 
         function updateBasketSummary() {
             const listEl = document.getElementById('basketItemsList');
             const badgeEl = document.getElementById('basketCountBadge');
-            const totalDurEl = document.getElementById('basketTotalDuration');
             const totalPriceEl = document.getElementById('basketTotalPrice');
-
-            if (!listEl || !badgeEl || !totalDurEl || !totalPriceEl) return;
+            if (!listEl || !badgeEl || !totalPriceEl) return;
 
             const services = getServicesData();
-
             if (selectedServiceIds.length === 0) {
-                listEl.innerHTML = '<p class="text-gray-500 italic">Lütfen hizmet seçiniz.</p>';
+                listEl.innerHTML = '<p class="text-gray-500 italic">Hizmet seçiniz.</p>';
                 badgeEl.innerText = '0 Hizmet';
-                totalDurEl.innerText = '0 Dk';
                 totalPriceEl.innerText = '0 ₺';
                 return;
             }
 
-            let totalMin = 0;
             let rawTotalPrice = 0;
             let htmlList = '<ul class="space-y-1">';
-
             selectedServiceIds.forEach(id => {
                 const srv = services.find(s => s.id === id);
                 if (srv) {
-                    totalMin += srv.durationMin;
                     rawTotalPrice += srv.price;
-                    htmlList += `
-                        <li class="flex justify-between items-center text-xs">
-                            <span class="text-gray-200"><i class="fa-solid fa-circle-check gold-text mr-1 text-[10px]"></i>${srv.name} (${formatDuration(srv.durationMin)})</span>
-                            <span class="gold-text font-semibold">${srv.price.toLocaleString('tr-TR')} ₺</span>
-                        </li>
-                    `;
+                    htmlList += `<li class="flex justify-between"><span>${srv.name}</span><span class="gold-text">${srv.price} ₺</span></li>`;
                 }
             });
 
             let finalPrice = rawTotalPrice;
             if (appliedCouponDiscount > 0) {
-                const discountAmount = (rawTotalPrice * appliedCouponDiscount) / 100;
-                finalPrice = rawTotalPrice - discountAmount;
-                htmlList += `
-                    <li class="flex justify-between items-center text-xs text-emerald-400 pt-1 border-t border-gray-800">
-                        <span><i class="fa-solid fa-ticket mr-1"></i>Kupon İndirimi (${appliedCouponName} - %${appliedCouponDiscount})</span>
-                        <span>-${discountAmount.toLocaleString('tr-TR')} ₺</span>
-                    </li>
-                `;
+                finalPrice = rawTotalPrice - ((rawTotalPrice * appliedCouponDiscount) / 100);
             }
-
             htmlList += '</ul>';
             listEl.innerHTML = htmlList;
             badgeEl.innerText = `${selectedServiceIds.length} Hizmet`;
-            totalDurEl.innerText = formatDuration(totalMin);
             totalPriceEl.innerText = `${finalPrice.toLocaleString('tr-TR')} ₺`;
         }
 
         window.updateTimeSlotAvailability = function() {
             const dateVal = document.getElementById('bDate').value;
             const timeSelect = document.getElementById('bTime');
-            const infoEl = document.getElementById('timeSlotInfo');
             if (!timeSelect) return;
-
-            const selectedTimeVal = timeSelect.value;
             const apps = getApps();
+            const bookedTimes = apps.filter(a => a.date === dateVal && (a.status === 'Beklemede' || a.status === 'Onaylandı')).map(a => a.time);
 
-            if (!dateVal) {
-                timeSelect.innerHTML = '<option value="">Önce Tarih Seçiniz</option>';
-                ALL_TIME_SLOTS.forEach(time => {
-                    const opt = document.createElement('option');
-                    opt.value = time;
-                    opt.textContent = time;
-                    timeSelect.appendChild(opt);
-                });
-                if (infoEl) infoEl.innerText = '';
-                return;
-            }
-
-            const bookedTimes = apps
-                .filter(a => a.date === dateVal && (a.status === 'Beklemede' || a.status === 'Onaylandı'))
-                .map(a => a.time);
-
-            let availableCount = 0;
             timeSelect.innerHTML = '<option value="">Saat Seçiniz</option>';
-
             ALL_TIME_SLOTS.forEach(time => {
                 const isBooked = bookedTimes.includes(time);
-                const option = document.createElement('option');
-                option.value = time;
-
-                if (isBooked) {
-                    option.textContent = `${time} - (DOLU)`;
-                    option.disabled = true;
-                    option.className = 'text-gray-600 bg-gray-900';
-                } else {
-                    option.textContent = `${time} (Müsait)`;
-                    availableCount++;
-                }
-
-                if (time === selectedTimeVal && !isBooked) {
-                    option.selected = true;
-                }
-
-                timeSelect.appendChild(option);
+                const opt = document.createElement('option');
+                opt.value = time;
+                opt.textContent = isBooked ? `${time} (DOLU)` : `${time} (Müsait)`;
+                if (isBooked) opt.disabled = true;
+                timeSelect.appendChild(opt);
             });
-
-            if (infoEl) {
-                infoEl.innerText = availableCount === 0 ? '⚠ Bu tarih tamamen doludur.' : `✓ ${availableCount} boş saat var.`;
-                infoEl.className = `text-xs mt-1.5 block font-medium ${availableCount === 0 ? 'text-red-400' : 'text-emerald-400'}`;
-            }
         };
 
         window.updateNavAuthUI = function() {
-            if (currentUser) {
-                let users = getUsersList();
-                const exists = users.some(u => u.name.toLowerCase() === currentUser.toLowerCase());
-                if (!exists) {
-                    window.handleLogout();
-                    showToast('Hesabınız yönetici tarafından silindi.', 'warning');
-                    return;
-                }
-            }
-
             const authButtons = document.getElementById('authButtonsContainer');
             const userProfile = document.getElementById('userProfileContainer');
             const navUserName = document.getElementById('navUserName');
             const navUserAvatar = document.getElementById('navUserAvatar');
-            const userWelcomeSub = document.getElementById('userWelcomeSub');
             const profileCardAvatar = document.getElementById('profileCardAvatar');
             const profileCardAvatarPlaceholder = document.getElementById('profileCardAvatarPlaceholder');
 
             if (currentUser) {
                 if (authButtons) authButtons.classList.add('hidden');
-                if (userProfile) {
-                    userProfile.classList.remove('hidden');
-                    userProfile.classList.add('flex');
-                }
+                if (userProfile) { userProfile.classList.remove('hidden'); userProfile.classList.add('flex'); }
                 if (navUserName) navUserName.innerText = currentUser;
-                if (userWelcomeSub) userWelcomeSub.innerText = `${currentUser} hesap randevuları ve profil ayarları.`;
 
                 let users = getUsersList();
                 const uObj = users.find(u => u.name.toLowerCase() === currentUser.toLowerCase());
                 const avatar = uObj && uObj.avatar ? uObj.avatar : '';
 
                 if (avatar) {
-                    if (navUserAvatar) {
-                        navUserAvatar.src = avatar;
-                        navUserAvatar.classList.remove('hidden');
-                    }
-                    if (profileCardAvatar) {
-                        profileCardAvatar.src = avatar;
-                        profileCardAvatar.classList.remove('hidden');
-                    }
-                    if (profileCardAvatarPlaceholder) {
-                        profileCardAvatarPlaceholder.classList.add('hidden');
-                    }
+                    if (navUserAvatar) { navUserAvatar.src = avatar; navUserAvatar.classList.remove('hidden'); }
+                    if (profileCardAvatar) { profileCardAvatar.src = avatar; profileCardAvatar.classList.remove('hidden'); }
+                    if (profileCardAvatarPlaceholder) profileCardAvatarPlaceholder.classList.add('hidden');
                 } else {
                     if (navUserAvatar) navUserAvatar.classList.add('hidden');
                     if (profileCardAvatar) profileCardAvatar.classList.add('hidden');
@@ -988,20 +775,12 @@
                         profileCardAvatarPlaceholder.classList.remove('hidden');
                     }
                 }
-
                 window.renderUserAppointments();
                 window.renderClientHairCardWidget();
                 window.renderCustomerCoupons();
             } else {
                 if (authButtons) authButtons.classList.remove('hidden');
-                if (userProfile) {
-                    userProfile.classList.remove('flex');
-                    userProfile.classList.add('hidden');
-                }
-                const hairWidget = document.getElementById('clientHairCardWidget');
-                if (hairWidget) hairWidget.classList.add('hidden');
-                const couponsContainer = document.getElementById('customerCouponsContainer');
-                if (couponsContainer) couponsContainer.innerHTML = '<p class="text-gray-500 italic col-span-full text-center py-6">Kuponları görebilmek için lütfen giriş yapınız.</p>';
+                if (userProfile) { userProfile.classList.remove('flex'); userProfile.classList.add('hidden'); }
             }
         };
 
@@ -1009,17 +788,15 @@
             if (!currentUser) return;
             const file = e.target.files[0];
             if (!file) return;
-
             const reader = new FileReader();
             reader.onload = function(uploadEvent) {
-                const base64Img = uploadEvent.target.result;
                 let users = getUsersList();
                 const idx = users.findIndex(u => u.name.toLowerCase() === currentUser.toLowerCase());
                 if (idx !== -1) {
-                    users[idx].avatar = base64Img;
+                    users[idx].avatar = uploadEvent.target.result;
                     saveUsersList(users);
                     window.updateNavAuthUI();
-                    showToast('Profil fotoğrafınız güncellendi!', 'success');
+                    showToast('Profil fotoğrafı güncellendi!', 'success');
                 }
             };
             reader.readAsDataURL(file);
@@ -1029,451 +806,170 @@
             const container = document.getElementById('customerCouponsContainer');
             if (!container) return;
             if (!currentUser) {
-                container.innerHTML = '<p class="text-gray-500 italic col-span-full text-center py-6">Kuponları görebilmek için lütfen giriş yapınız.</p>';
+                container.innerHTML = '<p class="text-gray-500 italic col-span-full text-center py-6">Kuponlar için giriş yapın.</p>';
                 return;
             }
-
             let coupons = [];
             try { coupons = JSON.parse(localStorage.getItem('nes_customer_coupons')) || []; } catch(e){}
-
-            const userKey = currentUser.trim().toLowerCase();
-            const myCoupons = coupons.filter(c => c.customerName.trim().toLowerCase() === userKey);
-
+            const myCoupons = coupons.filter(c => c.customerName.toLowerCase() === currentUser.toLowerCase());
             container.innerHTML = '';
             if (myCoupons.length === 0) {
-                container.innerHTML = '<p class="text-gray-500 italic col-span-full text-center py-6">Tanımlı aktif indirim kuponunuz bulunmuyor.</p>';
+                container.innerHTML = '<p class="text-gray-500 italic col-span-full text-center py-6">Aktif kuponunuz bulunmuyor.</p>';
                 return;
             }
-
             myCoupons.forEach(c => {
-                const now = new Date().getTime();
-                const timeLeft = c.expiresAt - now;
-                const isExpired = timeLeft <= 0;
-
                 const card = document.createElement('div');
-                card.className = `bg-[#0A0A0A] border p-5 rounded-2xl flex flex-col justify-between space-y-3 cursor-pointer hover:border-[#C5A059] transition ${isExpired ? 'border-red-900/60 opacity-60' : 'border-[#C5A059]/40'}`;
-                
-                if (!isExpired) {
-                    card.onclick = () => window.useCouponDirectly(c.code);
-                }
-
-                card.innerHTML = `
-                    <div class="flex justify-between items-start">
-                        <div>
-                            <span class="text-[10px] text-gray-500 uppercase tracking-wider block font-semibold">VIP İndirim Kuponu (Kullanmak için tıkla)</span>
-                            <h3 class="text-xl font-bold font-serif-title gold-text mt-0.5">${c.code}</h3>
-                        </div>
-                        <span class="text-sm font-bold bg-[#C5A059]/20 text-[#C5A059] px-3 py-1 rounded-full">%${c.discountPercent} İndirim</span>
-                    </div>
-                    <div class="text-xs space-y-1 text-gray-300">
-                        <p><strong>Durum:</strong> ${isExpired ? '<span class="text-red-400 font-semibold">Süresi Doldu</span>' : '<span class="text-emerald-400 font-semibold">Aktif (Sepete eklemek için tıkla)</span>'}</p>
-                        <p class="font-mono text-amber-400 countdown-timer" data-expires="${c.expiresAt}">Kalan Süre: Hesaplanıyor...</p>
-                    </div>
-                `;
+                card.className = "bg-[#0A0A0A] border border-[#C5A059]/40 p-5 rounded-2xl cursor-pointer hover:border-[#C5A059]";
+                card.onclick = () => window.useCouponDirectly(c.code);
+                card.innerHTML = `<h3 class="text-xl font-bold font-serif-title gold-text">${c.code}</h3><p class="text-xs text-emerald-400 mt-1">%${c.discountPercent} İndirim (Sepete ekle)</p>`;
                 container.appendChild(card);
             });
-            updateCouponCountdowns();
         };
-
-        function updateCouponCountdowns() {
-            const timers = document.querySelectorAll('.countdown-timer');
-            timers.forEach(timer => {
-                const expires = parseInt(timer.getAttribute('data-expires'), 10);
-                const now = new Date().getTime();
-                const diff = expires - now;
-
-                if (diff <= 0) {
-                    timer.innerText = "Süresi Doldu (0g 0s 0d 0s)";
-                    timer.className = "font-mono text-red-400 countdown-timer";
-                } else {
-                    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-                    const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-                    const mins = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
-                    const secs = Math.floor((diff % (1000 * 60)) / 1000);
-                    timer.innerText = `Kalan Süre: ${days}g ${hours}s ${mins}d ${secs}s`;
-                }
-            });
-        }
 
         window.renderClientHairCardWidget = function() {
             const widget = document.getElementById('clientHairCardWidget');
-            const typeEl = document.getElementById('clientWidgetHairType');
-            const formulaEl = document.getElementById('clientWidgetFormula');
-
-            if (!widget || !typeEl || !formulaEl) return;
-            if (!currentUser) {
-                widget.classList.add('hidden');
-                return;
-            }
-
+            if (!widget || !currentUser) { if(widget) widget.classList.add('hidden'); return; }
             let notepad = [];
             try { notepad = JSON.parse(localStorage.getItem('nes_customer_notepad')) || []; } catch(e){}
-
-            const userKey = currentUser.trim().toLowerCase();
-            const info = notepad.find(n => (n.customerName || '').trim().toLowerCase() === userKey);
-
+            const info = notepad.find(n => (n.customerName || '').toLowerCase() === currentUser.toLowerCase());
             if (info) {
-                typeEl.innerText = info.hairType || 'Belirtilmemiş';
-                formulaEl.innerText = info.formula || 'Reçete girilmemiş';
+                document.getElementById('clientWidgetHairType').innerText = info.hairType || '-';
+                document.getElementById('clientWidgetFormula').innerText = info.formula || '-';
                 widget.classList.remove('hidden');
             } else {
                 widget.classList.add('hidden');
             }
         };
 
-        window.switchClientAppTab = function(tabName) {
-            clientActiveAppTab = tabName;
-            const btnAktif = document.getElementById('clientTabAktif');
-            const btnGecmis = document.getElementById('clientTabGecmis');
-
-            if (tabName === 'aktif') {
-                if (btnAktif) btnAktif.className = "text-xs bg-[#C5A059]/20 border border-[#C5A059] text-[#C5A059] px-4 py-2 rounded-xl font-semibold transition";
-                if (btnGecmis) btnGecmis.className = "text-xs bg-gray-800 text-gray-300 hover:text-white px-4 py-2 rounded-xl font-semibold transition";
-            } else {
-                if (btnAktif) btnAktif.className = "text-xs bg-gray-800 text-gray-300 hover:text-white px-4 py-2 rounded-xl font-semibold transition";
-                if (btnGecmis) btnGecmis.className = "text-xs bg-[#C5A059]/20 border border-[#C5A059] text-[#C5A059] px-4 py-2 rounded-xl font-semibold transition";
-            }
+        window.switchClientAppTab = function(tab) {
+            clientActiveAppTab = tab;
+            document.getElementById('clientTabAktif').className = tab === 'aktif' ? "text-xs bg-[#C5A059]/20 border border-[#C5A059] text-[#C5A059] px-4 py-2 rounded-xl font-semibold" : "text-xs bg-gray-800 text-gray-300 px-4 py-2 rounded-xl font-semibold";
+            document.getElementById('clientTabGecmis').className = tab === 'gecmis' ? "text-xs bg-[#C5A059]/20 border border-[#C5A059] text-[#C5A059] px-4 py-2 rounded-xl font-semibold" : "text-xs bg-gray-800 text-gray-300 px-4 py-2 rounded-xl font-semibold";
             window.renderUserAppointments();
         };
 
         window.handleBooking = function(e) {
             e.preventDefault();
-            const warningEl = document.getElementById('bookingWarning');
-            const successEl = document.getElementById('bookingSuccess');
-            if (warningEl) warningEl.classList.add('hidden');
-            if (successEl) successEl.classList.add('hidden');
-
-            if (!currentUser) {
-                if (warningEl) warningEl.classList.remove('hidden');
-                window.openLoginModal();
-                return;
-            }
-
-            if (selectedServiceIds.length === 0) {
-                showToast('Hizmet seçmelisiniz!', 'warning');
-                return;
-            }
-
-            const selectedDate = document.getElementById('bDate').value;
-            const selectedTime = document.getElementById('bTime').value;
-
-            if (!selectedDate || !selectedTime) {
-                showToast('Tarih ve saat seçiniz.', 'warning');
-                return;
-            }
+            if (!currentUser) { window.openLoginModal(); return; }
+            if (selectedServiceIds.length === 0) { showToast('Hizmet seçmelisiniz.', 'warning'); return; }
 
             const services = getServicesData();
-            let totalMin = 0;
-            let rawTotalPrice = 0;
-            let selectedObjects = [];
-
+            let totalMin = 0, rawTotalPrice = 0, selectedObjects = [];
             selectedServiceIds.forEach(id => {
-                const srv = services.find(s => s.id === id);
-                if (srv) {
-                    totalMin += srv.durationMin;
-                    rawTotalPrice += srv.price;
-                    selectedObjects.push(srv);
-                }
+                const s = services.find(x => x.id === id);
+                if (s) { totalMin += s.durationMin; rawTotalPrice += s.price; selectedObjects.push(s); }
             });
 
             let finalPrice = rawTotalPrice;
-            if (appliedCouponDiscount > 0) {
-                finalPrice = rawTotalPrice - ((rawTotalPrice * appliedCouponDiscount) / 100);
-            }
+            if (appliedCouponDiscount > 0) finalPrice = rawTotalPrice - ((rawTotalPrice * appliedCouponDiscount) / 100);
 
-            const serviceNames = selectedObjects.map(s => s.name).join(' + ');
-            let fullServiceSummary = `${serviceNames} (${formatDuration(totalMin)} - ${finalPrice.toLocaleString('tr-TR')} ₺)`;
-            if (appliedCouponDiscount > 0) {
-                fullServiceSummary += ` [Kupon: ${appliedCouponName} -%${appliedCouponDiscount}]`;
-            }
-
-            const fileInput = document.getElementById('bFile');
-
-            const saveRecord = (img64) => {
-                const apps = getApps();
-                let usedCouponObj = null;
-
-                if (appliedCouponName) {
-                    let coupons = [];
-                    try { coupons = JSON.parse(localStorage.getItem('nes_customer_coupons')) || []; } catch(e){}
-                    const userKey = currentUser.trim().toLowerCase();
-                    const idx = coupons.findIndex(c => c.code.toUpperCase() === appliedCouponName.toUpperCase() && c.customerName.trim().toLowerCase() === userKey);
-                    if (idx !== -1) {
-                        usedCouponObj = coupons[idx];
-                        coupons.splice(idx, 1);
-                        localStorage.setItem('nes_customer_coupons', JSON.stringify(coupons));
-                    }
-                }
-
-                const newRecord = {
-                    id: Date.now(),
-                    name: currentUser,
-                    phone: document.getElementById('bPhone').value,
-                    service: fullServiceSummary,
-                    serviceList: selectedObjects,
-                    totalPrice: finalPrice,
-                    totalDurationMin: totalMin,
-                    date: selectedDate,
-                    time: selectedTime,
-                    note: document.getElementById('bNote').value,
-                    image: img64,
-                    status: 'Beklemede',
-                    reply: '',
-                    usedCouponCode: appliedCouponName || null,
-                    usedCouponObject: usedCouponObj
-                };
-                apps.unshift(newRecord);
-                saveApps(apps);
-
-                e.target.reset();
-                selectedServiceIds = [];
-                appliedCouponDiscount = 0;
-                appliedCouponName = '';
-                document.getElementById('couponFeedback').innerText = '';
-                window.renderServiceSelectionGrid();
-                window.updateTimeSlotAvailability();
-                window.renderCustomerCoupons();
-                
-                if (successEl) {
-                    successEl.classList.remove('hidden');
-                    setTimeout(() => successEl.classList.add('hidden'), 4000);
-                }
-                window.renderUserAppointments();
+            const record = {
+                id: Date.now(),
+                name: currentUser,
+                phone: document.getElementById('bPhone').value,
+                service: selectedObjects.map(s => s.name).join(' + '),
+                totalPrice: finalPrice,
+                totalDurationMin: totalMin,
+                date: document.getElementById('bDate').value,
+                time: document.getElementById('bTime').value,
+                note: document.getElementById('bNote').value,
+                image: '',
+                status: 'Beklemede',
+                reply: ''
             };
 
-            if (fileInput.files && fileInput.files[0]) {
-                const reader = new FileReader();
-                reader.onload = function(uploadEvent) {
-                    saveRecord(uploadEvent.target.result);
-                };
-                reader.readAsDataURL(fileInput.files[0]);
-            } else {
-                saveRecord('');
-            }
+            let apps = getApps();
+            apps.unshift(record);
+            saveApps(apps);
+
+            e.target.reset();
+            selectedServiceIds = [];
+            appliedCouponDiscount = 0;
+            appliedCouponName = '';
+            window.renderServiceSelectionGrid();
+            window.renderUserAppointments();
+            showToast('Randevunuz buluta kaydedildi!', 'success');
         };
 
         window.renderUserAppointments = function() {
             const container = document.getElementById('myAppointmentsContainer');
-            if (!container) return;
+            if (!container || !currentUser) return;
             const apps = getApps();
-            const myApps = apps.filter(a => a.name && currentUser && a.name.toLowerCase() === currentUser.toLowerCase());
-            
-            let filtered = myApps;
-            if (clientActiveAppTab === 'aktif') {
-                filtered = myApps.filter(a => a.status === 'Beklemede' || a.status === 'Onaylandı');
-            } else {
-                filtered = myApps.filter(a => a.status === 'Tamamlandı' || a.status === 'İptal' || a.status === 'Müşteri İptali');
-            }
+            const myApps = apps.filter(a => a.name && a.name.toLowerCase() === currentUser.toLowerCase());
+            const filtered = clientActiveAppTab === 'aktif' ? myApps.filter(a => a.status === 'Beklemede' || a.status === 'Onaylandı') : myApps.filter(a => a.status !== 'Beklemede' && a.status !== 'Onaylandı');
 
             container.innerHTML = '';
             if (filtered.length === 0) {
-                container.innerHTML = `<p class="text-center text-gray-400 py-6 text-sm">${clientActiveAppTab === 'aktif' ? 'Aktif randevunuz bulunmuyor.' : 'Geçmiş arşivinizde randevu bulunmuyor.'}</p>`;
+                container.innerHTML = '<p class="text-center text-gray-400 py-6 text-sm">Randevunuz bulunmuyor.</p>';
                 return;
             }
 
             filtered.forEach(app => {
                 const div = document.createElement('div');
-                div.className = "bg-[#0A0A0A] p-6 rounded-2xl border border-gray-800 flex flex-col md:flex-row justify-between items-start md:items-center gap-4";
+                div.className = "bg-[#0A0A0A] p-6 rounded-2xl border border-gray-800 flex justify-between items-center";
                 div.innerHTML = `
-                    <div class="space-y-2">
-                        <span class="gold-text font-serif font-bold text-lg">${app.service}</span>
-                        <p class="text-xs text-gray-300"><i class="fa-solid fa-calendar-days text-[#C5A059] mr-1"></i> ${app.date} - <b>${app.time}</b></p>
-                        <p class="text-xs text-gray-400">Not: ${app.note || 'Yok'}</p>
-                        ${app.reply ? `<p class="text-xs text-emerald-400 mt-2 bg-emerald-950/40 border border-emerald-900 p-3 rounded-xl"><i class="fa-solid fa-reply mr-1"></i> <b>Yanıt:</b> ${app.reply}</p>` : ''}
+                    <div>
+                        <strong class="text-[#C5A059] block">${app.service}</strong>
+                        <span class="text-xs text-gray-300">${app.date} - ${app.time}</span>
                     </div>
-                    <div class="flex flex-col sm:flex-row items-end sm:items-center gap-3">
-                        <span class="px-3.5 py-1.5 rounded-full text-xs font-semibold ${
-                            app.status === 'Onaylandı' ? 'bg-emerald-900/50 text-emerald-300 border border-emerald-800' :
-                            app.status === 'Tamamlandı' ? 'bg-blue-900/50 text-blue-300 border border-blue-800' :
-                            app.status === 'Müşteri İptali' || app.status === 'İptal' ? 'bg-red-900/50 text-red-300 border border-red-800' :
-                            'bg-amber-900/50 text-amber-300 border border-amber-800'
-                        }">${app.status}</span>
-                        ${(app.status === 'Beklemede' || app.status === 'Onaylandı') ? `
-                            <button onclick="window.cancelCustomerAppointment(${app.id})" class="text-xs bg-red-950/60 border border-red-800/80 text-red-400 hover:bg-red-900 hover:text-white px-3 py-1.5 rounded-xl font-semibold transition flex items-center gap-1.5 shadow">
-                                <i class="fa-solid fa-xmark"></i> Randevuyu İptal Et
-                            </button>
-                        ` : ''}
-                    </div>
+                    <span class="px-3 py-1 rounded-full text-xs font-bold bg-amber-950 text-amber-400 border border-amber-800">${app.status}</span>
                 `;
                 container.appendChild(div);
             });
         };
 
-        window.cancelCustomerAppointment = function(appId) {
-            let apps = getApps();
-            const target = apps.find(a => a.id === appId);
-            if (target) {
-                target.status = 'Müşteri İptali';
-
-                if (target.usedCouponObject) {
-                    let coupons = [];
-                    try { coupons = JSON.parse(localStorage.getItem('nes_customer_coupons')) || []; } catch(e){}
-                    coupons.push(target.usedCouponObject);
-                    localStorage.setItem('nes_customer_coupons', JSON.stringify(coupons));
-                }
-
-                saveApps(apps);
-                showToast('Randevunuz iptal edildi ve kuponunuz hesabınıza geri yüklendi.', 'success');
-                window.updateTimeSlotAvailability();
-                window.renderUserAppointments();
-                window.renderCustomerCoupons();
-            }
-        };
-
-        window.openLoginModal = function() {
-            const modal = document.getElementById('loginModal');
-            if (modal) {
-                window.switchToLoginForm();
-                modal.classList.remove('hidden');
-            }
-        };
-
-        window.closeLoginModal = function() {
-            const modal = document.getElementById('loginModal');
-            if (modal) modal.classList.add('hidden');
-        };
-
-        window.switchToLoginForm = function() {
-            document.getElementById('loginFormView').classList.remove('hidden');
-            document.getElementById('forgotStepView').classList.add('hidden');
-        };
-
-        window.switchToForgotPass = function() {
-            document.getElementById('loginFormView').classList.add('hidden');
-            document.getElementById('forgotStepView').classList.remove('hidden');
-        };
-
-        window.handleSendForgotRequest = function() {
-            const name = document.getElementById('forgotName').value.trim();
-            const phone = document.getElementById('forgotPhone').value.trim();
-            const err = document.getElementById('forgotErrorMsg');
-
-            if (!name || !phone) {
-                err.innerText = "Lütfen ad soyad ve telefon numaranızı yazınız!";
-                err.classList.remove('hidden');
-                return;
-            }
-
-            let forgotReqs = [];
-            try { forgotReqs = JSON.parse(localStorage.getItem('nes_forgot_password_requests')) || []; } catch(e){}
-
-            forgotReqs.unshift({
-                id: Date.now(),
-                name: name,
-                phone: phone,
-                timestamp: new Date().toLocaleString('tr-TR')
-            });
-
-            localStorage.setItem('nes_forgot_password_requests', JSON.stringify(forgotReqs));
-
-            if (window.db && window.appId) {
-                import("https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js").then(({ doc, setDoc }) => {
-                    setDoc(doc(window.db, 'artifacts', window.appId, 'public', 'data', 'nes_forgot_password_requests', String(forgotReqs[0].id)), forgotReqs[0]);
-                });
-            }
-
-            err.innerText = "Şifre sıfırlama talebiniz admin paneline iletildi!";
-            err.className = "text-emerald-400 text-xs text-center";
-            err.classList.remove('hidden');
-
-            setTimeout(() => {
-                window.closeLoginModal();
-                window.switchToLoginForm();
-            }, 2500);
-        };
-
-        window.openRegisterModal = function() {
-            document.getElementById('registerModal').classList.remove('hidden');
-        };
-
-        window.closeRegisterModal = function() {
-            document.getElementById('registerModal').classList.add('hidden');
-        };
+        window.openLoginModal = function() { document.getElementById('loginModal').classList.remove('hidden'); };
+        window.closeLoginModal = function() { document.getElementById('loginModal').classList.add('hidden'); };
+        window.openRegisterModal = function() { document.getElementById('registerModal').classList.remove('hidden'); };
+        window.closeRegisterModal = function() { document.getElementById('registerModal').classList.add('hidden'); };
 
         window.handleRegisterSubmit = function() {
             const name = document.getElementById('regName').value.trim();
             const pass = document.getElementById('regPass').value;
-            const err = document.getElementById('regErrorMsg');
-
-            if(!name || pass.length < 6) {
-                err.innerText = "Ad soyad ve en az 6 karakter şifre girin!";
-                err.classList.remove('hidden');
-                return;
-            }
-
+            if (!name || pass.length < 6) return showToast('Ad ve en az 6 karakter şifre girin.', 'warning');
             let users = getUsersList();
-            if (users.some(u => u.name.toLowerCase() === name.toLowerCase())) {
-                err.innerText = "Bu isimde kullanıcı zaten var!";
-                err.classList.remove('hidden');
-                return;
-            }
-
+            if (users.some(u => u.name.toLowerCase() === name.toLowerCase())) return showToast('Bu isim zaten kayıtlı.', 'warning');
+            
             users.push({ name, pass, avatar: '' });
             saveUsersList(users);
-
             window.closeRegisterModal();
             window.openLoginModal();
-            showToast('Kayıt başarılı. Giriş yapabilirsiniz.', 'success');
+            showToast('Kayıt başarılı!', 'success');
         };
 
         window.handleLoginSubmit = function() {
-            const identifier = document.getElementById('loginName').value.trim().toLowerCase();
+            const name = document.getElementById('loginName').value.trim();
             const pass = document.getElementById('loginPass').value;
-            const rememberMe = document.getElementById('rememberMeCheck').checked;
-            const err = document.getElementById('loginErrorMsg');
-            
             let users = getUsersList();
-            const foundUser = users.find(u => u.name.toLowerCase() === identifier && u.pass === pass);
-
-            if(foundUser) {
-                currentUser = foundUser.name;
-                if (rememberMe) {
-                    localStorage.setItem('nes_logged_user', foundUser.name);
-                    sessionStorage.removeItem('nes_logged_user');
-                } else {
-                    sessionStorage.setItem('nes_logged_user', foundUser.name);
-                    localStorage.setItem('nes_logged_user', foundUser.name);
-                }
+            const found = users.find(u => u.name.toLowerCase() === name.toLowerCase() && u.pass === pass);
+            if (found) {
+                currentUser = found.name;
+                localStorage.setItem('nes_logged_user', found.name);
                 window.closeLoginModal();
                 window.updateNavAuthUI();
-                showToast(`Hoş geldiniz, ${foundUser.name}!`, 'success');
+                showToast(`Hoş geldiniz, ${found.name}!`, 'success');
             } else {
-                err.innerText = "Hatalı Ad Soyad veya Şifre!";
-                err.classList.add('hidden');
+                showToast('Hatalı ad veya şifre.', 'warning');
             }
         };
 
         window.handleLogout = function() {
             currentUser = null;
             localStorage.removeItem('nes_logged_user');
-            sessionStorage.removeItem('nes_logged_user');
             window.updateNavAuthUI();
-            showToast('Oturum kapatıldı.', 'info');
+            showToast('Çıkış yapıldı.', 'info');
         };
 
-        window.toggleDropdownMenu = function() {
-            const dropdown = document.getElementById('dropdownMenu');
-            if (dropdown) dropdown.classList.toggle('hidden');
-        };
+        window.toggleDropdownMenu = function() { document.getElementById('dropdownMenu').classList.toggle('hidden'); };
 
         function showToast(message, type = 'info') {
             const container = document.getElementById('toastContainer');
             if (!container) return;
-
             const toast = document.createElement('div');
-            toast.className = `pointer-events-auto px-4 py-3 rounded-xl border text-xs font-semibold shadow-2xl transition-all duration-300 ${
-                type === 'success' ? 'bg-[#121212] border-emerald-500 text-emerald-400' :
-                type === 'warning' ? 'bg-[#121212] border-amber-500 text-amber-400' :
-                'bg-[#121212] border-[#C5A059] text-[#C5A059]'
-            }`;
-
+            toast.className = `px-4 py-3 rounded-xl border text-xs font-semibold ${type === 'success' ? 'bg-[#121212] border-emerald-500 text-emerald-400' : 'bg-[#121212] border-[#C5A059] text-[#C5A059]'}`;
             toast.innerText = message;
             container.appendChild(toast);
-
-            setTimeout(() => {
-                toast.classList.add('opacity-0', 'translate-y-2');
-                setTimeout(() => toast.remove(), 300);
-            }, 3000);
+            setTimeout(() => toast.remove(), 3000);
         }
     </script>
 </body>
