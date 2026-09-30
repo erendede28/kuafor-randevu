@@ -98,6 +98,7 @@
                 </div>
 
                 <div id="userProfileContainer" class="hidden items-center gap-3 bg-[#121212] border border-[#C5A059]/40 px-3.5 py-1.5 rounded-full">
+                    <img id="navUserAvatar" src="" class="w-7 h-7 rounded-full object-cover border border-[#C5A059] hidden" alt="Profil">
                     <span class="text-xs font-semibold text-[#C5A059]" id="navUserName"></span>
                     <button onclick="window.handleLogout()" class="text-xs text-gray-400 hover:text-red-400 transition ml-1" title="Çıkış Yap">
                         <i class="fa-solid fa-right-from-bracket"></i>
@@ -152,7 +153,7 @@
                 <span class="gold-text text-sm tracking-widest uppercase">Portfolyo</span>
                 <h2 class="text-3xl md:text-4xl font-bold font-serif-title gold-text mt-2">Seçkin Tasarımlarımız</h2>
                 <div class="w-24 h-0.5 bg-[#C5A059] mx-auto mt-4"></div>
-                <p class="text-gray-400 text-sm mt-3">Fotoğraflara tıklayarak orijinal yüksek çözünürlüklü halini inceleyebilirsiniz.</p>
+                <p class="text-gray-400 text-sm mt-3">Fotoğraflara tıklayarak yüksek çözünürlüklü ve detaylı halini inceleyebilirsiniz.</p>
             </div>
             <div class="grid grid-cols-2 md:grid-cols-4 gap-4" id="portfolioGridContainer"></div>
         </div>
@@ -262,13 +263,24 @@
         </div>
     </section>
 
+    <!-- Müşteri Paneli: Randevularım ve Profil Fotoğrafı Yönetimi -->
     <section id="randevularim" class="py-24 px-4 max-w-4xl mx-auto border-b border-gray-800">
         <div class="bg-[#121212] p-8 md:p-12 rounded-3xl shadow-2xl border border-[#C5A059]/30 space-y-6">
             <div class="flex flex-col sm:flex-row justify-between items-center gap-4 border-b border-gray-800 pb-6">
-                <div>
-                    <span class="gold-text text-sm tracking-widest uppercase">Müşteri Paneli</span>
-                    <h2 class="text-3xl font-bold font-serif-title gold-text mt-2">Randevularım & Geçmiş Arşiv</h2>
-                    <p id="userWelcomeSub" class="text-gray-400 text-sm mt-1"></p>
+                <div class="flex items-center gap-4">
+                    <div class="relative group">
+                        <img id="profileCardAvatar" src="" class="w-16 h-16 rounded-full object-cover border-2 border-[#C5A059] shadow-lg hidden" alt="Profil">
+                        <div id="profileCardAvatarPlaceholder" class="w-16 h-16 rounded-full gold-gradient text-black font-bold text-xl flex items-center justify-center shadow-lg hidden"></div>
+                        <label for="profileImgUploadInput" class="absolute bottom-0 right-0 w-6 h-6 rounded-full bg-[#0A0A0A] border border-[#C5A059] text-[#C5A059] flex items-center justify-center text-xs cursor-pointer hover:bg-[#C5A059] hover:text-black transition" title="Profil Fotoğrafı Değiştir">
+                            <i class="fa-solid fa-camera"></i>
+                        </label>
+                        <input type="file" id="profileImgUploadInput" accept="image/*" class="hidden" onchange="window.handleProfileAvatarUpload(event)">
+                    </div>
+                    <div>
+                        <span class="gold-text text-sm tracking-widest uppercase">Müşteri Paneli</span>
+                        <h2 class="text-3xl font-bold font-serif-title gold-text mt-1">Randevularım & Profilim</h2>
+                        <p id="userWelcomeSub" class="text-gray-400 text-sm mt-0.5"></p>
+                    </div>
                 </div>
                 <button onclick="window.renderUserAppointments()" class="text-xs bg-[#C5A059]/20 border border-[#C5A059] text-[#C5A059] px-4 py-2.5 rounded-xl hover:bg-[#C5A059] hover:text-black transition font-semibold flex items-center gap-2 shrink-0">
                     <i class="fa-solid fa-rotate"></i> Yenile
@@ -309,7 +321,7 @@
                 <div>
                     <span class="gold-text text-sm tracking-widest uppercase">VIP Ayrıcalıklar</span>
                     <h2 class="text-3xl font-bold font-serif-title gold-text mt-2">Kupon Bilgilerim</h2>
-                    <p class="text-gray-400 text-sm mt-1">Salonumuz tarafından size tanımlanan aktif indirim kuponları ve süre sayaçları. <b>Kuponun üzerine tıklayarak sepete otomatik ekleyebilirsiniz.</b></p>
+                    <p class="text-gray-400 text-sm mt-1">Salonumuz tarafından size tanımlanan aktif indirim kuponları. <b>Kuponun üzerine tıklayarak sepete otomatik ekleyebilirsiniz.</b></p>
                 </div>
                 <button onclick="window.renderCustomerCoupons()" class="text-xs bg-[#C5A059]/20 border border-[#C5A059] text-[#C5A059] px-4 py-2.5 rounded-xl hover:bg-[#C5A059] hover:text-black transition font-semibold flex items-center gap-2">
                     <i class="fa-solid fa-rotate"></i> Yenile
@@ -348,7 +360,7 @@
         </div>
     </section>
 
-    <!-- Orijinal Yüksek Çözünürlüklü Portfolyo Lightbox Modalı -->
+    <!-- Portfolyo Işık (Lightbox) Modalı -->
     <div id="portfolioLightboxModal" class="fixed inset-0 bg-black/95 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
         <button onclick="window.closePortfolioLightbox()" class="absolute top-6 right-6 w-12 h-12 rounded-full bg-[#121212] border border-[#C5A059]/40 text-[#C5A059] flex items-center justify-center text-2xl hover:bg-[#C5A059] hover:text-black transition shadow-2xl z-50">&times;</button>
         <div class="max-w-5xl max-h-[90vh] flex flex-col items-center justify-center relative space-y-4">
@@ -358,7 +370,7 @@
             <div class="flex items-center gap-4 bg-[#121212] border border-[#C5A059]/40 px-6 py-3 rounded-2xl shadow-2xl">
                 <span id="lightboxTitle" class="text-sm font-bold font-serif-title gold-text mr-4"></span>
                 <button onclick="window.zoomLightbox(-0.25)" class="w-9 h-9 rounded-xl bg-[#0A0A0A] border border-gray-800 text-white font-bold hover:border-[#C5A059] transition flex items-center justify-center" title="Küçült"><i class="fa-solid fa-magnifying-glass-minus"></i></button>
-                <span id="lightboxZoomBadge" class="text-xs font-mono gold-text font-bold px-2">%100</span>
+                <span id="lightboxZoomBadge" class="text-xs font-mono gold-text font-bold px-2">%50</span>
                 <button onclick="window.zoomLightbox(0.25)" class="w-9 h-9 rounded-xl bg-[#0A0A0A] border border-gray-800 text-white font-bold hover:border-[#C5A059] transition flex items-center justify-center" title="Büyüt"><i class="fa-solid fa-magnifying-glass-plus"></i></button>
                 <button onclick="window.resetLightboxZoom()" class="text-xs bg-[#C5A059]/20 border border-[#C5A059] text-[#C5A059] px-3 py-2 rounded-xl font-semibold hover:bg-[#C5A059] hover:text-black transition ml-2">Sıfırla</button>
             </div>
@@ -369,6 +381,7 @@
         <p>&copy; 2026 NES KUAFÖR SALONU. Tüm hakları saklıdır.</p>
     </footer>
 
+    <!-- Giriş Yap Modal -->
     <div id="loginModal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
         <div class="bg-[#121212] border border-[#C5A059]/40 rounded-3xl max-w-md w-full p-6 md:p-8 shadow-2xl relative">
             <button onclick="window.closeLoginModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white text-2xl">&times;</button>
@@ -382,6 +395,10 @@
                 <div>
                     <label class="block text-xs text-gray-400 uppercase mb-1">Şifre</label>
                     <input type="password" id="loginPass" placeholder="Şifreniz" class="w-full bg-[#0A0A0A] border border-gray-800 text-white px-4 py-2.5 rounded-xl focus:border-[#C5A059] focus:outline-none">
+                </div>
+                <div class="flex items-center gap-2 pt-1">
+                    <input type="checkbox" id="rememberMeCheck" class="w-4 h-4 accent-[#C5A059] rounded cursor-pointer">
+                    <label for="rememberMeCheck" class="text-xs text-gray-300 cursor-pointer select-none">Oturumumu Sürekli Açık Tut (Beni Hatırla)</label>
                 </div>
                 <div class="flex justify-end">
                     <button type="button" onclick="window.switchToForgotPass()" class="text-xs gold-text hover:underline">Şifremi Unuttum?</button>
@@ -408,6 +425,7 @@
         </div>
     </div>
 
+    <!-- Üye Ol Modal -->
     <div id="registerModal" class="fixed inset-0 bg-black/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
         <div class="bg-[#121212] border border-[#C5A059]/40 rounded-3xl max-w-md w-full p-6 md:p-8 shadow-2xl relative">
             <button onclick="window.closeRegisterModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white text-2xl">&times;</button>
@@ -430,13 +448,13 @@
     <div id="toastContainer" class="fixed bottom-6 right-6 z-[100] flex flex-col gap-3 pointer-events-none"></div>
 
     <script>
-        let currentUser = localStorage.getItem('nes_logged_user') || null;
+        let currentUser = localStorage.getItem('nes_logged_user') || sessionStorage.getItem('nes_logged_user') || null;
         const ALL_TIME_SLOTS = ['10:00', '12:00', '14:00', '16:00', '18:00'];
         let selectedServiceIds = [];
         let clientActiveAppTab = 'aktif';
         let appliedCouponDiscount = 0;
         let appliedCouponName = '';
-        let lightboxCurrentScale = 1.0;
+        let lightboxCurrentScale = 0.5; // Starts at 50% scale
 
         const DEFAULT_SERVICES_DATA = [
             { id: 'ombre', name: 'Ombre Tasarımı', price: 3500, durationMin: 180 },
@@ -536,11 +554,11 @@
             const img = document.getElementById('lightboxImg');
             const titleEl = document.getElementById('lightboxTitle');
             if (modal && img) {
-                lightboxCurrentScale = 1.0;
-                img.style.transform = `scale(1)`;
+                lightboxCurrentScale = 0.5; // Starts at 50% scale
+                img.style.transform = `scale(0.5)`;
                 img.src = imgSrc;
                 const badge = document.getElementById('lightboxZoomBadge');
-                if (badge) badge.innerText = `%100`;
+                if (badge) badge.innerText = `%50`;
                 if (titleEl) titleEl.innerText = title || 'Seçkin Tasarım';
                 modal.classList.remove('hidden');
             }
@@ -552,7 +570,7 @@
         };
 
         window.zoomLightbox = function(delta) {
-            lightboxCurrentScale = Math.max(0.5, Math.min(3.5, lightboxCurrentScale + delta));
+            lightboxCurrentScale = Math.max(0.1, Math.min(3.5, lightboxCurrentScale + delta));
             const img = document.getElementById('lightboxImg');
             const badge = document.getElementById('lightboxZoomBadge');
             if (img) img.style.transform = `scale(${lightboxCurrentScale})`;
@@ -560,11 +578,11 @@
         };
 
         window.resetLightboxZoom = function() {
-            lightboxCurrentScale = 1.0;
+            lightboxCurrentScale = 0.5;
             const img = document.getElementById('lightboxImg');
             const badge = document.getElementById('lightboxZoomBadge');
-            if (img) img.style.transform = `scale(1)`;
-            if (badge) badge.innerText = `%100`;
+            if (img) img.style.transform = `scale(0.5)`;
+            if (badge) badge.innerText = `%50`;
         };
 
         window.renderMainServicesCatalog = function() {
@@ -802,7 +820,7 @@
             });
 
             if (infoEl) {
-                infoEl.innerText = availableCount === 0 ? '⚠️ Bu tarih tamamen doludur.' : `✓ ${availableCount} boş saat var.`;
+                infoEl.innerText = availableCount === 0 ? '⚠️️ Bu tarih tamamen doludur.' : `✓ ${availableCount} boş saat var.`;
                 infoEl.className = `text-xs mt-1.5 block font-medium ${availableCount === 0 ? 'text-red-400' : 'text-emerald-400'}`;
             }
         };
@@ -821,7 +839,10 @@
             const authButtons = document.getElementById('authButtonsContainer');
             const userProfile = document.getElementById('userProfileContainer');
             const navUserName = document.getElementById('navUserName');
+            const navUserAvatar = document.getElementById('navUserAvatar');
             const userWelcomeSub = document.getElementById('userWelcomeSub');
+            const profileCardAvatar = document.getElementById('profileCardAvatar');
+            const profileCardAvatarPlaceholder = document.getElementById('profileCardAvatarPlaceholder');
 
             if (currentUser) {
                 if (authButtons) authButtons.classList.add('hidden');
@@ -830,7 +851,34 @@
                     userProfile.classList.add('flex');
                 }
                 if (navUserName) navUserName.innerText = currentUser;
-                if (userWelcomeSub) userWelcomeSub.innerText = `${currentUser} hesap randevuları.`;
+                if (userWelcomeSub) userWelcomeSub.innerText = `${currentUser} hesap randevuları ve profil ayarları.`;
+
+                // Kullanıcının avatarını getir
+                let users = getUsersList();
+                const uObj = users.find(u => u.name.toLowerCase() === currentUser.toLowerCase());
+                const avatar = uObj && uObj.avatar ? uObj.avatar : '';
+
+                if (avatar) {
+                    if (navUserAvatar) {
+                        navUserAvatar.src = avatar;
+                        navUserAvatar.classList.remove('hidden');
+                    }
+                    if (profileCardAvatar) {
+                        profileCardAvatar.src = avatar;
+                        profileCardAvatar.classList.remove('hidden');
+                    }
+                    if (profileCardAvatarPlaceholder) {
+                        profileCardAvatarPlaceholder.classList.add('hidden');
+                    }
+                } else {
+                    if (navUserAvatar) navUserAvatar.classList.add('hidden');
+                    if (profileCardAvatar) profileCardAvatar.classList.add('hidden');
+                    if (profileCardAvatarPlaceholder) {
+                        profileCardAvatarPlaceholder.innerText = currentUser.charAt(0).toUpperCase();
+                        profileCardAvatarPlaceholder.classList.remove('hidden');
+                    }
+                }
+
                 window.renderUserAppointments();
                 window.renderClientHairCardWidget();
                 window.renderCustomerCoupons();
@@ -845,6 +893,26 @@
                 const couponsContainer = document.getElementById('customerCouponsContainer');
                 if (couponsContainer) couponsContainer.innerHTML = '<p class="text-gray-500 italic col-span-full text-center py-6">Kuponları görebilmek için lütfen giriş yapınız.</p>';
             }
+        };
+
+        window.handleProfileAvatarUpload = function(e) {
+            if (!currentUser) return;
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(uploadEvent) {
+                const base64Img = uploadEvent.target.result;
+                let users = getUsersList();
+                const idx = users.findIndex(u => u.name.toLowerCase() === currentUser.toLowerCase());
+                if (idx !== -1) {
+                    users[idx].avatar = base64Img;
+                    saveUsersList(users);
+                    window.updateNavAuthUI();
+                    showToast('Profil fotoğrafınız güncellendi!', 'success');
+                }
+            };
+            reader.readAsDataURL(file);
         };
 
         window.renderCustomerCoupons = function() {
@@ -1013,6 +1081,20 @@
 
             const saveRecord = (img64) => {
                 const apps = getApps();
+                let usedCouponObj = null;
+
+                if (appliedCouponName) {
+                    let coupons = [];
+                    try { coupons = JSON.parse(localStorage.getItem('nes_customer_coupons')) || []; } catch(e){}
+                    const userKey = currentUser.trim().toLowerCase();
+                    const idx = coupons.findIndex(c => c.code.toUpperCase() === appliedCouponName.toUpperCase() && c.customerName.trim().toLowerCase() === userKey);
+                    if (idx !== -1) {
+                        usedCouponObj = coupons[idx];
+                        coupons.splice(idx, 1);
+                        localStorage.setItem('nes_customer_coupons', JSON.stringify(coupons));
+                    }
+                }
+
                 const newRecord = {
                     id: Date.now(),
                     name: currentUser,
@@ -1027,23 +1109,11 @@
                     image: img64,
                     status: 'Beklemede',
                     reply: '',
-                    usedCouponCode: appliedCouponName || null
+                    usedCouponCode: appliedCouponName || null,
+                    usedCouponObject: usedCouponObj
                 };
                 apps.push(newRecord);
                 saveApps(apps);
-
-                if (appliedCouponName) {
-                    let coupons = [];
-                    try { coupons = JSON.parse(localStorage.getItem('nes_customer_coupons')) || []; } catch(e){}
-                    const userKey = currentUser.trim().toLowerCase();
-                    const idx = coupons.findIndex(c => c.code.toUpperCase() === appliedCouponName.toUpperCase() && c.customerName.trim().toLowerCase() === userKey);
-                    if (idx !== -1) {
-                        newRecord.usedCouponObject = coupons[idx];
-                        coupons.splice(idx, 1);
-                        localStorage.setItem('nes_customer_coupons', JSON.stringify(coupons));
-                        saveApps(apps);
-                    }
-                }
 
                 e.target.reset();
                 selectedServiceIds = [];
@@ -1128,10 +1198,8 @@
                 if (target.usedCouponObject) {
                     let coupons = [];
                     try { coupons = JSON.parse(localStorage.getItem('nes_customer_coupons')) || []; } catch(e){}
-                    if (new Date().getTime() < target.usedCouponObject.expiresAt) {
-                        coupons.push(target.usedCouponObject);
-                        localStorage.setItem('nes_customer_coupons', JSON.stringify(coupons));
-                    }
+                    coupons.push(target.usedCouponObject);
+                    localStorage.setItem('nes_customer_coupons', JSON.stringify(coupons));
                 }
 
                 saveApps(apps);
@@ -1231,7 +1299,7 @@
                 return;
             }
 
-            users.push({ name, pass });
+            users.push({ name, pass, avatar: '' });
             saveUsersList(users);
 
             window.closeRegisterModal();
@@ -1242,6 +1310,7 @@
         window.handleLoginSubmit = function() {
             const identifier = document.getElementById('loginName').value.trim().toLowerCase();
             const pass = document.getElementById('loginPass').value;
+            const rememberMe = document.getElementById('rememberMeCheck').checked;
             const err = document.getElementById('loginErrorMsg');
             
             let users = getUsersList();
@@ -1249,7 +1318,13 @@
 
             if(foundUser) {
                 currentUser = foundUser.name;
-                localStorage.setItem('nes_logged_user', foundUser.name);
+                if (rememberMe) {
+                    localStorage.setItem('nes_logged_user', foundUser.name);
+                    sessionStorage.removeItem('nes_logged_user');
+                } else {
+                    sessionStorage.setItem('nes_logged_user', foundUser.name); // Persistent fallback
+                    localStorage.setItem('nes_logged_user', foundUser.name);
+                }
                 window.closeLoginModal();
                 window.updateNavAuthUI();
                 showToast(`Hoş geldiniz, ${foundUser.name}!`, 'success');
@@ -1262,6 +1337,7 @@
         window.handleLogout = function() {
             currentUser = null;
             localStorage.removeItem('nes_logged_user');
+            sessionStorage.removeItem('nes_logged_user');
             window.updateNavAuthUI();
             showToast('Oturum kapatıldı.', 'info');
         };
