@@ -321,6 +321,7 @@
                             <button onclick="window.filterApps('Hepsi')" id="btnFilter_Hepsi" class="text-xs bg-gray-800 px-3.5 py-2 rounded-xl text-gray-300 font-semibold hover:text-white transition">Tümü</button>
                             <button onclick="window.filterApps('Aktif')" id="btnFilter_Aktif" class="text-xs bg-[#C5A059]/20 border border-[#C5A059] text-[#C5A059] px-3.5 py-2 rounded-xl font-semibold transition">Aktif Randevular</button>
                             <button onclick="window.filterApps('Gecmis')" id="btnFilter_Gecmis" class="text-xs bg-gray-800 px-3.5 py-2 rounded-xl text-gray-300 font-semibold hover:text-white transition">Geçmiş Arşiv</button>
+                            <button onclick="window.clearFinishedAppointments()" class="text-xs bg-red-950/60 border border-red-800 text-red-400 hover:bg-red-900 hover:text-white px-3.5 py-2 rounded-xl font-semibold transition flex items-center gap-1.5"><i class="fa-solid fa-trash-can"></i> Tamamlanan/İptalleri Sil</button>
                         </div>
                     </div>
 
@@ -1170,6 +1171,7 @@
                         <button onclick="window.updateAppStatus(${a.id}, 'Tamamlandı')" class="p-2 bg-blue-950/50 border border-blue-800 text-blue-400 rounded-lg hover:bg-blue-900 transition" title="Tamamlandı"><i class="fa-solid fa-flag-checkered"></i></button>
                         <button onclick="window.openReplyModalForApp(${a.id})" class="p-2 bg-amber-950/50 border border-amber-800 text-amber-400 rounded-lg hover:bg-amber-900 transition" title="Incele / Yanıtla"><i class="fa-solid fa-comment"></i></button>
                         <button onclick="window.updateAppStatus(${a.id}, 'İptal')" class="p-2 bg-red-950/50 border border-red-800 text-red-300 rounded-lg hover:bg-red-900 transition" title="İptal"><i class="fa-solid fa-xmark"></i></button>
+                        <button onclick="window.deleteAppointment(${a.id})" class="p-2 bg-red-950/80 border border-red-700 text-red-400 rounded-lg hover:bg-red-900 hover:text-white transition" title="Randevuyu Kalıcı Sil"><i class="fa-solid fa-trash-can"></i></button>
                     </td>
                 `;
                 tbody.appendChild(tr);
@@ -1188,6 +1190,44 @@
                 window.syncAllData();
                 addAuditLog('Randevu Durumu', `#${id} randevusu ${newStatus} olarak güncellendi.`);
                 showToast(`Randevu durumu "${newStatus}" yapıldı.`, 'success');
+            }
+        };
+
+        window.deleteAppointment = function(id) {
+            if (confirm('Bu randevuyu veritabanından kalıcı olarak silmek istediğinize emin misiniz?')) {
+                let apps = getStoredApps().filter(a => String(a.id) !== String(id));
+                saveStoredApps(apps);
+                if (window.db && window.appId) {
+                    import("https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js").then(({ doc, deleteDoc }) => {
+                        deleteDoc(doc(window.db, 'artifacts', window.appId, 'public', 'data', 'nes_apps', String(id))).catch(e => console.error(e));
+                    });
+                }
+                window.syncAllData();
+                addAuditLog('Randevu Silindi', `#${id} numaralı randevu silindi.`);
+                showToast('Randevu veritabanından silindi.', 'info');
+            }
+        };
+
+        window.clearFinishedAppointments = function() {
+            let apps = getStoredApps();
+            const finishedApps = apps.filter(a => a.status === 'Tamamlandı' || a.status === 'İptal' || a.status === 'Müşteri İptali');
+            if (finishedApps.length === 0) {
+                showToast('Silinecek tamamlanan veya iptal edilen randevu bulunamadı.', 'warning');
+                return;
+            }
+            if (confirm(`${finishedApps.length} adet tamamlanan veya iptal edilen randevuyu veritabanından silmek istediğinize emin misiniz?`)) {
+                let remainingApps = apps.filter(a => a.status !== 'Tamamlandı' && a.status !== 'İptal' && a.status !== 'Müşteri İptali');
+                saveStoredApps(remainingApps);
+                if (window.db && window.appId) {
+                    import("https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js").then(({ doc, deleteDoc }) => {
+                        finishedApps.forEach(a => {
+                            deleteDoc(doc(window.db, 'artifacts', window.appId, 'public', 'data', 'nes_apps', String(a.id))).catch(e => console.error(e));
+                        });
+                    });
+                }
+                window.syncAllData();
+                addAuditLog('Randevular Temizlendi', `${finishedApps.length} adet tamamlanan/iptal randevu silindi.`);
+                showToast(`${finishedApps.length} adet geçmiş randevu silindi.`, 'success');
             }
         };
 
