@@ -794,6 +794,11 @@
         }
         function saveRevenueLedger(ledger) { localStorage.setItem('nes_revenue_ledger', JSON.stringify(ledger)); }
 
+        function getLifetimeStats() {
+            try { return JSON.parse(localStorage.getItem('nes_lifetime_appointment_stats')) || { totalApps: 0, completedApps: 0 }; } catch(e) { return { totalApps: 0, completedApps: 0 }; }
+        }
+        function saveLifetimeStats(stats) { localStorage.setItem('nes_lifetime_appointment_stats', JSON.stringify(stats)); }
+
         function addRevenueRecord(note, amount, dateStr) {
             let ledger = getRevenueLedger();
             ledger.unshift({
@@ -804,6 +809,11 @@
                 timestamp: Date.now()
             });
             saveRevenueLedger(ledger);
+
+            let stats = getLifetimeStats();
+            stats.totalApps = (stats.totalApps || 0) + 1;
+            stats.completedApps = (stats.completedApps || 0) + 1;
+            saveLifetimeStats(stats);
         }
 
         window.deleteRevenueRecord = function(id) {
@@ -817,18 +827,13 @@
 
         function renderDashboard(apps, users) {
             let totalRevenue = 0;
-            let completedCount = 0;
-            let pendingCount = 0;
-
-            apps.forEach(a => {
-                if (a.status === 'Tamamlandı') completedCount++;
-                else if (a.status === 'Beklemede') pendingCount++;
-            });
-
             let ledger = getRevenueLedger();
             ledger.forEach(r => {
                 totalRevenue += (r.amount || 0);
             });
+
+            let stats = getLifetimeStats();
+            let pendingCount = apps.filter(a => a.status === 'Beklemede').length;
 
             const revEl = document.getElementById('dashTotalRevenue');
             const appsEl = document.getElementById('dashTotalApps');
@@ -837,8 +842,8 @@
             const usersEl = document.getElementById('dashTotalUsers');
 
             if (revEl) revEl.innerText = `${totalRevenue.toLocaleString('tr-TR')} ₺`;
-            if (appsEl) appsEl.innerText = apps.length;
-            if (compEl) compEl.innerText = `${completedCount} Tamamlanan`;
+            if (appsEl) appsEl.innerText = stats.totalApps || apps.length;
+            if (compEl) compEl.innerText = `${stats.completedApps || 0} Tamamlanan`;
             if (pendEl) pendEl.innerText = pendingCount;
             if (usersEl) usersEl.innerText = users.length;
 
@@ -1027,9 +1032,9 @@
 
             apps = apps.filter(a => a.id !== id);
             saveStoredApps(apps);
-            addAuditLog('Randevu Silindi', `#${id} ID'li randevu silindi. (Ciro etkilenmez)`);
+            addAuditLog('Randevu Silindi', `#${id} ID'li randevu silindi.`);
             window.syncAllData();
-            showToast('Randevu silindi (Ciro korundu).', 'info');
+            showToast('Randevu silindi (Ciro ve İstatistikler korundu).', 'info');
         };
 
         window.updateAppStatus = function(id, newStatus) {
@@ -1053,6 +1058,18 @@
                     let amountToAdd = target.totalPrice || 0;
                     if (amountToAdd > 0) {
                         addRevenueRecord(`Randevu #${target.id} (${target.name || 'Müşteri'})`, amountToAdd, target.date || new Date().toISOString().split('T')[0]);
+                    } else {
+                        let stats = getLifetimeStats();
+                        stats.totalApps = (stats.totalApps || 0) + 1;
+                        stats.completedApps = (stats.completedApps || 0) + 1;
+                        saveLifetimeStats(stats);
+                    }
+                } else {
+                    let stats = getLifetimeStats();
+                    if (stats.totalApps === 0) {
+                        stats.totalApps = apps.length;
+                        stats.completedApps = apps.filter(a => a.status === 'Tamamlandı').length;
+                        saveLifetimeStats(stats);
                     }
                 }
 
