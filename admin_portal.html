@@ -901,13 +901,15 @@
         }
 
         function getStoredUsers() { try { return JSON.parse(localStorage.getItem('nes_users_list')) || []; } catch(e) { return []; } }
+        
         function saveStoredUsers(users) { 
             localStorage.setItem('nes_users_list', JSON.stringify(users));
             if (window.db && window.appId) {
                 import("https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js").then(({ doc, setDoc }) => {
                     users.forEach(u => {
-                        const docId = (u.name || 'user').replace(/[^a-zA-Z0-9]/g, '_');
-                        setDoc(doc(window.db, 'artifacts', window.appId, 'public', 'data', 'nes_users_list', docId), u).catch(e => console.error(e));
+                        if (!u.name) return;
+                        const docId = encodeURIComponent(u.name.trim().toLowerCase());
+                        setDoc(doc(window.db, 'artifacts', window.appId, 'public', 'data', 'nes_users_list', docId), u, { merge: true }).catch(e => console.error("Admin kullanıcı kaydetme hatası:", e));
                     });
                 });
             }
@@ -1592,8 +1594,8 @@
                 saveStoredUsers(users);
                 if (window.db && window.appId) {
                     import("https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js").then(({ doc, deleteDoc }) => {
-                        const docId = (name || 'user').replace(/[^a-zA-Z0-9]/g, '_');
-                        deleteDoc(doc(window.db, 'artifacts', window.appId, 'public', 'data', 'nes_users_list', docId)).catch(e => console.error(e));
+                        const docId = encodeURIComponent(name.trim().toLowerCase());
+                        deleteDoc(doc(window.db, 'artifacts', window.appId, 'public', 'data', 'nes_users_list', docId)).catch(e => console.error("Kullanıcı silme hatası:", e));
                     });
                 }
                 window.syncAllData();
