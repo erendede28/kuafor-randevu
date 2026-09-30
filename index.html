@@ -563,8 +563,9 @@
             if (window.db && window.appId) {
                 import("https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js").then(({ doc, setDoc }) => {
                     users.forEach(u => {
-                        const docId = (u.name || 'user').replace(/[^a-zA-Z0-9]/g, '_');
-                        setDoc(doc(window.db, 'artifacts', window.appId, 'public', 'data', 'nes_users_list', docId), u).catch(e => console.error(e));
+                        if (!u.name) return;
+                        const docId = encodeURIComponent(u.name.trim().toLowerCase());
+                        setDoc(doc(window.db, 'artifacts', window.appId, 'public', 'data', 'nes_users_list', docId), u, { merge: true }).catch(e => console.error("Kullanıcı senkronizasyon hatası:", e));
                     });
                 });
             }
@@ -954,11 +955,15 @@
             let users = getUsersList();
             if (users.some(u => u.name.toLowerCase() === name.toLowerCase())) return showToast('Bu isim zaten kayıtlı.', 'warning');
             
-            users.push({ name, pass, avatar: '' });
+            const newUser = { name, pass, avatar: '' };
+            users.push(newUser);
             saveUsersList(users);
+
+            currentUser = name;
+            localStorage.setItem('nes_logged_user', name);
             window.closeRegisterModal();
-            window.openLoginModal();
-            showToast('Kayıt başarılı!', 'success');
+            window.updateNavAuthUI();
+            showToast(`Kayıt başarılı! Hoş geldiniz, ${name}.`, 'success');
         };
 
         window.handleLoginSubmit = function() {
